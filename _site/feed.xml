@@ -1,17 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-08-28T00:38:44+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2025/08/28/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2025-08-28T00:32:04+09:00</published><updated>2025-08-28T00:32:04+09:00</updated><id>http://localhost:4000/jekyll/update/2025/08/28/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2025/08/28/welcome-to-jekyll.html"><![CDATA[<p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2025-08-28T01:00:24+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Your awesome title</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">블로그를 시작하며</title><link href="http://localhost:4000/blog/2025/08/28/welcome-to-jekyll.html" rel="alternate" type="text/html" title="블로그를 시작하며" /><published>2025-08-28T00:32:04+09:00</published><updated>2025-08-28T00:32:04+09:00</updated><id>http://localhost:4000/blog/2025/08/28/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/blog/2025/08/28/welcome-to-jekyll.html"><![CDATA[<p>안녕하세요! 정현류입니다.</p>
 
-<p>Jekyll requires blog post files to be named according to the following format:</p>
+<p>드디어 제 개인 블로그를 시작하게 되었습니다. 이 블로그는 제가 프로그래밍과 기술에 대해 배우고 경험한 것들을 기록하고 공유하는 공간이 될 예정입니다.</p>
 
-<p><code class="language-plaintext highlighter-rouge">YEAR-MONTH-DAY-title.MARKUP</code></p>
+<h2 id="블로그를-시작하는-이유">블로그를 시작하는 이유</h2>
 
-<p>Where <code class="language-plaintext highlighter-rouge">YEAR</code> is a four-digit number, <code class="language-plaintext highlighter-rouge">MONTH</code> and <code class="language-plaintext highlighter-rouge">DAY</code> are both two-digit numbers, and <code class="language-plaintext highlighter-rouge">MARKUP</code> is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+<ol>
+  <li><strong>지식 정리</strong>: 배운 내용을 체계적으로 정리하기 위해</li>
+  <li><strong>기록</strong>: 개발 과정에서 겪은 문제들과 해결 방법을 기록하기 위해</li>
+  <li><strong>공유</strong>: 다른 개발자들과 지식을 나누기 위해</li>
+  <li><strong>성장</strong>: 글쓰기를 통해 더 깊이 있는 학습을 하기 위해</li>
+</ol>
 
-<p>Jekyll also offers powerful support for code snippets:</p>
+<h2 id="앞으로-다룰-주제들">앞으로 다룰 주제들</h2>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">end</span>
-<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
-<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
+<ul>
+  <li>프로그래밍 언어 학습기</li>
+  <li>웹 개발 팁과 트릭</li>
+  <li>새로운 기술 스택 탐구</li>
+  <li>개발 도구 사용법</li>
+  <li>프로젝트 후기</li>
+</ul>
 
-<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.]]></summary></entry></feed>
+<h2 id="기술-스택">기술 스택</h2>
+
+<p>이 블로그는 <a href="https://jekyllrb.com/">Jekyll</a>을 사용하여 만들어졌습니다. Jekyll은 정적 사이트 생성기로, GitHub Pages와 함께 사용하기에 매우 적합합니다.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Jekyll 설정 예시</span>
+<span class="ss">title: </span><span class="s2">"정현류의 블로그"</span>
+<span class="ss">description: </span><span class="s2">"프로그래밍과 기술에 대한 이야기"</span>
+<span class="ss">url: </span><span class="s2">"https://junghyunryu.github.io"</span>
+</code></pre></div></div>
+
+<p>앞으로 많은 내용으로 찾아뵙겠습니다. 감사합니다!</p>
+
+<hr />
+
+<p><strong>참고 자료:</strong></p>
+<ul>
+  <li><a href="https://jekyllrb.com/docs/home">Jekyll 공식 문서</a></li>
+  <li><a href="https://pages.github.com/">GitHub Pages</a></li>
+</ul>]]></content><author><name></name></author><category term="blog" /><summary type="html"><![CDATA[안녕하세요! 정현류입니다.]]></summary></entry></feed>
