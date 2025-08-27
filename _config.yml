@@ -22,7 +22,7 @@ title: 정현류의 블로그
 email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
   정현류의 개발 블로그입니다. 프로그래밍, 기술, 그리고 일상에 대한 이야기를 담습니다.
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/my-blog" # the subpath of your site, e.g. /blog
 url: "https://junghyunryu.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: 
 github_username: junghyunryu
