@@ -74,9 +74,9 @@ def main():
         print(f"Processing topic: {selected_topic}")
         run_article_generator(selected_topic)
         
-        # Wait 5 minutes
-        print("Waiting for 5 minutes...")
-        time.sleep(300)  # 5 minutes in seconds
+        # Wait 5 seconds
+        print("Waiting for 5 seconds...")
+        time.sleep(5)  # 5 seconds in seconds
 
 if __name__ == "__main__":
     main()
