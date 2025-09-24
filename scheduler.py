@@ -25,6 +25,7 @@ def run_article_generator(topic):
     """article_generator.py 실행 및 Git 명령어 수행"""
     # 가상환경 활성화 및 Python 명령어 실행    
     activate_cmd = "source venv/bin/activate "
+    # activate_cmd = ". venv/bin/activate "
     python_cmd = f"python article_generator.py \"{topic}\""
     git_cmd = " && git add . && git commit -m \"새 글 작성함\" && git push origin main"
     
@@ -33,6 +34,7 @@ def run_article_generator(topic):
     
     # 명령어 실행 (인코딩을 utf-8로 설정하고 오류 대체 처리)
     result = subprocess.run(full_cmd, shell=True, text=True, executable = '/bin/bash', capture_output=True, encoding='utf-8', errors='replace')
+    # result = subprocess.run(full_cmd, shell=True, text=True, capture_output=True, encoding='utf-8', errors='replace')
     
     if result.returncode == 0:
         print(f"성공적으로 '{topic}'에 대한 글을 작성하고 푸시했습니다.")
