@@ -61,10 +61,10 @@ def main():
         # article_generator 실행 및 Git 작업 수행
         run_article_generator(selected_topic)
         
-        # 토픽이 남아있다면 5초 대기
+        # 토픽이 남아있다면 60초 대기
         if topics:
-            print("5초 대기 중...")
-            time.sleep(5)
+            print("60초 대기 중...")
+            time.sleep(60)
     
     print("모든 토픽이 소진되었습니다. 프로그램을 종료합니다.")
 
