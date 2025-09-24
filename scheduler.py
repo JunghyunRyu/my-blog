@@ -24,7 +24,7 @@ def save_topics(topics, file_path="topics.json"):
 def run_article_generator(topic):
     """article_generator.py 실행 및 Git 명령어 수행"""
     # 가상환경 활성화 및 Python 명령어 실행    
-    activate_cmd = "source venv/bin/activate "
+    activate_cmd = "source venv/bin/activate && "
     # activate_cmd = ". venv/bin/activate "
     python_cmd = f"python article_generator.py \"{topic}\""
     git_cmd = " && git add . && git commit -m \"새 글 작성함\" && git push origin main"
