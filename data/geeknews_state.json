@@ -1,5 +1,6 @@
 {
   "processed": [
-    "https://news.hada.io/sample-topic"
+    "https://news.hada.io/sample-topic",
+    "https://news.hada.io/topic?id=23539"
   ]
 }

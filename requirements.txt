@@ -1,0 +1,34 @@
+# 코드깎는노인 트랜스크립트 스크래퍼 - 필수 의존성
+# Windows PowerShell 환경 최적화
+
+# 웹 자동화
+playwright>=1.40.0
+asyncio
+
+# 환경 설정
+python-dotenv>=1.0.0
+
+# 파일 I/O
+aiofiles>=23.2.0
+
+# 데이터 처리
+beautifulsoup4>=4.12.0
+
+# HTTP 요청 (백업용)
+requests>=2.31.0
+
+# 텍스트 처리
+lxml>=4.9.0
+
+# 개발 및 디버깅 (선택사항)
+rich>=13.0.0
+
+# Windows 특화 지원
+colorama>=0.4.6
+
+# 타입 힌팅 지원 (Python 3.8 이하)
+typing-extensions>=4.0.0
+
+# 비동기 지원
+asyncio-throttle>=1.0.2
+

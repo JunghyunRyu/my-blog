@@ -54,7 +54,7 @@ class FeedItem(t.TypedDict):
 
 
 def fetch_feed(url: str = DEFAULT_FEED_URL) -> list[FeedItem]:
-    """RSS 피드를 가져와서 FeedItem 목록을 반환한다."""
+    """RSS 또는 Atom 피드를 가져와서 FeedItem 목록을 반환한다."""
     try:
         with urllib.request.urlopen(url) as response:
             raw = response.read()
@@ -62,6 +62,18 @@ def fetch_feed(url: str = DEFAULT_FEED_URL) -> list[FeedItem]:
         raise RuntimeError(f"RSS 피드에 접근할 수 없습니다: {exc}") from exc
 
     root = ET.fromstring(raw)
+    
+    # Atom 피드인지 RSS 피드인지 확인
+    if root.tag.endswith("}feed") or root.tag == "feed":
+        # Atom 피드 처리
+        return _parse_atom_feed(root)
+    else:
+        # RSS 피드 처리
+        return _parse_rss_feed(root)
+
+
+def _parse_rss_feed(root: ET.Element) -> list[FeedItem]:
+    """RSS 2.0 피드를 파싱한다."""
     channel = root.find("channel")
     if channel is None:
         raise RuntimeError("RSS 피드에 channel 요소가 없습니다.")
@@ -88,6 +100,69 @@ def fetch_feed(url: str = DEFAULT_FEED_URL) -> list[FeedItem]:
             )
         )
     return items
+
+
+def _parse_atom_feed(root: ET.Element) -> list[FeedItem]:
+    """Atom 피드를 파싱한다."""
+    # Atom 네임스페이스
+    ns = {"atom": "http://www.w3.org/2005/Atom"}
+    
+    items: list[FeedItem] = []
+    for entry in root.findall("atom:entry", ns):
+        # id (guid 역할)
+        guid = _get_first_text_ns(entry, "atom:id", ns)
+        
+        # title
+        title = _get_first_text_ns(entry, "atom:title", ns)
+        
+        # link (alternate 타입 우선)
+        link = _get_atom_link(entry, ns)
+        
+        # summary 또는 content
+        summary = _get_first_text_ns(entry, "atom:summary", ns) or _get_first_text_ns(entry, "atom:content", ns)
+        
+        # published 또는 updated
+        published = _get_first_text_ns(entry, "atom:published", ns) or _get_first_text_ns(entry, "atom:updated", ns)
+        
+        if not guid or not title or not link:
+            # 필수 필드가 없으면 스킵
+            continue
+        
+        items.append(
+            FeedItem(
+                guid=guid.strip(),
+                title=_normalize_whitespace(title),
+                link=link.strip(),
+                summary=_normalize_whitespace(summary or ""),
+                published_at=published.strip() if published else "",
+            )
+        )
+    return items
+
+
+def _get_atom_link(entry: ET.Element, ns: dict[str, str]) -> str | None:
+    """Atom entry에서 link를 추출한다. alternate 타입을 우선으로 찾는다."""
+    # alternate 타입 링크 찾기
+    for link_elem in entry.findall("atom:link", ns):
+        if link_elem.get("rel") == "alternate" or link_elem.get("rel") is None:
+            href = link_elem.get("href")
+            if href:
+                return href
+    
+    # 첫 번째 링크 반환
+    link_elem = entry.find("atom:link", ns)
+    if link_elem is not None:
+        return link_elem.get("href")
+    
+    return None
+
+
+def _get_first_text_ns(parent: ET.Element, tag: str, ns: dict[str, str]) -> str | None:
+    """네임스페이스를 고려하여 첫 번째 텍스트를 가져온다."""
+    element = parent.find(tag, ns)
+    if element is None or element.text is None:
+        return None
+    return element.text
 
 
 def _get_first_text(parent: ET.Element, tag: str) -> str | None:
