@@ -110,23 +110,6 @@ python -m automation.geeknews_pipeline --max-posts 3
 
 로컬 환경에서 네트워크 없이 동작을 검증하려면 `automation/sample_feed.xml`을 `--feed-url`로 지정해 샘플 RSS를 사용할 수 있습니다.【F:automation/sample_feed.xml†L1-L14】
 
-```bash
-# macOS/Linux
-python -m automation.geeknews_pipeline \
-  --feed-url "$(python - <<'PY'
-from pathlib import Path
-print(Path('automation/sample_feed.xml').resolve().as_uri())
-PY
-)" --max-posts 1 --timezone UTC
-```
-
-PowerShell을 사용할 경우에는 아래와 같이 파일 경로를 미리 변수로 변환한 뒤 실행하면 됩니다.
-
-```powershell
-$feedUrl = python -c "from pathlib import Path; print(Path('automation/sample_feed.xml').resolve().as_uri())"
-python -m automation.geeknews_pipeline --feed-url $feedUrl --max-posts 1 --timezone UTC
-```
-
 ### 3.3 게시 전 QA
 - 로컬에서 `bundle exec jekyll build` 혹은 `jekyll serve`로 렌더링 확인.
 - 링크 체크, 이미지 미리보기, 마크다운 렌더링 확인.

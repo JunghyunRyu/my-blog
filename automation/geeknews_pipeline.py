@@ -54,7 +54,7 @@ class FeedItem(t.TypedDict):
 
 
 def fetch_feed(url: str = DEFAULT_FEED_URL) -> list[FeedItem]:
-    """RSS/Atom 피드를 가져와서 FeedItem 목록을 반환한다."""
+    """RSS 피드를 가져와서 FeedItem 목록을 반환한다."""
     try:
         with urllib.request.urlopen(url) as response:
             raw = response.read()
@@ -62,36 +62,20 @@ def fetch_feed(url: str = DEFAULT_FEED_URL) -> list[FeedItem]:
         raise RuntimeError(f"RSS 피드에 접근할 수 없습니다: {exc}") from exc
 
     root = ET.fromstring(raw)
-    root_tag = _strip_namespace(root.tag).lower()
-
-    if root_tag == "rss":
-        return _parse_rss_items(root)
-    if root_tag == "feed":
-        return _parse_atom_entries(root)
-
-    raise RuntimeError("지원하지 않는 피드 형식입니다. RSS/Atom 피드를 사용하세요.")
-
-
-def _parse_rss_items(root: ET.Element) -> list[FeedItem]:
-    channel: ET.Element | None = None
-    for child in root:
-        if _strip_namespace(child.tag).lower() == "channel":
-            channel = child
-            break
+    channel = root.find("channel")
     if channel is None:
-        raise RuntimeError("RSS 피드에서 channel 요소를 찾을 수 없습니다.")
+        raise RuntimeError("RSS 피드에 channel 요소가 없습니다.")
 
     items: list[FeedItem] = []
-    for item in channel:
-        if _strip_namespace(item.tag).lower() != "item":
-            continue
-        guid = _find_text(item, "guid") or _find_text(item, "link")
-        title = _find_text(item, "title")
-        link = _find_text(item, "link")
-        summary = _find_text(item, "description") or _find_text(item, "content")
-        published = _find_text(item, "pubdate") or _find_text(item, "published")
+    for item in channel.findall("item"):
+        guid = _get_first_text(item, "guid") or _get_first_text(item, "link")
+        title = _get_first_text(item, "title")
+        link = _get_first_text(item, "link")
+        summary = _get_first_text(item, "description")
+        published = _get_first_text(item, "pubDate")
 
         if not guid or not title or not link:
+            # 필수 필드가 없으면 스킵
             continue
 
         items.append(
@@ -106,64 +90,11 @@ def _parse_rss_items(root: ET.Element) -> list[FeedItem]:
     return items
 
 
-def _parse_atom_entries(root: ET.Element) -> list[FeedItem]:
-    items: list[FeedItem] = []
-    for entry in root:
-        if _strip_namespace(entry.tag).lower() != "entry":
-            continue
-
-        guid = _find_text(entry, "id")
-        title = _find_text(entry, "title")
-        link = _find_link(entry)
-        summary = _find_text(entry, "summary") or _find_text(entry, "content")
-        published = _find_text(entry, "published") or _find_text(entry, "updated")
-
-        if not title:
-            continue
-        if not guid:
-            guid = link or title
-        if not link:
-            link = guid
-
-        items.append(
-            FeedItem(
-                guid=guid.strip(),
-                title=_normalize_whitespace(title),
-                link=link.strip(),
-                summary=_normalize_whitespace(summary or ""),
-                published_at=published.strip() if published else "",
-            )
-        )
-    if not items:
-        raise RuntimeError("Atom 피드에서 entry 요소를 찾을 수 없습니다.")
-    return items
-
-
-def _find_text(parent: ET.Element, tag: str) -> str | None:
-    for child in parent:
-        if _strip_namespace(child.tag).lower() != tag.lower():
-            continue
-        text = child.text or ""
-        return text
-    return None
-
-
-def _find_link(parent: ET.Element) -> str | None:
-    for child in parent:
-        if _strip_namespace(child.tag).lower() != "link":
-            continue
-        href = child.attrib.get("href")
-        if href and child.attrib.get("rel", "alternate") in {"alternate", ""}:
-            return href
-        if child.text:
-            return child.text
-    return None
-
-
-def _strip_namespace(tag: str) -> str:
-    if "}" in tag:
-        return tag.split("}", 1)[1]
-    return tag
+def _get_first_text(parent: ET.Element, tag: str) -> str | None:
+    element = parent.find(tag)
+    if element is None or element.text is None:
+        return None
+    return element.text
 
 
 def _normalize_whitespace(value: str) -> str:
