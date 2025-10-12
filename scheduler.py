@@ -23,18 +23,27 @@ def main() -> None:
     feed_url = os.getenv("GEEKNEWS_FEED_URL", DEFAULT_FEED_URL)
     tz_name = os.getenv("PIPELINE_TIMEZONE", DEFAULT_TIMEZONE)
     tz = resolve_timezone(tz_name) or timezone.utc
+    
+    # 새로운 설정 추가
+    enable_web_research = os.getenv("ENABLE_WEB_RESEARCH", "true").lower() == "true"
+    enable_scraping = os.getenv("ENABLE_SCRAPING", "false").lower() == "true"
+    min_votes = int(os.getenv("MIN_VOTE_COUNT", 10))
 
     while True:
-        print("GeekNews 파이프라인 실행 시작")
-        result = run_pipeline(max_posts, feed_url, tz)
-        if result:
-            print("생성된 포스트:")
-            for path in result:
-                print(f"- {path}")
-        else:
-            print("새롭게 생성된 포스트가 없습니다.")
-
-        print(f"{interval}초 대기 후 다음 실행")
+        print("\n" + "=" * 80)
+        print("GeekNews QA 전문가급 자동화 스케줄러")
+        print("=" * 80)
+        
+        result = run_pipeline(
+            max_posts=max_posts,
+            feed_url=feed_url,
+            timezone=tz,
+            enable_web_research=enable_web_research,
+            enable_scraping=enable_scraping,
+            min_votes=min_votes
+        )
+        
+        print(f"\n다음 실행까지 {interval}초 대기 중...")
         time.sleep(interval)
 
 

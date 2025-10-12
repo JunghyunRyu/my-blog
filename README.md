@@ -1,6 +1,209 @@
-# 코드깎는노인 트랜스크립트 스크래퍼
+# My Blog CLI - 블로그 자동화 도구
 
-Windows PowerShell 환경에서 작동하는 코드깎는노인 사이트의 강의 트랜스크립트 자동 스크래핑 도구입니다.
+Windows PowerShell 환경에서 작동하는 블로그 콘텐츠 자동화 시스템입니다.
+
+## 주요 기능
+
+### 1. GeekNews QA 전문가급 자동화 시스템 ⭐ NEW!
+GeekNews에서 IT 신규 뉴스를 수집하여 QA Engineer 관점의 전문적인 블로그 포스트를 자동 생성합니다.
+
+### 2. 코드깎는노인 트랜스크립트 스크래퍼
+코드깎는노인 사이트의 강의 트랜스크립트를 자동으로 추출합니다.
+
+---
+
+# 📰 GeekNews QA 전문가급 자동화 시스템
+
+## ✨ 주요 특징
+
+- **AI/트렌드 자동 필터링**: AI 관련 항목 필수 포함 + 인기도 기반 선별
+- **웹 연구 통합**: DuckDuckGo 검색 + HackerNews 전문가 의견 수집
+- **QA Engineer 관점 강화**: 실무 가이드, 학습 로드맵, 전문가 의견 제공
+- **심층 분석**: OpenAI GPT 기반 전문적인 콘텐츠 생성
+- **완전 자동화**: RSS 수집부터 블로그 포스트 생성까지 원클릭
+
+## 🚀 빠른 시작
+
+### 1. 환경 설정
+
+```powershell
+# 가상환경 활성화
+.\venv\Scripts\Activate.ps1
+
+# 의존성 설치
+pip install -r requirements.txt
+
+# 환경 변수 설정
+Copy-Item env.example .env
+# .env 파일을 열어서 OPENAI_API_KEY 설정
+```
+
+### 2. 실행
+
+```powershell
+# 기본 실행 (최대 10개 포스트)
+python -m automation.geeknews_pipeline
+
+# 포스트 개수 지정
+python -m automation.geeknews_pipeline --max-posts 5
+
+# 웹 연구 비활성화 (속도 개선)
+python -m automation.geeknews_pipeline --no-web-research
+
+# 최소 투표수 설정
+python -m automation.geeknews_pipeline --min-votes 20
+```
+
+### 3. 스케줄러로 주기 실행
+
+```powershell
+# .env 파일에서 설정 조정 후
+python scheduler.py
+```
+
+## 📋 시스템 아키텍처
+
+### 파이프라인 흐름
+
+```
+1. RSS 피드 수집
+   ↓
+2. 중복 필터링
+   ↓
+3. AI/트렌드 필터링 + 우선순위 결정
+   ↓
+4. 웹 연구 (DuckDuckGo, HackerNews)
+   ↓
+5. OpenAI 기반 전문가급 QA 콘텐츠 생성
+   ↓
+6. Jekyll 블로그 포스트 작성 (_posts/)
+   ↓
+7. 상태 저장
+```
+
+### 필터링 기준
+
+- **AI 관련 항목**: 무조건 포함 (최우선)
+- **인기도**: 투표수 10개 이상 (설정 가능)
+- **트렌드**: 최신 기술 관련 키워드
+- **우선순위 점수**: AI(40점) + 투표수(30점) + 댓글(10점) + 트렌드(10점) + QA(10점)
+
+## 📝 생성되는 콘텐츠 구조
+
+```markdown
+---
+layout: post
+title: "기사 제목"
+categories: [GeekNews, QA, AI]
+tags: [GeekNews, QA, AI]
+---
+
+## 요약
+[3-4문장 핵심 요약]
+
+## QA Engineer가 알아야 할 핵심 내용
+- 이 기술이 QA 업무에 미치는 영향
+- 테스트 전략 고려사항
+
+## 실무 적용 가이드
+### 1. 테스트 자동화 개선
+실행 단계와 구체적인 방법
+
+### 2. 품질 검증 프로세스
+실무 적용 가이드
+
+## 학습 로드맵
+### 즉시 학습 (1-2주)
+- 배워야 할 기술
+- 추천 학습 자료
+
+### 단기 학습 (1-3개월)
+...
+
+## 전문가 의견
+### 시니어 QA 엔지니어 관점
+> 전문가의 조언
+
+### 테스트 자동화 전문가 관점
+...
+
+## 주요 Q&A
+**Q:** 질문
+**A:** 상세한 답변
+
+## Follow-up 제안
+- 추가 조사 항목
+
+## 참고 자료
+- [공식 문서](url)
+- [튜토리얼](url)
+```
+
+## ⚙️ 설정 옵션
+
+### 환경 변수 (.env 파일)
+
+```bash
+# 필수: OpenAI API 키
+OPENAI_API_KEY=your_api_key_here
+
+# 선택사항
+OPENAI_MODEL=gpt-4o-mini              # 모델 선택
+MIN_VOTE_COUNT=10                      # 최소 투표수
+MAX_POSTS_PER_RUN=10                   # 최대 포스트 수
+ENABLE_WEB_RESEARCH=true               # 웹 연구 활성화
+PIPELINE_INTERVAL_SECONDS=3600         # 스케줄러 주기 (초)
+```
+
+### 명령줄 옵션
+
+```powershell
+--max-posts N          # 최대 포스트 수 (기본값: 10)
+--min-votes N          # 최소 투표수 (기본값: 10)
+--no-web-research      # 웹 연구 비활성화
+--enable-scraping      # GeekNews 웹 스크래핑 활성화
+--feed-url URL         # RSS 피드 URL
+--timezone TZ          # 시간대 (기본값: Asia/Seoul)
+```
+
+## 📊 성공 지표
+
+- ✅ AI 관련 항목 100% 포함
+- ✅ 하루 5-10개 고품질 포스트 생성
+- ✅ 전문가 의견 평균 2-3개 포함
+- ✅ 웹 검색 기반 참고 자료 5개 이상
+- ✅ QA Engineer 실무 가이드 포함
+- ✅ 학습 로드맵 제공
+
+## 🔧 문제 해결
+
+### OpenAI API 오류
+```powershell
+# API 키 확인
+echo $env:OPENAI_API_KEY
+
+# .env 파일 확인
+cat .env
+```
+
+### 웹 검색 실패
+```powershell
+# 웹 연구 비활성화하고 실행
+python -m automation.geeknews_pipeline --no-web-research
+```
+
+### 느린 실행 속도
+```powershell
+# 포스트 개수 줄이기
+python -m automation.geeknews_pipeline --max-posts 3
+
+# 웹 연구 비활성화
+python -m automation.geeknews_pipeline --no-web-research
+```
+
+---
+
+# 🎓 코드깎는노인 트랜스크립트 스크래퍼
 
 ## 🚀 빠른 시작
 

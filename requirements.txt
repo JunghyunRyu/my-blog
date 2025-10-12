@@ -1,4 +1,4 @@
-# 코드깎는노인 트랜스크립트 스크래퍼 - 필수 의존성
+# GeekNews QA 전문가급 자동화 시스템 - 필수 의존성
 # Windows PowerShell 환경 최적화
 
 # 웹 자동화
@@ -14,11 +14,20 @@ aiofiles>=23.2.0
 # 데이터 처리
 beautifulsoup4>=4.12.0
 
-# HTTP 요청 (백업용)
+# HTTP 요청
 requests>=2.31.0
 
 # 텍스트 처리
 lxml>=4.9.0
+
+# RSS/Atom 피드 파싱
+feedparser>=6.0.10
+
+# 웹 검색 (DuckDuckGo - API 키 불필요)
+duckduckgo-search>=3.9.0
+
+# 기사 본문 추출 (선택사항)
+newspaper3k>=0.2.8
 
 # 개발 및 디버깅 (선택사항)
 rich>=13.0.0

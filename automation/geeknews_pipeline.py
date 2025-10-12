@@ -34,15 +34,22 @@ import xml.etree.ElementTree as ET
 
 try:  # pragma: no cover - 런타임에서만 필요
     from .qa_generator import QAContentGenerator, QAResult
+    from .content_filter import ContentFilter, ContentMetrics
+    from .web_researcher import WebResearcher, ResearchResult
 except ImportError:  # pragma: no cover - 스크립트 직접 실행 대비
     from qa_generator import QAContentGenerator, QAResult
+    from content_filter import ContentFilter, ContentMetrics
+    from web_researcher import WebResearcher, ResearchResult
 
 
 DEFAULT_FEED_URL = "https://feeds.feedburner.com/geeknews-feed"
 STATE_DIR = Path("data")
 STATE_FILE = STATE_DIR / "geeknews_state.json"
 POSTS_DIR = Path("_posts")
-DEFAULT_MAX_POSTS = 3
+DEFAULT_MAX_POSTS = 10
+DEFAULT_MIN_VOTES = 10
+DEFAULT_ENABLE_WEB_RESEARCH = True
+DEFAULT_ENABLE_SCRAPING = False  # GeekNews 스크래핑 비활성화 (속도 개선)
 
 
 class FeedItem(t.TypedDict):
@@ -199,7 +206,13 @@ def ensure_posts_dir(path: Path = POSTS_DIR) -> None:
     path.mkdir(parents=True, exist_ok=True)
 
 
-def write_post(item: FeedItem, qa_result: QAResult, *, timezone: dt.tzinfo | None = None) -> Path:
+def write_post(
+    item: FeedItem, 
+    qa_result: QAResult, 
+    metrics: ContentMetrics | None = None,
+    *, 
+    timezone: dt.tzinfo | None = None
+) -> Path:
     ensure_posts_dir()
     published_dt = parse_pubdate(item.get("published_at"))
     if published_dt is None:
@@ -211,14 +224,26 @@ def write_post(item: FeedItem, qa_result: QAResult, *, timezone: dt.tzinfo | Non
     filename = f"{published_dt:%Y-%m-%d}-{slug}.md"
     filepath = POSTS_DIR / filename
 
+    # 카테고리 및 태그 결정
+    categories = ["GeekNews", "QA"]
+    tags = ["GeekNews", "QA"]
+    
+    if metrics and metrics.categories:
+        categories.extend(metrics.categories)
+        tags.extend(metrics.categories)
+    
+    # 중복 제거
+    categories = list(dict.fromkeys(categories))
+    tags = list(dict.fromkeys(tags))
+
     front_matter = textwrap.dedent(
         f"""\
         ---
         layout: post
         title: "{item['title']}"
         date: {published_dt:%Y-%m-%d %H:%M:%S %z}
-        categories: [GeekNews, QA]
-        tags: [GeekNews, QA]
+        categories: {categories}
+        tags: {tags}
         summary: "{qa_result.summary.strip()}"
         original_url: "{item['link']}"
         ---
@@ -227,30 +252,101 @@ def write_post(item: FeedItem, qa_result: QAResult, *, timezone: dt.tzinfo | Non
 
     content_lines = [front_matter, "", "## 요약", "", qa_result.summary.strip() or "(요약 준비 중)", ""]
 
+    # QA Engineer 인사이트
+    if qa_result.qa_engineer_insights:
+        content_lines.extend(["## QA Engineer가 알아야 할 핵심 내용", ""])
+        for insight in qa_result.qa_engineer_insights:
+            content_lines.append(f"- {insight}")
+        content_lines.append("")
+
+    # 실무 적용 가이드
+    if qa_result.practical_guide:
+        content_lines.extend(["## 실무 적용 가이드", ""])
+        for i, guide in enumerate(qa_result.practical_guide, 1):
+            title = guide.get("title", f"가이드 {i}")
+            description = guide.get("description", "")
+            content_lines.append(f"### {i}. {title}")
+            content_lines.append("")
+            content_lines.append(description)
+            if guide.get("steps"):
+                content_lines.append("")
+                content_lines.append("**실행 단계:**")
+                steps = guide.get("steps", "")
+                if isinstance(steps, str):
+                    for step in steps.split(","):
+                        content_lines.append(f"- {step.strip()}")
+                else:
+                    for step in steps:
+                        content_lines.append(f"- {step}")
+            content_lines.append("")
+
+    # 학습 로드맵
+    if qa_result.learning_roadmap:
+        content_lines.extend(["## 학습 로드맵", ""])
+        for roadmap in qa_result.learning_roadmap:
+            phase = roadmap.get("phase", "학습 단계")
+            skills = roadmap.get("skills", [])
+            resources = roadmap.get("resources", [])
+            
+            content_lines.append(f"### {phase}")
+            content_lines.append("")
+            
+            if skills:
+                content_lines.append("**배워야 할 기술:**")
+                for skill in skills:
+                    content_lines.append(f"- {skill}")
+                content_lines.append("")
+            
+            if resources:
+                content_lines.append("**추천 학습 자료:**")
+                for resource in resources:
+                    content_lines.append(f"- {resource}")
+                content_lines.append("")
+
+    # 전문가 의견
+    if qa_result.expert_opinions:
+        content_lines.extend(["## 전문가 의견", ""])
+        for expert in qa_result.expert_opinions:
+            perspective = expert.get("perspective", "전문가")
+            opinion = expert.get("opinion", "")
+            content_lines.append(f"### {perspective} 관점")
+            content_lines.append("")
+            content_lines.append(f"> {opinion}")
+            content_lines.append("")
+
+    # 주요 Q&A
     if qa_result.qa_pairs:
         content_lines.extend(["## 주요 Q&A", ""])
         for pair in qa_result.qa_pairs:
             question = pair.get("question", "질문")
             answer = pair.get("answer", "답변 준비 중입니다.")
-            content_lines.append(f"- **Q:** {question}")
-            content_lines.append(f"  **A:** {answer}")
+            content_lines.append(f"**Q:** {question}")
+            content_lines.append("")
+            content_lines.append(f"**A:** {answer}")
             content_lines.append("")
     else:
         content_lines.extend(["## 주요 Q&A", "", "(추가 분석 대기 중)", ""])
 
+    # Follow-up 제안
     if qa_result.follow_ups:
         content_lines.extend(["## Follow-up 제안", ""])
         for idea in qa_result.follow_ups:
             content_lines.append(f"- {idea}")
         content_lines.append("")
 
+    # 참고 자료
     if qa_result.resources:
         content_lines.extend(["## 참고 자료", ""])
         for resource in qa_result.resources:
             label = resource.get("label") or resource.get("url") or "관련 링크"
             url = resource.get("url")
+            resource_type = resource.get("type", "")
+            
             if url:
-                content_lines.append(f"- [{label}]({url})")
+                if resource_type:
+                    content_lines.append(f"- [{label}]({url}) ({resource_type})")
+                else:
+                    content_lines.append(f"- [{label}]({url})")
             else:
                 content_lines.append(f"- {label}")
         content_lines.append("")
@@ -288,35 +384,159 @@ def slugify(value: str) -> str:
     return slug or "geeknews"
 
 
-def run_pipeline(max_posts: int, feed_url: str, timezone: dt.tzinfo | None) -> list[Path]:
+def run_pipeline(
+    max_posts: int, 
+    feed_url: str, 
+    timezone: dt.tzinfo | None,
+    enable_web_research: bool = DEFAULT_ENABLE_WEB_RESEARCH,
+    enable_scraping: bool = DEFAULT_ENABLE_SCRAPING,
+    min_votes: int = DEFAULT_MIN_VOTES
+) -> list[Path]:
+    print("=" * 80)
+    print("GeekNews QA 전문가급 자동화 파이프라인 시작")
+    print("=" * 80)
+    
+    # 1. RSS 피드 수집
+    print("\n[1단계] RSS 피드 수집 중...")
     items = fetch_feed(feed_url)
+    print(f"  → 총 {len(items)}개 항목 수집 완료")
+    
+    # 2. 중복 필터링
+    print("\n[2단계] 중복 항목 필터링 중...")
     processed = load_state()
     new_items = select_new_items(items, processed)
-
+    print(f"  → {len(new_items)}개의 신규 항목 발견")
+    
     if not new_items:
-        print("새로운 GeekNews 항목이 없습니다.")
+        print("\n✓ 새로운 GeekNews 항목이 없습니다.")
         return []
-
+    
+    # 3. 콘텐츠 필터링 및 우선순위 결정
+    print("\n[3단계] AI/트렌드 필터링 및 우선순위 결정 중...")
+    content_filter = ContentFilter(
+        min_votes=min_votes, 
+        enable_scraping=enable_scraping
+    )
+    filtered_items = content_filter.filter_and_sort(new_items, max_items=max_posts)
+    print(f"  → {len(filtered_items)}개 항목 선별 완료")
+    
+    for item, metrics in filtered_items[:5]:  # 상위 5개만 출력
+        print(f"    - {item['title'][:60]}... (우선순위: {metrics.priority_score:.1f})")
+        print(f"      AI 관련: {metrics.is_ai_related}, 카테고리: {', '.join(metrics.categories)}")
+    
+    if not filtered_items:
+        print("\n✓ 필터링 조건을 만족하는 항목이 없습니다.")
+        return []
+    
+    # 4. 웹 연구 및 QA 콘텐츠 생성
+    print("\n[4단계] 웹 연구 및 전문가급 QA 콘텐츠 생성 중...")
+    
+    web_researcher = WebResearcher(
+        max_search_results=5,
+        enable_expert_search=enable_web_research
+    ) if enable_web_research else None
+    
     generator = QAContentGenerator()
     created_files: list[Path] = []
-
-    for item in new_items[:max_posts]:
-        print(f"처리 중: {item['title']}")
-        qa_result = generator.generate(item)
-        filepath = write_post(item, qa_result, timezone=timezone)
-        print(f"생성된 포스트: {filepath}")
-        created_files.append(filepath)
-        processed.add(item["guid"])
-
+    
+    for i, (item, metrics) in enumerate(filtered_items, 1):
+        print(f"\n  [{i}/{len(filtered_items)}] 처리 중: {item['title']}")
+        
+        # 웹 연구 수행
+        research_data = None
+        if web_researcher:
+            print(f"    → 웹 연구 수행 중...")
+            try:
+                research_data = web_researcher.research(
+                    item["title"], 
+                    item.get("summary", ""), 
+                    item["link"]
+                )
+                print(f"       웹 검색 결과: {len(research_data.web_results)}개")
+                print(f"       전문가 의견: {len(research_data.expert_opinions)}개")
+            except Exception as exc:
+                print(f"       웹 연구 실패: {exc}")
+        
+        # QA 콘텐츠 생성
+        print(f"    → AI 기반 QA 콘텐츠 생성 중...")
+        try:
+            qa_result = generator.generate(item, research_data=research_data)
+            print(f"       생성 완료 (인사이트: {len(qa_result.qa_engineer_insights)}개)")
+        except Exception as exc:
+            print(f"       생성 실패: {exc}")
+            continue
+        
+        # 포스트 작성
+        print(f"    → 블로그 포스트 작성 중...")
+        try:
+            filepath = write_post(item, qa_result, metrics=metrics, timezone=timezone)
+            print(f"       ✓ 생성 완료: {filepath.name}")
+            created_files.append(filepath)
+            processed.add(item["guid"])
+        except Exception as exc:
+            print(f"       포스트 작성 실패: {exc}")
+            continue
+    
+    # 5. 상태 저장
+    print("\n[5단계] 처리 상태 저장 중...")
     save_state(processed)
+    print(f"  → 상태 저장 완료")
+    
+    # 요약 출력
+    print("\n" + "=" * 80)
+    print("파이프라인 실행 완료")
+    print("=" * 80)
+    print(f"총 생성된 포스트: {len(created_files)}개")
+    
+    if created_files:
+        print("\n생성된 포스트 목록:")
+        for path in created_files:
+            print(f"  ✓ {path}")
+    
+    print("=" * 80)
+    
     return created_files
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="GeekNews QA 포스트 자동 생성")
-    parser.add_argument("--max-posts", type=int, default=DEFAULT_MAX_POSTS, help="한 번에 생성할 최대 포스트 수")
-    parser.add_argument("--feed-url", type=str, default=DEFAULT_FEED_URL, help="대상 RSS 피드 URL")
-    parser.add_argument("--timezone", type=str, default="Asia/Seoul", help="게시 시간대 (IANA Olson 형식)")
+    parser = argparse.ArgumentParser(
+        description="GeekNews QA 전문가급 자동화 포스트 생성",
+        epilog="예시: python -m automation.geeknews_pipeline --max-posts 10"
+    )
+    parser.add_argument(
+        "--max-posts", 
+        type=int, 
+        default=DEFAULT_MAX_POSTS, 
+        help=f"한 번에 생성할 최대 포스트 수 (기본값: {DEFAULT_MAX_POSTS})"
+    )
+    parser.add_argument(
+        "--feed-url", 
+        type=str, 
+        default=DEFAULT_FEED_URL, 
+        help="대상 RSS 피드 URL"
+    )
+    parser.add_argument(
+        "--timezone", 
+        type=str, 
+        default="Asia/Seoul", 
+        help="게시 시간대 (IANA Olson 형식)"
+    )
+    parser.add_argument(
+        "--min-votes", 
+        type=int, 
+        default=DEFAULT_MIN_VOTES, 
+        help=f"최소 투표수 필터링 (기본값: {DEFAULT_MIN_VOTES})"
+    )
+    parser.add_argument(
+        "--no-web-research", 
+        action="store_true", 
+        help="웹 연구 비활성화 (속도 개선)"
+    )
+    parser.add_argument(
+        "--enable-scraping", 
+        action="store_true", 
+        help="GeekNews 웹 스크래핑 활성화 (느림)"
+    )
     return parser.parse_args(argv)
 
 
@@ -338,16 +558,22 @@ def resolve_timezone(name: str | None) -> dt.tzinfo | None:
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     timezone = resolve_timezone(args.timezone)
+    
     try:
-        created = run_pipeline(args.max_posts, args.feed_url, timezone)
+        created = run_pipeline(
+            max_posts=args.max_posts,
+            feed_url=args.feed_url,
+            timezone=timezone,
+            enable_web_research=not args.no_web_research,
+            enable_scraping=args.enable_scraping,
+            min_votes=args.min_votes
+        )
     except Exception as exc:  # pylint: disable=broad-except
-        print(f"파이프라인 실행 중 오류: {exc}")
+        print(f"\n❌ 파이프라인 실행 중 오류: {exc}")
+        import traceback
+        traceback.print_exc()
         return 1
 
-    if created:
-        print("생성 완료:")
-        for path in created:
-            print(f"- {path}")
     return 0
 
 
