@@ -1,21 +1,18 @@
 source "https://rubygems.org"
 
-# Jekyll 버전 - jekyll-remote-theme과 호환되는 버전
-gem "jekyll", "~> 3.9"
+# Jekyll 안정 버전
+gem "jekyll", "~> 4.3"
+gem "minima", "~> 2.5"
 gem "webrick", "~> 1.8"
-gem "kramdown", "~> 2.3"
-gem "kramdown-parser-gfm", "~> 1.1"
 
 # Jekyll 플러그인
 group :jekyll_plugins do
-  gem "jekyll-remote-theme"
   gem "jekyll-feed", "~> 0.12"
   gem "jekyll-redirect-from"
   gem "jekyll-seo-tag"
   gem "jekyll-archives"
   gem "jekyll-sitemap"
   gem "jekyll-paginate"
-  gem "jekyll-include-cache"
 end
 
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem

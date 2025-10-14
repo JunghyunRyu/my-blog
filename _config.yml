@@ -1,5 +1,5 @@
 # ========================================
-# Chirpy 테마 설정
+# Jekyll 블로그 설정
 # ========================================
 
 # 사이트 정보
@@ -10,98 +10,54 @@ url: https://junghyunryu.github.io
 baseurl: /my-blog
 
 # 테마
-# theme: jekyll-theme-chirpy  # GitHub Actions에서 remote_theme 사용
+theme: minima
 
 # 사용자 정보
 author:
   name: 정현류
-  bio: QA Engineer & Developer
-  location: South Korea
-  email: # 이메일 주소를 여기에 입력하세요
-  twitter: # Twitter 사용자명 (선택사항)
-  github: junghyunryu
+  email: # 이메일 주소
 
 # 소셜 미디어
-social:
-  github: junghyunryu
-  # twitter: # Twitter 사용자명
-  # facebook: # Facebook 사용자명
-  # linkedin: # LinkedIn 사용자명
-  # stackoverflow: # Stack Overflow 사용자 ID
-  # telegram: # Telegram 사용자명
+minima:
+  social_links:
+    - { platform: github, user_url: "https://github.com/junghyunryu" }
 
 # 언어 및 시간대
 lang: ko-KR
 timezone: Asia/Seoul
 
-# 빌드 설정
-# theme: jekyll-theme-chirpy
-remote_theme: cotes2020/jekyll-theme-chirpy  # GitHub Pages용
-
 # 플러그인
 plugins:
-  - jekyll-remote-theme
   - jekyll-feed
   - jekyll-redirect-from
   - jekyll-seo-tag
   - jekyll-archives
   - jekyll-sitemap
+  - jekyll-paginate
 
 # 페이지 설정
 paginate: 10
 paginate_path: /page:num/
 
-# 카테고리 및 태그
-category_archive:
-  type: jekyll-archives
-  path: /categories/
-tag_archive:
-  type: jekyll-archives
-  path: /tags/
-
-# 아카이브
+# 아카이브 설정
 jekyll-archives:
   enabled:
     - categories
     - tags
   layouts:
-    category: category
-    tag: tag
+    category: archive-category
+    tag: archive-tag
   permalinks:
     category: /categories/:name/
     tag: /tags/:name/
-
-# SEO 설정
-seo:
-  type: WebSite
-  image: /assets/img/avatar.png
-
-# 댓글 시스템 (선택사항)
-# comments:
-#   active: giscus
-#   giscus:
-#     repo: junghyunryu/junghyunryu.github.io
-#     repo_id: # Giscus repo ID
-#     category: # Giscus category
-#     category_id: # Giscus category ID
-
-# 검색 기능
-search: true
-
-# 다크 모드
-mode:
-  dark: true
-  light: true
-
-# 타이포그래피
-typography_serif: false
-typography_monospace: false
 
 # Markdown 설정
 markdown: kramdown
 kramdown:
   input: GFM
   syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    default_lang: plaintext
 
 # 제외할 파일/디렉토리
 exclude:
@@ -115,3 +71,20 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
   - venv/
+  - automation/
+  - geeknews/
+  - scripts/
+  - tests/
+  - deploy/
+  - data/
+  - run_geeknews.bat
+  - run_geeknews.ps1
+  - scheduler.py
+  - requirements.txt
+  - topics.json
+  - Makefile
+  - nohup.out
+
+# 포함할 파일
+include:
+  - _pages
