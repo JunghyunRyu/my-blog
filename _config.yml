@@ -3,9 +3,9 @@
 # ========================================
 
 # 사이트 정보
-title: 개발 블로그 (jhryu's blogs)
-tagline: QA Engineer & Developer
-description: 정현류의 개발 블로그입니다. 프로그래밍, 기술, 그리고 일상에 대한 이야기를 담습니다.
+title: AI Quality Lab
+tagline: AI-Powered QA Engineering
+description: AI 기반 QA 자동화와 테스트 품질 관리에 대한 실무 경험과 기술 트렌드를 공유합니다.
 url: https://junghyunryu.github.io
 baseurl: /my-blog
 
@@ -14,12 +14,13 @@ theme: minima
 
 # 사용자 정보
 author:
-  name: 정현류
-  email: # 이메일 주소
+  name: 류정현
+  email: jhryu115@gmail.com
 
 # 소셜 미디어
 minima:
   social_links:
+    - { platform: email, user_url: "jhryu115@gmail.com" }
     - { platform: github, user_url: "https://github.com/junghyunryu" }
 
 # 언어 및 시간대

@@ -401,11 +401,41 @@ def run_pipeline(
     items = fetch_feed(feed_url)
     print(f"  → 총 {len(items)}개 항목 수집 완료")
     
+    # 수집된 RSS 피드 항목 상세 출력
+    if items:
+        print(f"\n  [수집된 RSS 피드 항목 목록]")
+        for i, item in enumerate(items[:10], 1):  # 최대 10개만 출력
+            print(f"    {i}. {item['title'][:70]}...")
+            print(f"       GUID: {item['guid'][:80]}...")
+        if len(items) > 10:
+            print(f"    ... 외 {len(items) - 10}개 항목")
+    else:
+        print("  ⚠️ RSS 피드에서 항목을 찾을 수 없습니다.")
+    
     # 2. 중복 필터링
     print("\n[2단계] 중복 항목 필터링 중...")
     processed = load_state()
+    print(f"  → 이미 처리된 항목: {len(processed)}개")
+    if processed:
+        print(f"  [이미 처리된 항목 목록]")
+        for i, guid in enumerate(sorted(processed)[:5], 1):  # 최대 5개만 출력
+            print(f"    {i}. {guid[:80]}...")
+        if len(processed) > 5:
+            print(f"    ... 외 {len(processed) - 5}개 항목")
+    
     new_items = select_new_items(items, processed)
-    print(f"  → {len(new_items)}개의 신규 항목 발견")
+    print(f"\n  → 신규 항목: {len(new_items)}개 발견")
+    
+    # 신규 항목 상세 출력
+    if new_items:
+        print(f"\n  [신규 항목 목록]")
+        for i, item in enumerate(new_items[:10], 1):  # 최대 10개만 출력
+            print(f"    {i}. {item['title'][:70]}...")
+            print(f"       GUID: {item['guid'][:80]}...")
+        if len(new_items) > 10:
+            print(f"    ... 외 {len(new_items) - 10}개 항목")
+    else:
+        print("  ℹ️ 새로운 항목이 없습니다.")
     
     if not new_items:
         print("\n✓ 새로운 GeekNews 항목이 없습니다.")

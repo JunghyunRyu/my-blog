@@ -3,11 +3,13 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import textwrap
 import typing as t
 import urllib.error
 import urllib.request
 from dataclasses import dataclass, field
+from html import unescape
 
 
 @dataclass
@@ -372,7 +374,9 @@ class RuleBasedProvider:
 
     def _build_summary(self, title: str, description: str) -> str:
         if description:
-            return description[:400]
+            # HTML 제거 및 마크다운 변환
+            cleaned = _strip_html(description)
+            return cleaned[:400]
         return f"'{title}' 기사에서 소개한 내용을 추후 업데이트할 예정입니다."
 
     def _build_qa_pairs(self, title: str, summary: str) -> list[dict[str, str]]:
@@ -513,3 +517,37 @@ def _ensure_expert_opinions_list(value: t.Any) -> list[dict[str, str]]:
             }
             result.append(opinion)
     return result
+
+
+def _strip_html(html: str) -> str:
+    """HTML 태그를 제거하고 마크다운으로 변환한다."""
+    if not html:
+        return ""
+    
+    # HTML 엔티티 디코딩
+    text = unescape(html)
+    
+    # <strong> -> **
+    text = re.sub(r'<strong>(.*?)</strong>', r'**\1**', text)
+    text = re.sub(r'<b>(.*?)</b>', r'**\1**', text)
+    
+    # <em> -> *
+    text = re.sub(r'<em>(.*?)</em>', r'*\1*', text)
+    text = re.sub(r'<i>(.*?)</i>', r'*\1*', text)
+    
+    # <ul><li> -> - 
+    text = re.sub(r'<ul>\s*', '', text)
+    text = re.sub(r'</ul>', '', text)
+    text = re.sub(r'<li>(.*?)</li>', r'- \1\n', text)
+    
+    # <p> -> \n\n
+    text = re.sub(r'<p>(.*?)</p>', r'\1\n\n', text)
+    
+    # 나머지 HTML 태그 제거
+    text = re.sub(r'<[^>]+>', '', text)
+    
+    # 연속된 공백 정리
+    text = re.sub(r'\n\s*\n', '\n\n', text)
+    text = re.sub(r' +', ' ', text)
+    
+    return text.strip()

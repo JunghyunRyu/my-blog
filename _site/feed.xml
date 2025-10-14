@@ -1,4 +1,129 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="http://localhost:4000/my-blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/my-blog/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2025-10-14T17:01:45+09:00</updated><id>http://localhost:4000/my-blog/feed.xml</id><title type="html">개발 블로그 (jhryu’s blogs)</title><subtitle>정현류의 개발 블로그입니다. 프로그래밍, 기술, 그리고 일상에 대한 이야기를 담습니다.</subtitle><author><name>정현류</name></author><entry><title type="html">Show GN: AI 마피아 게임</title><link href="http://localhost:4000/my-blog/daily%20life/2025/10/14/show-gn-ai.html" rel="alternate" type="text/html" title="Show GN: AI 마피아 게임" /><published>2025-10-14T16:50:57+09:00</published><updated>2025-10-14T16:50:57+09:00</updated><id>http://localhost:4000/my-blog/daily%20life/2025/10/14/show-gn-ai</id><content type="html" xml:base="http://localhost:4000/my-blog/daily%20life/2025/10/14/show-gn-ai.html"><![CDATA[<h2 id="요약">요약</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="ko-KR"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="http://localhost:4000/my-blog/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/my-blog/" rel="alternate" type="text/html" hreflang="ko-KR" /><updated>2025-10-15T00:37:20+09:00</updated><id>http://localhost:4000/my-blog/feed.xml</id><title type="html">AI Quality Lab</title><subtitle>AI 기반 QA 자동화와 테스트 품질 관리에 대한 실무 경험과 기술 트렌드를 공유합니다.</subtitle><author><name>류정현</name><email>jhryu115@gmail.com</email></author><entry><title type="html">미국은 공장 붐 대신 AI 골드러시를 맞이하고 있음 ⭐⭐⭐</title><link href="http://localhost:4000/my-blog/qa%20engineer/2025/10/15/ai.html" rel="alternate" type="text/html" title="미국은 공장 붐 대신 AI 골드러시를 맞이하고 있음 ⭐⭐⭐" /><published>2025-10-15T00:22:22+09:00</published><updated>2025-10-15T00:22:22+09:00</updated><id>http://localhost:4000/my-blog/qa%20engineer/2025/10/15/ai</id><content type="html" xml:base="http://localhost:4000/my-blog/qa%20engineer/2025/10/15/ai.html"><![CDATA[<h2 id="요약">요약</h2>
+
+<p>미국 경제에서 AI 산업이 하드웨어 제조업을 대체하며 주도적인 역할을 하고 있습니다. 많은 자본이 전통적인 공장 설립 대신 인공지능 개발 및 데이터센터에 유입되고 있으며, 이는 고용 증가와 함께 새로운 기술 트렌드를 형성하고 있습니다. AI의 발전은 기업들이 경쟁력을 유지하고 혁신을 이루는 데 필수적인 요소로 자리잡고 있습니다.</p>
+
+<h2 id="qa-engineer가-알아야-할-핵심-내용">QA Engineer가 알아야 할 핵심 내용</h2>
+
+<ul>
+  <li>AI 기술의 발전은 현대 소프트웨어 개발 환경의 복잡성과 속도 증가에 대응하기 위한 필수적인 도구로 자리잡고 있습니다. QA 엔지니어는 AI를 활용하여 테스트 케이스를 자동으로 생성하고, 결함을 예측하며, 품질 보증 프로세스를 효율적으로 개선할 수 있습니다. 2025년까지 80%의 소프트웨어 팀이 AI를 도입할 것으로 예상되며(tricentis.com), 이는 QA 엔지니어에게 경쟁력을 높이는 중요한 요소가 될 것입니다.</li>
+  <li>AI의 도입은 기존 QA 프로세스에 큰 변화를 가져옵니다. 테스트 계획 단계에서 AI가 위험 요소를 분석하여 우선적으로 테스트할 기능을 선정하고, 실행 단계에서는 AI가 로그를 분석하여 결함의 근본 원인을 파악하는 데 도움을 줍니다. 이러한 변화는 QAOps와 같은 새로운 접근법을 통해 리스크 식별과 우선순위 재조정에 기여하며, 데이터 중심 접근 방식이 QA 품질을 향상시키는 데 중요한 역할을 합니다.</li>
+  <li>AI 기술을 활용할 때는 몇 가지 주의사항이 필요합니다. AI의 결과물을 맹신하지 말고 반드시 검증해야 하며, 학습 데이터의 한계로 인해 발생할 수 있는 오작동 가능성을 인지해야 합니다. 또한, 보안 및 개인정보 보호 측면에서 테스트 데이터의 클라우드 유출 위험을 고려하고, AI는 도구일 뿐이라는 점을 명심해야 합니다.</li>
+</ul>
+
+<h2 id="실무-적용-가이드">실무 적용 가이드</h2>
+
+<h3 id="1-테스트-자동화-개선">1. 테스트 자동화 개선</h3>
+
+<p>AI를 활용하여 테스트 자동화를 고도화하는 방법으로는 AI 기반 테스트 케이스 자동 생성, 자연어 요구사항 입력을 통한 테스트 생성, 자가 치유 기능을 활용한 UI 변경 대응 등이 있습니다. 이러한 접근은 유지보수 부담을 경감하고, 테스트 커버리지를 넓히는 데 기여할 수 있습니다.</p>
+
+<p><strong>실행 단계:</strong></p>
+<ul>
+  <li>
+    <ol>
+      <li>AI 테스트 도구 파일럿 도입: 팀의 작은 모듈에 AI 기반 테스트 케이스 생성 도구(예: ChatGPT)를 시범 적용하여 효과를 검증합니다.</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>AI 생성 테스트 검토: AI가 생성한 테스트 케이스를 QA 엔지니어가 검토하여 누락된 시나리오나 오류가 있는 케이스를 걸러냅니다.</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>CI/CD 통합: 검증된 AI 생성 테스트 케이스를 CI/CD 파이프라인에 포함시켜 코드 변경 시 자동 실행되도록 구성합니다.</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>결과 모니터링 및 피드백: AI가 제안한 테스트의 실행 결과를 모니터링하고</li>
+    </ol>
+  </li>
+  <li>오탐/미탐 사례를 수집하여 모델 개선이나 추가 테스트 케이스 작성에 반영합니다.</li>
+  <li>
+    <ol>
+      <li>팀 가이드 마련: AI 도구 활용에 대한 모범 사례와 한계를 문서화하여 팀원들과 공유하고</li>
+    </ol>
+  </li>
+  <li>AI 결과에 대한 리뷰 절차를 공식화합니다.</li>
+</ul>
+
+<h3 id="2-품질-검증-프로세스">2. 품질 검증 프로세스</h3>
+
+<p>AI를 품질 검증 프로세스 전반에 통합하기 위해서는 테스트 기획 단계에서 AI 분석을 통해 위험도가 높은 기능을 선별하고 자원을 집중하는 전략이 필요합니다. 테스트 실행 단계에서는 AI가 로그와 결과를 분석하여 결함의 근본 원인을 파악하거나 방대한 테스트 결과를 시각화하는 방법을 활용할 수 있습니다. 배포 후 운영 단계에서는 AIOps와 연계된 AI 모니터링을 통해 실제 사용자 환경의 이상 징후를 조기 탐지하는 방안을 마련해야 합니다. 이러한 접근은 요구사항 분석부터 운영 모니터링까지 QA 프로세스 각 단계에 AI를 내재화하여 전체 테스트 사이클의 효율성과 선제적 품질 관리 능력을 향상시키는 데 기여합니다.</p>
+
+<h2 id="학습-로드맵">학습 로드맵</h2>
+
+<h3 id="즉시-학습-1-2주">즉시 학습 (1-2주)</h3>
+
+<p><strong>배워야 할 기술:</strong></p>
+<ul>
+  <li>기술의 기본 개념과 작동 원리 이해</li>
+  <li>간단한 도구나 플랫폼 사용 경험 쌓기 (초보자 수준)</li>
+</ul>
+
+<h3 id="단기-학습-1-3개월">단기 학습 (1-3개월)</h3>
+
+<p><strong>배워야 할 기술:</strong></p>
+<ul>
+  <li>머신러닝 및 데이터 과학 기초 지식 (Python 등 프로그래밍 언어 활용)</li>
+  <li>관련 테스트 자동화 프레임워크 및 도구 심화 학습</li>
+</ul>
+
+<h3 id="장기-학습-3-6개월">장기 학습 (3-6개월)</h3>
+
+<p><strong>배워야 할 기술:</strong></p>
+<ul>
+  <li>AI 모델 커스터마이징 및 현장 적용 능력 (예: 결함 예측 모델 개발)</li>
+  <li>AI 품질 거버넌스 및 윤리 준수 방안 습득</li>
+</ul>
+
+<h2 id="전문가-의견">전문가 의견</h2>
+
+<h3 id="시니어-qa-엔지니어-관점">시니어 QA 엔지니어 관점</h3>
+
+<blockquote>
+  <p>AI 기술의 도입은 품질 보증의 기본 원리를 변화시키지 않으며, 이를 ‘똑똑한 보조자’로 보는 것이 중요합니다. 반복적인 테스트 처리를 AI가 담당함으로써 QA 엔지니어는 초기 설계 단계의 품질 이슈 검토나 창의적인 테스트 시나리오 구상에 더 많은 시간을 할애할 수 있습니다. 그러나 기술 결과물에 대한 최종 책임은 여전히 QA 팀에 있으므로, 놓친 부분을 찾아내고 판단을 보완하는 역할이 중요합니다.</p>
+</blockquote>
+
+<h3 id="테스트-자동화-전문가-관점">테스트 자동화 전문가 관점</h3>
+
+<blockquote>
+  <p>AI 기술은 자동화 분야에 혁신적인 변화를 가져왔습니다. 과거에는 스크립트 작성과 유지보수에 많은 수작업 시간이 소요되었으나, 이제 AI가 코드 생성부터 자가 치유까지 도와주어 자동화 범위가 크게 넓어졌습니다. 특히 시각적 테스트나 동적 요소 식별 기술이 그동안 자동화가 어려웠던 영역을 크게 개선하였으며, 이러한 도구들을 기존 프레임워크와 프로세스에 잘 통합하여 신뢰성 높은 자동화 파이프라인을 구축하는 것이 중요합니다.</p>
+</blockquote>
+
+<h3 id="devopssre-관점">DevOps/SRE 관점</h3>
+
+<blockquote>
+  <p>AI 기술의 도입은 개발, 테스트, 운영 간 경계를 더욱 모호하게 만들고 있습니다. 테스트 단계에서 결함을 잘 잡아내면 운영 환경 장애를 줄일 수 있으며, 운영 중 로그 분석으로 이상 징후를 실시간 감지할 수 있는 장점이 있습니다. 그러나 파이프라인에 새로운 복잡성이 생기며, AI로부터 나오는 알림과 지표를 기존 모니터링 시스템과 통합하여 오탐지나 경미한 이슈가 과도한 알람으로 이어지지 않도록 튜닝하는 노력이 필요합니다.</p>
+</blockquote>
+
+<h2 id="주요-qa">주요 Q&amp;A</h2>
+
+<p><strong>Q:</strong> 이 기술의 핵심 변화는 무엇인가요?</p>
+
+<p><strong>A:</strong> AI 기술의 도입은 QA 업무에 깊숙이 자리잡으면서 테스트 케이스 설계, 유지보수, 결함 탐지와 같은 작업들을 지능적으로 자동화할 수 있게 되었습니다. 과거에는 수작업으로 작성하던 시나리오를 이제 요구사항 분석을 통해 대량으로 생성하고, 실행 중 오류를 자가 치유로 자동 수정할 수 있게 되었습니다. 그 결과, 훨씬 짧은 시간에 더 폭넓은 테스트를 수행하여 품질을 확보할 수 있으며, QA 인력은 전략 수립과 창의적 품질 향상에 집중할 수 있게 되었습니다. 업계 통계에 따르면, AI 도구를 활용한 팀의 테스트 커버리지는 평균 30% 증가했습니다(tricentis.com).</p>
+
+<p><strong>Q:</strong> QA 담당자가 확인해야 할 위험 요소는?</p>
+
+<p><strong>A:</strong> AI 기술을 활용할 때는 여러 위험 요소를 고려해야 합니다. 첫째, 기술의 한계로 인해 잘못된 결과가 나올 수 있으며, 학습된 데이터에만 기반하므로 특정 도메인 지식이 필요한 경우 부정확한 테스트 케이스를 제안하거나 중요한 시나리오를 놓칠 수 있습니다. 둘째, 기술에 대한 과도한 의존은 위험하므로 제공된 답이 맥락에 맞는지 판단하고 교차 검증해야 하며, 이를 소홀히 하면 잘못된 결론을 얻을 수 있습니다. 셋째, 기술 도구 사용 시 데이터 보안과 프라이버시 문제도 고려해야 하며, 외부 클라우드 서비스에 제품의 민감한 테스트 데이터를 업로드하면 정보 유출 위험이 있습니다. 넷째, 기술의 결정은 이유가 불투명할 때가 많으므로(설명 가능성 낮음) 결과를 맹신하기보다 왜 그런 결과가 나왔는지 추가 확인하는 태도가 필요합니다.</p>
+
+<p><strong>Q:</strong> 팀에 바로 적용할 수 있는 행동 항목은?</p>
+
+<p><strong>A:</strong> 팀은 즉시 실행 가능한 구체적인 액션 아이템을 마련해야 합니다. 우선 작은 범위에서라도 AI 기술 활용을 시작해보는 것이 좋으며, 현재 프로젝트의 일부 모듈에 관련 도구를 도입해 파일럿으로 운영하고 그 결과를 팀과 공유해야 합니다. 또한 팀원들의 이해도를 높이기 위해 짧은 워크숍이나 스터디를 개최하여 간단한 실습(예: 도구로 테스트 시나리오 만들어보기)을 해볼 수 있습니다. 마지막으로, 기술이 제안한 결과에 대해 항상 2인 이상의 리뷰를 거치는 절차를 추가하여 실수를 걸러내고 팀의 신뢰도를 유지할 수 있도록 해야 합니다.</p>
+
+<h2 id="follow-up-제안">Follow-up 제안</h2>
+
+<ul>
+  <li>생성형 AI를 활용한 테스트 데이터 및 시나리오 생성 기법 연구</li>
+  <li>Agentic AI (자율 에이전트) 기술의 QA 분야 적용 가능성 모니터링</li>
+</ul>
+
+<h2 id="참고-자료">참고 자료</h2>
+
+<ul>
+  <li><a href="https://www.istqb.org/downloads/category/2-advanced-level-documents.html">ISTQB 생성형 AI 테스팅 Syllabus v1.0</a></li>
+  <li><a href="https://www.practitest.com/resource-center/blog/chatgpt-prompts-for-software-testing/">ChatGPT를 활용한 테스트 자동화 가이드 (PractiTest 블로그)</a></li>
+</ul>]]></content><author><name>류정현</name><email>jhryu115@gmail.com</email></author><category term="QA Engineer" /><category term="AI" /><category term="Development" /><summary type="html"><![CDATA[요약]]></summary></entry><entry><title type="html">Show GN: AI 마피아 게임</title><link href="http://localhost:4000/my-blog/daily%20life/2025/10/14/show-gn-ai.html" rel="alternate" type="text/html" title="Show GN: AI 마피아 게임" /><published>2025-10-14T16:50:57+09:00</published><updated>2025-10-14T16:50:57+09:00</updated><id>http://localhost:4000/my-blog/daily%20life/2025/10/14/show-gn-ai</id><content type="html" xml:base="http://localhost:4000/my-blog/daily%20life/2025/10/14/show-gn-ai.html"><![CDATA[<h2 id="요약">요약</h2>
 
 <p>AI 기반의 마피아 게임은 12명 중 11명이 AI로 구성된 혁신적인 게임으로, 사용자에게 다양한 경험을 제공합니다. 이 게임은 순한맛과 매운맛의 내용 선택이 가능하며, ElevenLabs의 음성 모드를 통해 더욱 몰입감 있는 플레이가 가능합니다. 특히, 매운맛 모드에서는 AI가 욕설을 포함한 대사를 생성하여 유머와 긴장감을 동시에 제공합니다. 이러한 기술은 게임 산업에서 AI의 활용 가능성을 보여주며, 사용자 경험을 극대화하는 방향으로 발전하고 있습니다.</p>
 
@@ -141,35 +266,7 @@
 <ul>
   <li><a href="https://www.istqb.org/downloads/category/2-advanced-level-documents.html">ISTQB 생성형 AI 테스팅 Syllabus v1.0</a></li>
   <li><a href="https://www.practitest.com/resource-center/blog/chatgpt-prompts-for-software-testing/">ChatGPT를 활용한 테스트 자동화 가이드 (PractiTest 블로그)</a></li>
-</ul>]]></content><author><name>정현류</name></author><category term="Daily Life" /><category term="GeekNews" /><category term="QA" /><category term="AI" /><summary type="html"><![CDATA[요약]]></summary></entry><entry><title type="html">웹 페이지 내용을 바탕으로 대화하는 무료 AI 크롬 익스텐션(광고/구독 없음, 1분 내 설치 가능)</title><link href="http://localhost:4000/my-blog/learning/2025/10/14/ai-1.html" rel="alternate" type="text/html" title="웹 페이지 내용을 바탕으로 대화하는 무료 AI 크롬 익스텐션(광고/구독 없음, 1분 내 설치 가능)" /><published>2025-10-14T16:49:28+09:00</published><updated>2025-10-14T16:49:28+09:00</updated><id>http://localhost:4000/my-blog/learning/2025/10/14/ai----1</id><content type="html" xml:base="http://localhost:4000/my-blog/learning/2025/10/14/ai-1.html"><![CDATA[<h2 id="요약">요약</h2>
-
-<p><strong>별도 가입이나 설치 없이 개인의 Gemini API Key를 이용해서 무료로 사용 가능한 초간단 크롬 익스텐션</strong></p>
-<p>[ 기능 소개 ]</p>
-<ul> <li>Gemini API Key를 발급받아 등록만하면 바로 사용 가능</li> <li>구글에서 제공하는 무료 한도만큼 무제한으로 사용 가능(높은 한도를 원하시면 '할당량 등급
-
-## 주요 Q&amp;A
-
-**Q:** 이 소식이 다루는 핵심 변화는 무엇인가요?
-
-**A:** 기사 '웹 페이지 내용을 바탕으로 대화하는 무료 AI 크롬 익스텐션(광고/구독 없음, 1분 내 설치 가능)'는 다음을 강조합니다: <p><strong>별도 가입이나 설치 없이 개인의 Gemini API Key를 이용해서 무료로 사용 가능한 초간단 크롬 익스텐션</strong></p> <p>[ 기능 소개 ]</p> <ul> <li>Gemini API Key를 발급받아 등록만하면 바로 사용 가능</li> <li>구글에서 제공하는 무료 한도만큼 무제한으로 사용 가능(높은 한도를 원하시면 '할당량 등급
-
-**Q:** QA 담당자가 확인해야 할 위험 요소는 무엇인가요?
-
-**A:** QA 관점에서 '웹 페이지 내용을 바탕으로 대화하는 무료 AI 크롬 익스텐션(광고/구독 없음, 1분 내 설치 가능)'는 새 기능/변화를 검증할 때 잠재적인 결함 영역을 면밀히 확인해야 합니다. 기사에서 언급된 내용(<p><strong>별도 가입이나 설치 없이 개인의 Gemini API Key를 이용해서 무료로 사용 가능한 초간단 크롬 익스텐션</strong></p> <p>[ 기능 소개 ]</p> <ul> <li>Gemini API Key를 발급받아 등록만하면 바로 사용 가능</li> <li>구글에서 제공하는 무료 한도만큼 무제한으로 사용 가능(높은 한도를 원하시면 '할당량 등급)을 기준으로 테스트 시나리오를 준비하세요.
-
-**Q:** 팀에 바로 적용할 수 있는 행동 항목은 무엇인가요?
-
-**A:** 팀은 기사 '웹 페이지 내용을 바탕으로 대화하는 무료 AI 크롬 익스텐션(광고/구독 없음, 1분 내 설치 가능)'에서 소개된 내용을 바탕으로 회고를 진행하고, QA 체크리스트를 업데이트하세요. 테스트 데이터, 모니터링 지표, 사용자 피드백 경로를 정비하면 도움이 됩니다.
-
-## Follow-up 제안
-
-- '웹 페이지 내용을 바탕으로 대화하는 무료 AI 크롬 익스텐션(광고/구독 없음, 1분 내 설치 가능)' 관련 추가 공식 발표나 블로그를 모니터링하세요.
-- 도입 시 필요한 테스트 자동화 시나리오를 정의하세요.
-
-## 참고 자료
-
-- [GeekNews 원문](https://news.hada.io/topic?id=23650)
-</li></ul></li></ul></li></ul>]]></content><author><name>정현류</name></author><category term="Learning" /><category term="Chrome" /><category term="Gemini" /><summary type="html"><![CDATA[요약]]></summary></entry><entry><title type="html">Wi-Fi 속도가 빠를수록 품질이 나빠지는 이유 ⭐⭐⭐</title><link href="http://localhost:4000/my-blog/qa%20engineer/2025/10/12/wi-fi.html" rel="alternate" type="text/html" title="Wi-Fi 속도가 빠를수록 품질이 나빠지는 이유 ⭐⭐⭐" /><published>2025-10-12T17:41:41+09:00</published><updated>2025-10-12T17:41:41+09:00</updated><id>http://localhost:4000/my-blog/qa%20engineer/2025/10/12/wi-fi</id><content type="html" xml:base="http://localhost:4000/my-blog/qa%20engineer/2025/10/12/wi-fi.html"><![CDATA[<h2 id="요약">요약</h2>
+</ul>]]></content><author><name>류정현</name><email>jhryu115@gmail.com</email></author><category term="Daily Life" /><category term="GeekNews" /><category term="QA" /><category term="AI" /><summary type="html"><![CDATA[요약]]></summary></entry><entry><title type="html">Wi-Fi 속도가 빠를수록 품질이 나빠지는 이유 ⭐⭐⭐</title><link href="http://localhost:4000/my-blog/qa%20engineer/2025/10/12/wi-fi.html" rel="alternate" type="text/html" title="Wi-Fi 속도가 빠를수록 품질이 나빠지는 이유 ⭐⭐⭐" /><published>2025-10-12T17:41:41+09:00</published><updated>2025-10-12T17:41:41+09:00</updated><id>http://localhost:4000/my-blog/qa%20engineer/2025/10/12/wi-fi</id><content type="html" xml:base="http://localhost:4000/my-blog/qa%20engineer/2025/10/12/wi-fi.html"><![CDATA[<h2 id="요약">요약</h2>
 
 <p>Wi-Fi 속도가 빠를수록 품질이 나빠지는 현상은 5 GHz 대역에서의 넓은 채널 폭 사용으로 인해 발생하는 간섭과 지연 증가에 기인합니다. 소비자용 제품들은 기본적으로 80MHz 이상의 넓은 채널 폭을 설정하여 최상의 경험을 제공하기보다는 성능 저하를 초래할 수 있습니다. 이러한 기술적 이해는 QA 엔지니어가 네트워크 성능 테스트를 설계하고 실행하는 데 중요한 요소로 작용할 수 있습니다.</p>
 
@@ -312,7 +409,7 @@
 <ul>
   <li><a href="https://www.cisco.com/c/en/us/solutions/small-business/resource-center/wifi-performance-optimization.html">Wi-Fi 성능 최적화 가이드</a></li>
   <li><a href="https://www.coursera.org/learn/networking-basics">Coursera - Networking Basics</a></li>
-</ul>]]></content><author><name>정현류</name></author><category term="QA Engineer" /><category term="QA" /><summary type="html"><![CDATA[요약]]></summary></entry><entry><title type="html">“튜토리얼 지옥”을 대체한 “바이브 코딩 지옥”의 등장 ⭐⭐⭐</title><link href="http://localhost:4000/my-blog/qa%20engineer/2025/10/12/geeknews.html" rel="alternate" type="text/html" title="“튜토리얼 지옥”을 대체한 “바이브 코딩 지옥”의 등장 ⭐⭐⭐" /><published>2025-10-12T17:00:05+09:00</published><updated>2025-10-12T17:00:05+09:00</updated><id>http://localhost:4000/my-blog/qa%20engineer/2025/10/12/geeknews</id><content type="html" xml:base="http://localhost:4000/my-blog/qa%20engineer/2025/10/12/geeknews.html"><![CDATA[<h2 id="요약">요약</h2>
+</ul>]]></content><author><name>류정현</name><email>jhryu115@gmail.com</email></author><category term="QA Engineer" /><category term="QA" /><summary type="html"><![CDATA[요약]]></summary></entry><entry><title type="html">“튜토리얼 지옥”을 대체한 “바이브 코딩 지옥”의 등장 ⭐⭐⭐</title><link href="http://localhost:4000/my-blog/qa%20engineer/2025/10/12/geeknews.html" rel="alternate" type="text/html" title="“튜토리얼 지옥”을 대체한 “바이브 코딩 지옥”의 등장 ⭐⭐⭐" /><published>2025-10-12T17:00:05+09:00</published><updated>2025-10-12T17:00:05+09:00</updated><id>http://localhost:4000/my-blog/qa%20engineer/2025/10/12/geeknews</id><content type="html" xml:base="http://localhost:4000/my-blog/qa%20engineer/2025/10/12/geeknews.html"><![CDATA[<h2 id="요약">요약</h2>
 
 <p>최근 코딩 교육 환경에서 ‘튜토리얼 지옥’ 대신 ‘바이브 코딩 지옥’이 새로운 문제로 대두되고 있습니다. 이는 AI 없이는 코딩할 수 없고, AI가 생성한 코드에 의존하게 되는 상황을 의미합니다. 이러한 변화는 QA 엔지니어에게도 큰 영향을 미치며, AI 도구를 활용한 테스트 자동화와 품질 보증의 새로운 접근법이 필요해지고 있습니다. AI의 도입은 소프트웨어 개발 및 테스트 프로세스의 효율성을 높일 수 있지만, 동시에 새로운 리스크와 과제를 동반합니다.</p>
 
@@ -455,7 +552,7 @@
 <ul>
   <li><a href="https://www.istqb.org/downloads/category/2-syllabi.html">ISTQB 생성형 AI 테스팅 Syllabus v1.0</a></li>
   <li><a href="https://www.practitest.com/resource-center/blog/chatgpt-prompts-for-software-testing/">ChatGPT를 활용한 테스트 자동화 가이드 (PractiTest 블로그)</a></li>
-</ul>]]></content><author><name>정현류</name></author><category term="QA Engineer" /><category term="AI" /><category term="Development" /><summary type="html"><![CDATA[요약]]></summary></entry><entry><title type="html">EC2 서버에 Nginx와 Application Server(uvicorn/FastAPI) 연결 설정, 운영 팁까지</title><link href="http://localhost:4000/my-blog/learning/2025/10/12/ec2-nginx-applcation.html" rel="alternate" type="text/html" title="EC2 서버에 Nginx와 Application Server(uvicorn/FastAPI) 연결 설정, 운영 팁까지" /><published>2025-10-12T13:05:00+09:00</published><updated>2025-10-12T13:05:00+09:00</updated><id>http://localhost:4000/my-blog/learning/2025/10/12/ec2-nginx-applcation</id><content type="html" xml:base="http://localhost:4000/my-blog/learning/2025/10/12/ec2-nginx-applcation.html"><![CDATA[<h1 id="ec2-서버에-nginx와-application-server-연결-설정-운영-팁까지">EC2 서버에 Nginx와 Application Server 연결 설정, 운영 팁까지</h1>
+</ul>]]></content><author><name>류정현</name><email>jhryu115@gmail.com</email></author><category term="QA Engineer" /><category term="AI" /><category term="Development" /><summary type="html"><![CDATA[요약]]></summary></entry><entry><title type="html">EC2 서버에 Nginx와 Application Server(uvicorn/FastAPI) 연결 설정, 운영 팁까지</title><link href="http://localhost:4000/my-blog/learning/2025/10/12/ec2-nginx-applcation.html" rel="alternate" type="text/html" title="EC2 서버에 Nginx와 Application Server(uvicorn/FastAPI) 연결 설정, 운영 팁까지" /><published>2025-10-12T13:05:00+09:00</published><updated>2025-10-12T13:05:00+09:00</updated><id>http://localhost:4000/my-blog/learning/2025/10/12/ec2-nginx-applcation</id><content type="html" xml:base="http://localhost:4000/my-blog/learning/2025/10/12/ec2-nginx-applcation.html"><![CDATA[<h1 id="ec2-서버에-nginx와-application-server-연결-설정-운영-팁까지">EC2 서버에 Nginx와 Application Server 연결 설정, 운영 팁까지</h1>
 
 <p><strong>목표</strong>: AWS EC2(Ubuntu)에서 <strong>FastAPI(Uvicorn)</strong> 애플리케이션을 구동하고, <strong>Nginx</strong>를 리버스 프록시로 앞단에 세워 80 포트로 서비스합니다.</p>
 
@@ -582,50 +679,50 @@ pip <span class="nb">install </span>fastapi uvicorn[standard]
 
 <p><code class="language-plaintext highlighter-rouge">~/reactbase/server.py</code> 파일을 생성합니다:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
-<span class="kn">from</span> <span class="nn">fastapi.responses</span> <span class="kn">import</span> <span class="n">PlainTextResponse</span>
-<span class="kn">from</span> <span class="nn">fastapi.staticfiles</span> <span class="kn">import</span> <span class="n">StaticFiles</span>
-<span class="kn">import</span> <span class="nn">uvicorn</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span> <span class="n">fastapi.responses</span> <span class="kn">import</span> <span class="n">PlainTextResponse</span>
+<span class="kn">from</span> <span class="n">fastapi.staticfiles</span> <span class="kn">import</span> <span class="n">StaticFiles</span>
+<span class="kn">import</span> <span class="n">uvicorn</span>
+<span class="kn">import</span> <span class="n">pathlib</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s">"My API Server"</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s">"EC2에서 구동되는 FastAPI 애플리케이션"</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="s">"1.0.0"</span>
+<span class="n">app</span> <span class="o">=</span> <span class="nc">FastAPI</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="sh">"</span><span class="s">My API Server</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">EC2에서 구동되는 FastAPI 애플리케이션</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="sh">"</span><span class="s">1.0.0</span><span class="sh">"</span>
 <span class="p">)</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
+<span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">read_root</span><span class="p">():</span>
-    <span class="s">"""루트 엔드포인트"""</span>
-    <span class="k">return</span> <span class="s">"welcome"</span>
+    <span class="sh">"""</span><span class="s">루트 엔드포인트</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">welcome</span><span class="sh">"</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/hello"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
+<span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/hello</span><span class="sh">"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">read_hello</span><span class="p">():</span>
-    <span class="s">"""Hello 엔드포인트"""</span>
-    <span class="k">return</span> <span class="s">"hello"</span>
+    <span class="sh">"""</span><span class="s">Hello 엔드포인트</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/world"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
+<span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/world</span><span class="sh">"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">read_world</span><span class="p">():</span>
-    <span class="s">"""World 엔드포인트"""</span>
-    <span class="k">return</span> <span class="s">"world"</span>
+    <span class="sh">"""</span><span class="s">World 엔드포인트</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">world</span><span class="sh">"</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/health"</span><span class="p">)</span>
+<span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/health</span><span class="sh">"</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">health_check</span><span class="p">():</span>
-    <span class="s">"""헬스 체크 엔드포인트 (모니터링용)"""</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s">"status"</span><span class="p">:</span> <span class="s">"healthy"</span><span class="p">,</span> <span class="s">"service"</span><span class="p">:</span> <span class="s">"fastapi"</span><span class="p">}</span>
+    <span class="sh">"""</span><span class="s">헬스 체크 엔드포인트 (모니터링용)</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">healthy</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">service</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">fastapi</span><span class="sh">"</span><span class="p">}</span>
 
 <span class="c1"># 정적 파일: /home/ubuntu/reactbase/public → /images 경로로 노출
-</span><span class="n">static_dir</span> <span class="o">=</span> <span class="n">pathlib</span><span class="p">.</span><span class="n">Path</span><span class="p">(</span><span class="n">__file__</span><span class="p">).</span><span class="n">resolve</span><span class="p">().</span><span class="n">parent</span>
-<span class="n">public_dir</span> <span class="o">=</span> <span class="n">static_dir</span> <span class="o">/</span> <span class="s">"public"</span>
+</span><span class="n">static_dir</span> <span class="o">=</span> <span class="n">pathlib</span><span class="p">.</span><span class="nc">Path</span><span class="p">(</span><span class="n">__file__</span><span class="p">).</span><span class="nf">resolve</span><span class="p">().</span><span class="n">parent</span>
+<span class="n">public_dir</span> <span class="o">=</span> <span class="n">static_dir</span> <span class="o">/</span> <span class="sh">"</span><span class="s">public</span><span class="sh">"</span>
 
 <span class="c1"># public 디렉토리가 없으면 생성
-</span><span class="n">public_dir</span><span class="p">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="n">public_dir</span><span class="p">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="c1"># 정적 파일 마운트
-</span><span class="n">app</span><span class="p">.</span><span class="n">mount</span><span class="p">(</span><span class="s">"/images"</span><span class="p">,</span> <span class="n">StaticFiles</span><span class="p">(</span><span class="n">directory</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">public_dir</span><span class="p">),</span> <span class="n">html</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">"images"</span><span class="p">)</span>
+</span><span class="n">app</span><span class="p">.</span><span class="nf">mount</span><span class="p">(</span><span class="sh">"</span><span class="s">/images</span><span class="sh">"</span><span class="p">,</span> <span class="nc">StaticFiles</span><span class="p">(</span><span class="n">directory</span><span class="o">=</span><span class="nf">str</span><span class="p">(</span><span class="n">public_dir</span><span class="p">),</span> <span class="n">html</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">images</span><span class="sh">"</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">uvicorn</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s">"0.0.0.0"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">uvicorn</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="sh">"</span><span class="s">0.0.0.0</span><span class="sh">"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
 </code></pre></div></div>
 
 <h3 id="로컬-테스트">로컬 테스트</h3>
@@ -685,37 +782,37 @@ curl http://127.0.0.1:8000/docs
 
 <p>아래 내용을 입력:</p>
 
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span>
-<span class="py">Description</span><span class="p">=</span><span class="s">FastAPI Application Service</span>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">FastAPI Application Service</span>
 <span class="py">After</span><span class="p">=</span><span class="s">network.target</span>
 <span class="py">Documentation</span><span class="p">=</span><span class="s">https://fastapi.tiangolo.com/</span>
-
-<span class="nn">[Service]</span>
-<span class="py">Type</span><span class="p">=</span><span class="s">simple</span>
+<span class="w">
+</span><span class="nn">[Service]</span><span class="w">
+</span><span class="py">Type</span><span class="p">=</span><span class="s">simple</span>
 <span class="py">User</span><span class="p">=</span><span class="s">ubuntu</span>
 <span class="py">Group</span><span class="p">=</span><span class="s">ubuntu</span>
 <span class="py">WorkingDirectory</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase</span>
 <span class="py">Environment</span><span class="p">=</span><span class="s">"PATH=/home/ubuntu/reactbase/venv/bin"</span>
 <span class="py">ExecStart</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase/venv/bin/uvicorn server:app </span><span class="se">\
-</span>    <span class="s">--host 0.0.0.0 </span><span class="se">\
-</span>    <span class="s">--port 8000 </span><span class="se">\
-</span>    <span class="s">--proxy-headers </span><span class="se">\
-</span>    <span class="s">--forwarded-allow-ips="*"</span>
-
-<span class="c"># 재시작 정책
+</span><span class="w">    </span><span class="s">--host 0.0.0.0 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--port 8000 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--proxy-headers </span><span class="se">\
+</span><span class="w">    </span><span class="s">--forwarded-allow-ips="*"</span>
+<span class="w">
+</span><span class="c"># 재시작 정책
 </span><span class="py">Restart</span><span class="p">=</span><span class="s">always</span>
 <span class="py">RestartSec</span><span class="p">=</span><span class="s">3</span>
-
-<span class="c"># 프로세스 종료 시간 제한
+<span class="w">
+</span><span class="c"># 프로세스 종료 시간 제한
 </span><span class="py">TimeoutStopSec</span><span class="p">=</span><span class="s">10</span>
-
-<span class="c"># 로그 설정 (journalctl로 확인 가능)
+<span class="w">
+</span><span class="c"># 로그 설정 (journalctl로 확인 가능)
 </span><span class="py">StandardOutput</span><span class="p">=</span><span class="s">journal</span>
 <span class="py">StandardError</span><span class="p">=</span><span class="s">journal</span>
 <span class="py">SyslogIdentifier</span><span class="p">=</span><span class="s">fastapi</span>
-
-<span class="nn">[Install]</span>
-<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+<span class="w">
+</span><span class="nn">[Install]</span><span class="w">
+</span><span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
 </code></pre></div></div>
 
 <h3 id="설정-항목-설명">설정 항목 설명</h3>
@@ -852,7 +949,7 @@ curl http://127.0.0.1:8000/docs
         <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:8000</span><span class="p">;</span>
 
         <span class="c1"># 프록시 헤더 설정</span>
-        <span class="kn">proxy_http_version</span> <span class="mi">1</span><span class="s">.1</span><span class="p">;</span>
+        <span class="kn">proxy_http_version</span> <span class="mf">1.1</span><span class="p">;</span>
         <span class="kn">proxy_set_header</span> <span class="s">Host</span>              <span class="nv">$host</span><span class="p">;</span>
         <span class="kn">proxy_set_header</span> <span class="s">X-Real-IP</span>         <span class="nv">$remote_addr</span><span class="p">;</span>
         <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span>   <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
@@ -1408,11 +1505,11 @@ ssh <span class="nt">-i</span> 키.pem ubuntu@&lt;IP&gt;
 
 <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 코어가 2개라면 workers=2 또는 3
 </span><span class="py">ExecStart</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase/venv/bin/uvicorn server:app </span><span class="se">\
-</span>    <span class="s">--host 0.0.0.0 </span><span class="se">\
-</span>    <span class="s">--port 8000 </span><span class="se">\
-</span>    <span class="s">--workers 2 </span><span class="se">\
-</span>    <span class="s">--proxy-headers </span><span class="se">\
-</span>    <span class="s">--forwarded-allow-ips="*"</span>
+</span><span class="w">    </span><span class="s">--host 0.0.0.0 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--port 8000 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--workers 2 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--proxy-headers </span><span class="se">\
+</span><span class="w">    </span><span class="s">--forwarded-allow-ips="*"</span>
 </code></pre></div></div>
 
 <blockquote>
@@ -1930,7 +2027,7 @@ curl http://localhost/
 
 <p><strong>작성일</strong>: 2025년 10월 12일<br />
 <strong>카테고리</strong>: DevOps, AWS<br />
-<strong>태그</strong>: EC2, Nginx, FastAPI, Uvicorn, Ubuntu, systemd, ReverseProxy, SFTP</p>]]></content><author><name>정현류</name></author><category term="Learning" /><category term="EC2" /><category term="Nginx" /><category term="FastAPI" /><category term="Uvicorn" /><category term="Ubuntu" /><category term="systemd" /><category term="ReverseProxy" /><category term="SFTP" /><category term="DevOps" /><category term="AWS" /><summary type="html"><![CDATA[EC2 서버에 Nginx와 Application Server 연결 설정, 운영 팁까지]]></summary></entry><entry><title type="html">AWS EC2 FastAPI 프로덕션 배포 완전 가이드</title><link href="http://localhost:4000/my-blog/learning/2025/10/11/study-aws.html" rel="alternate" type="text/html" title="AWS EC2 FastAPI 프로덕션 배포 완전 가이드" /><published>2025-10-11T19:30:00+09:00</published><updated>2025-10-11T19:30:00+09:00</updated><id>http://localhost:4000/my-blog/learning/2025/10/11/study-aws</id><content type="html" xml:base="http://localhost:4000/my-blog/learning/2025/10/11/study-aws.html"><![CDATA[<h1 id="aws-ec2-fastapi-프로덕션-배포-완전-가이드">AWS EC2 FastAPI 프로덕션 배포 완전 가이드</h1>
+<strong>태그</strong>: EC2, Nginx, FastAPI, Uvicorn, Ubuntu, systemd, ReverseProxy, SFTP</p>]]></content><author><name>류정현</name><email>jhryu115@gmail.com</email></author><category term="Learning" /><category term="EC2" /><category term="Nginx" /><category term="FastAPI" /><category term="Uvicorn" /><category term="Ubuntu" /><category term="systemd" /><category term="ReverseProxy" /><category term="SFTP" /><category term="DevOps" /><category term="AWS" /><summary type="html"><![CDATA[EC2 서버에 Nginx와 Application Server 연결 설정, 운영 팁까지]]></summary></entry><entry><title type="html">AWS EC2 FastAPI 프로덕션 배포 완전 가이드</title><link href="http://localhost:4000/my-blog/learning/2025/10/11/study-aws.html" rel="alternate" type="text/html" title="AWS EC2 FastAPI 프로덕션 배포 완전 가이드" /><published>2025-10-11T19:30:00+09:00</published><updated>2025-10-11T19:30:00+09:00</updated><id>http://localhost:4000/my-blog/learning/2025/10/11/study-aws</id><content type="html" xml:base="http://localhost:4000/my-blog/learning/2025/10/11/study-aws.html"><![CDATA[<h1 id="aws-ec2-fastapi-프로덕션-배포-완전-가이드">AWS EC2 FastAPI 프로덕션 배포 완전 가이드</h1>
 
 <h2 id="개요">개요</h2>
 
@@ -2299,36 +2396,36 @@ aiofiles==23.2.1
 
 <p><code class="language-plaintext highlighter-rouge">/home/ubuntu/reactbase/server.py</code> 파일 생성:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Request</span>
-<span class="kn">from</span> <span class="nn">fastapi.responses</span> <span class="kn">import</span> <span class="n">PlainTextResponse</span><span class="p">,</span> <span class="n">JSONResponse</span>
-<span class="kn">from</span> <span class="nn">fastapi.staticfiles</span> <span class="kn">import</span> <span class="n">StaticFiles</span>
-<span class="kn">from</span> <span class="nn">fastapi.middleware.cors</span> <span class="kn">import</span> <span class="n">CORSMiddleware</span>
-<span class="kn">from</span> <span class="nn">fastapi.middleware.trustedhost</span> <span class="kn">import</span> <span class="n">TrustedHostMiddleware</span>
-<span class="kn">import</span> <span class="nn">uvicorn</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="n">fastapi.responses</span> <span class="kn">import</span> <span class="n">PlainTextResponse</span><span class="p">,</span> <span class="n">JSONResponse</span>
+<span class="kn">from</span> <span class="n">fastapi.staticfiles</span> <span class="kn">import</span> <span class="n">StaticFiles</span>
+<span class="kn">from</span> <span class="n">fastapi.middleware.cors</span> <span class="kn">import</span> <span class="n">CORSMiddleware</span>
+<span class="kn">from</span> <span class="n">fastapi.middleware.trustedhost</span> <span class="kn">import</span> <span class="n">TrustedHostMiddleware</span>
+<span class="kn">import</span> <span class="n">uvicorn</span>
+<span class="kn">import</span> <span class="n">pathlib</span>
+<span class="kn">import</span> <span class="n">os</span>
+<span class="kn">from</span> <span class="n">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 
 <span class="c1"># 환경 변수 로드 (선택사항)
-</span><span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
-<span class="n">load_dotenv</span><span class="p">()</span>
+</span><span class="kn">from</span> <span class="n">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="nf">load_dotenv</span><span class="p">()</span>
 
 <span class="c1"># FastAPI 앱 초기화
-</span><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s">"FastAPI Production Server"</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s">"AWS EC2에 배포된 프로덕션 FastAPI 서버"</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="s">"1.0.0"</span><span class="p">,</span>
-    <span class="n">docs_url</span><span class="o">=</span><span class="s">"/docs"</span><span class="p">,</span>  <span class="c1"># Swagger UI
-</span>    <span class="n">redoc_url</span><span class="o">=</span><span class="s">"/redoc"</span>  <span class="c1"># ReDoc
+</span><span class="n">app</span> <span class="o">=</span> <span class="nc">FastAPI</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="sh">"</span><span class="s">FastAPI Production Server</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="sh">"</span><span class="s">AWS EC2에 배포된 프로덕션 FastAPI 서버</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="sh">"</span><span class="s">1.0.0</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">docs_url</span><span class="o">=</span><span class="sh">"</span><span class="s">/docs</span><span class="sh">"</span><span class="p">,</span>  <span class="c1"># Swagger UI
+</span>    <span class="n">redoc_url</span><span class="o">=</span><span class="sh">"</span><span class="s">/redoc</span><span class="sh">"</span>  <span class="c1"># ReDoc
 </span><span class="p">)</span>
 
 <span class="c1"># CORS 설정 (필요한 경우)
-</span><span class="n">app</span><span class="p">.</span><span class="n">add_middleware</span><span class="p">(</span>
+</span><span class="n">app</span><span class="p">.</span><span class="nf">add_middleware</span><span class="p">(</span>
     <span class="n">CORSMiddleware</span><span class="p">,</span>
-    <span class="n">allow_origins</span><span class="o">=</span><span class="p">[</span><span class="s">"*"</span><span class="p">],</span>  <span class="c1"># 프로덕션에서는 특정 도메인만 허용
+    <span class="n">allow_origins</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">*</span><span class="sh">"</span><span class="p">],</span>  <span class="c1"># 프로덕션에서는 특정 도메인만 허용
 </span>    <span class="n">allow_credentials</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-    <span class="n">allow_methods</span><span class="o">=</span><span class="p">[</span><span class="s">"*"</span><span class="p">],</span>
-    <span class="n">allow_headers</span><span class="o">=</span><span class="p">[</span><span class="s">"*"</span><span class="p">],</span>
+    <span class="n">allow_methods</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">*</span><span class="sh">"</span><span class="p">],</span>
+    <span class="n">allow_headers</span><span class="o">=</span><span class="p">[</span><span class="sh">"</span><span class="s">*</span><span class="sh">"</span><span class="p">],</span>
 <span class="p">)</span>
 
 <span class="c1"># 신뢰할 수 있는 호스트 설정 (보안)
@@ -2338,82 +2435,82 @@ aiofiles==23.2.1
 # )
 </span>
 <span class="c1"># 헬스 체크 엔드포인트
-</span><span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/health"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">JSONResponse</span><span class="p">)</span>
+</span><span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/health</span><span class="sh">"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">JSONResponse</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">health_check</span><span class="p">():</span>
-    <span class="s">"""서버 상태 확인용 헬스 체크 엔드포인트"""</span>
+    <span class="sh">"""</span><span class="s">서버 상태 확인용 헬스 체크 엔드포인트</span><span class="sh">"""</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s">"status"</span><span class="p">:</span> <span class="s">"healthy"</span><span class="p">,</span>
-        <span class="s">"timestamp"</span><span class="p">:</span> <span class="n">datetime</span><span class="p">.</span><span class="n">utcnow</span><span class="p">().</span><span class="n">isoformat</span><span class="p">(),</span>
-        <span class="s">"version"</span><span class="p">:</span> <span class="s">"1.0.0"</span>
+        <span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">healthy</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">timestamp</span><span class="sh">"</span><span class="p">:</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">utcnow</span><span class="p">().</span><span class="nf">isoformat</span><span class="p">(),</span>
+        <span class="sh">"</span><span class="s">version</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">1.0.0</span><span class="sh">"</span>
     <span class="p">}</span>
 
 <span class="c1"># 기본 엔드포인트
-</span><span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
+</span><span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/</span><span class="sh">"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">read_root</span><span class="p">():</span>
-    <span class="s">"""루트 경로"""</span>
-    <span class="k">return</span> <span class="s">"Welcome to FastAPI Production Server"</span>
+    <span class="sh">"""</span><span class="s">루트 경로</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">Welcome to FastAPI Production Server</span><span class="sh">"</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/hello"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
+<span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/hello</span><span class="sh">"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">read_hello</span><span class="p">():</span>
-    <span class="s">"""Hello 엔드포인트"""</span>
-    <span class="k">return</span> <span class="s">"hello"</span>
+    <span class="sh">"""</span><span class="s">Hello 엔드포인트</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">hello</span><span class="sh">"</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/world"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
+<span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/world</span><span class="sh">"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">PlainTextResponse</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">read_world</span><span class="p">():</span>
-    <span class="s">"""World 엔드포인트"""</span>
-    <span class="k">return</span> <span class="s">"world"</span>
+    <span class="sh">"""</span><span class="s">World 엔드포인트</span><span class="sh">"""</span>
+    <span class="k">return</span> <span class="sh">"</span><span class="s">world</span><span class="sh">"</span>
 
 <span class="c1"># API 엔드포인트 예시
-</span><span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/api/info"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">JSONResponse</span><span class="p">)</span>
+</span><span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/api/info</span><span class="sh">"</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">JSONResponse</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">api_info</span><span class="p">():</span>
-    <span class="s">"""서버 정보 반환"""</span>
+    <span class="sh">"""</span><span class="s">서버 정보 반환</span><span class="sh">"""</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s">"server"</span><span class="p">:</span> <span class="s">"FastAPI"</span><span class="p">,</span>
-        <span class="s">"python_version"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">sys</span><span class="p">.</span><span class="n">version</span><span class="p">,</span>
-        <span class="s">"environment"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">"ENVIRONMENT"</span><span class="p">,</span> <span class="s">"production"</span><span class="p">)</span>
+        <span class="sh">"</span><span class="s">server</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">FastAPI</span><span class="sh">"</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">python_version</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="n">sys</span><span class="p">.</span><span class="n">version</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">environment</span><span class="sh">"</span><span class="p">:</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">ENVIRONMENT</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">production</span><span class="sh">"</span><span class="p">)</span>
     <span class="p">}</span>
 
 <span class="c1"># 정적 파일 서빙
-</span><span class="n">static_dir</span> <span class="o">=</span> <span class="n">pathlib</span><span class="p">.</span><span class="n">Path</span><span class="p">(</span><span class="n">__file__</span><span class="p">).</span><span class="n">resolve</span><span class="p">().</span><span class="n">parent</span>
-<span class="n">public_dir</span> <span class="o">=</span> <span class="n">static_dir</span> <span class="o">/</span> <span class="s">"public"</span>
+</span><span class="n">static_dir</span> <span class="o">=</span> <span class="n">pathlib</span><span class="p">.</span><span class="nc">Path</span><span class="p">(</span><span class="n">__file__</span><span class="p">).</span><span class="nf">resolve</span><span class="p">().</span><span class="n">parent</span>
+<span class="n">public_dir</span> <span class="o">=</span> <span class="n">static_dir</span> <span class="o">/</span> <span class="sh">"</span><span class="s">public</span><span class="sh">"</span>
 
-<span class="k">if</span> <span class="n">public_dir</span><span class="p">.</span><span class="n">exists</span><span class="p">():</span>
-<span class="n">app</span><span class="p">.</span><span class="n">mount</span><span class="p">(</span><span class="s">"/images"</span><span class="p">,</span> <span class="n">StaticFiles</span><span class="p">(</span><span class="n">directory</span><span class="o">=</span><span class="n">public_dir</span><span class="p">,</span> <span class="n">html</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">"images"</span><span class="p">)</span>
-    <span class="n">app</span><span class="p">.</span><span class="n">mount</span><span class="p">(</span><span class="s">"/static"</span><span class="p">,</span> <span class="n">StaticFiles</span><span class="p">(</span><span class="n">directory</span><span class="o">=</span><span class="n">public_dir</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s">"static"</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">public_dir</span><span class="p">.</span><span class="nf">exists</span><span class="p">():</span>
+<span class="n">app</span><span class="p">.</span><span class="nf">mount</span><span class="p">(</span><span class="sh">"</span><span class="s">/images</span><span class="sh">"</span><span class="p">,</span> <span class="nc">StaticFiles</span><span class="p">(</span><span class="n">directory</span><span class="o">=</span><span class="n">public_dir</span><span class="p">,</span> <span class="n">html</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">images</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">app</span><span class="p">.</span><span class="nf">mount</span><span class="p">(</span><span class="sh">"</span><span class="s">/static</span><span class="sh">"</span><span class="p">,</span> <span class="nc">StaticFiles</span><span class="p">(</span><span class="n">directory</span><span class="o">=</span><span class="n">public_dir</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="sh">"</span><span class="s">static</span><span class="sh">"</span><span class="p">)</span>
 
 <span class="c1"># 에러 핸들러
-</span><span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
+</span><span class="nd">@app.exception_handler</span><span class="p">(</span><span class="mi">404</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">not_found_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>
+    <span class="k">return</span> <span class="nc">JSONResponse</span><span class="p">(</span>
         <span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span>
-        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s">"detail"</span><span class="p">:</span> <span class="s">"요청한 리소스를 찾을 수 없습니다."</span><span class="p">}</span>
+        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">detail</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">요청한 리소스를 찾을 수 없습니다.</span><span class="sh">"</span><span class="p">}</span>
     <span class="p">)</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+<span class="nd">@app.exception_handler</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">internal_error_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>
+    <span class="k">return</span> <span class="nc">JSONResponse</span><span class="p">(</span>
         <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s">"detail"</span><span class="p">:</span> <span class="s">"서버 내부 오류가 발생했습니다."</span><span class="p">}</span>
+        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="sh">"</span><span class="s">detail</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">서버 내부 오류가 발생했습니다.</span><span class="sh">"</span><span class="p">}</span>
     <span class="p">)</span>
 
 <span class="c1"># 애플리케이션 시작/종료 이벤트
-</span><span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">on_event</span><span class="p">(</span><span class="s">"startup"</span><span class="p">)</span>
+</span><span class="nd">@app.on_event</span><span class="p">(</span><span class="sh">"</span><span class="s">startup</span><span class="sh">"</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">startup_event</span><span class="p">():</span>
-    <span class="s">"""앱 시작 시 실행"""</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"FastAPI 서버 시작됨"</span><span class="p">)</span>
+    <span class="sh">"""</span><span class="s">앱 시작 시 실행</span><span class="sh">"""</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">FastAPI 서버 시작됨</span><span class="sh">"</span><span class="p">)</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">on_event</span><span class="p">(</span><span class="s">"shutdown"</span><span class="p">)</span>
+<span class="nd">@app.on_event</span><span class="p">(</span><span class="sh">"</span><span class="s">shutdown</span><span class="sh">"</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">shutdown_event</span><span class="p">():</span>
-    <span class="s">"""앱 종료 시 실행"""</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">"FastAPI 서버 종료됨"</span><span class="p">)</span>
+    <span class="sh">"""</span><span class="s">앱 종료 시 실행</span><span class="sh">"""</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sh">"</span><span class="s">FastAPI 서버 종료됨</span><span class="sh">"</span><span class="p">)</span>
 
 <span class="c1"># 직접 실행 시 (개발 환경용)
-</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">uvicorn</span><span class="p">.</span><span class="n">run</span><span class="p">(</span>
+</span><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="sh">"</span><span class="s">__main__</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">uvicorn</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span>
         <span class="n">app</span><span class="p">,</span>
-        <span class="n">host</span><span class="o">=</span><span class="s">"0.0.0.0"</span><span class="p">,</span>
+        <span class="n">host</span><span class="o">=</span><span class="sh">"</span><span class="s">0.0.0.0</span><span class="sh">"</span><span class="p">,</span>
         <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span>
-        <span class="n">log_level</span><span class="o">=</span><span class="s">"info"</span>
+        <span class="n">log_level</span><span class="o">=</span><span class="sh">"</span><span class="s">info</span><span class="sh">"</span>
     <span class="p">)</span>
 </code></pre></div></div>
 
@@ -2675,13 +2772,13 @@ aws ec2 authorize-security-group-ingress <span class="se">\</span>
 
 <p><strong>기본 설정:</strong></p>
 
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span>
-<span class="py">Description</span><span class="p">=</span><span class="s">FastAPI Application Server</span>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">FastAPI Application Server</span>
 <span class="py">After</span><span class="p">=</span><span class="s">network.target</span>
 <span class="py">Documentation</span><span class="p">=</span><span class="s">https://fastapi.tiangolo.com/</span>
-
-<span class="nn">[Service]</span>
-<span class="py">Type</span><span class="p">=</span><span class="s">notify</span>
+<span class="w">
+</span><span class="nn">[Service]</span><span class="w">
+</span><span class="py">Type</span><span class="p">=</span><span class="s">notify</span>
 <span class="py">User</span><span class="p">=</span><span class="s">ubuntu</span>
 <span class="py">Group</span><span class="p">=</span><span class="s">ubuntu</span>
 <span class="py">WorkingDirectory</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase</span>
@@ -2693,61 +2790,61 @@ aws ec2 authorize-security-group-ingress <span class="se">\</span>
 <span class="py">RestartSec</span><span class="p">=</span><span class="s">3</span>
 <span class="py">StandardOutput</span><span class="p">=</span><span class="s">append:/var/log/fastapi/access.log</span>
 <span class="py">StandardError</span><span class="p">=</span><span class="s">append:/var/log/fastapi/error.log</span>
-
-<span class="c"># 보안 설정
+<span class="w">
+</span><span class="c"># 보안 설정
 </span><span class="py">NoNewPrivileges</span><span class="p">=</span><span class="s">true</span>
 <span class="py">PrivateTmp</span><span class="p">=</span><span class="s">true</span>
-
-<span class="c"># 리소스 제한
+<span class="w">
+</span><span class="c"># 리소스 제한
 </span><span class="py">LimitNOFILE</span><span class="p">=</span><span class="s">65536</span>
 <span class="py">TimeoutStopSec</span><span class="p">=</span><span class="s">30</span>
-
-<span class="nn">[Install]</span>
-<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+<span class="w">
+</span><span class="nn">[Install]</span><span class="w">
+</span><span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
 </code></pre></div></div>
 
 <p><strong>프로덕션 설정 (Multi-worker):</strong></p>
 
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span>
-<span class="py">Description</span><span class="p">=</span><span class="s">FastAPI Application Server (Production)</span>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Unit]</span><span class="w">
+</span><span class="py">Description</span><span class="p">=</span><span class="s">FastAPI Application Server (Production)</span>
 <span class="py">After</span><span class="p">=</span><span class="s">network.target</span>
 <span class="py">Documentation</span><span class="p">=</span><span class="s">https://fastapi.tiangolo.com/</span>
-
-<span class="nn">[Service]</span>
-<span class="py">Type</span><span class="p">=</span><span class="s">notify</span>
+<span class="w">
+</span><span class="nn">[Service]</span><span class="w">
+</span><span class="py">Type</span><span class="p">=</span><span class="s">notify</span>
 <span class="py">User</span><span class="p">=</span><span class="s">ubuntu</span>
 <span class="py">Group</span><span class="p">=</span><span class="s">ubuntu</span>
 <span class="py">WorkingDirectory</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase</span>
 <span class="py">Environment</span><span class="p">=</span><span class="s">"PATH=/home/ubuntu/reactbase/venv/bin"</span>
 <span class="py">EnvironmentFile</span><span class="p">=</span><span class="s">-/home/ubuntu/reactbase/.env</span>
 <span class="py">ExecStart</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase/venv/bin/uvicorn server:app </span><span class="se">\
-</span>    <span class="s">--host 0.0.0.0 </span><span class="se">\
-</span>    <span class="s">--port 8000 </span><span class="se">\
-</span>    <span class="s">--workers 4 </span><span class="se">\
-</span>    <span class="s">--log-level info </span><span class="se">\
-</span>    <span class="s">--access-log </span><span class="se">\
-</span>    <span class="s">--proxy-headers </span><span class="se">\
-</span>    <span class="s">--forwarded-allow-ips='*'</span>
+</span><span class="w">    </span><span class="s">--host 0.0.0.0 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--port 8000 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--workers 4 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--log-level info </span><span class="se">\
+</span><span class="w">    </span><span class="s">--access-log </span><span class="se">\
+</span><span class="w">    </span><span class="s">--proxy-headers </span><span class="se">\
+</span><span class="w">    </span><span class="s">--forwarded-allow-ips='*'</span>
 <span class="py">ExecReload</span><span class="p">=</span><span class="s">/bin/kill -HUP $MAINPID</span>
 <span class="py">Restart</span><span class="p">=</span><span class="s">on-failure</span>
 <span class="py">RestartSec</span><span class="p">=</span><span class="s">5s</span>
 <span class="py">StandardOutput</span><span class="p">=</span><span class="s">journal</span>
 <span class="py">StandardError</span><span class="p">=</span><span class="s">journal</span>
 <span class="py">SyslogIdentifier</span><span class="p">=</span><span class="s">fastapi</span>
-
-<span class="c"># 보안 강화
+<span class="w">
+</span><span class="c"># 보안 강화
 </span><span class="py">NoNewPrivileges</span><span class="p">=</span><span class="s">true</span>
 <span class="py">PrivateTmp</span><span class="p">=</span><span class="s">true</span>
 <span class="py">ProtectSystem</span><span class="p">=</span><span class="s">strict</span>
 <span class="py">ProtectHome</span><span class="p">=</span><span class="s">read-only</span>
 <span class="py">ReadWritePaths</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase</span>
-
-<span class="c"># 리소스 제한
+<span class="w">
+</span><span class="c"># 리소스 제한
 </span><span class="py">LimitNOFILE</span><span class="p">=</span><span class="s">65536</span>
 <span class="py">LimitNPROC</span><span class="p">=</span><span class="s">512</span>
-
-<span class="nn">[Install]</span>
-<span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
+<span class="w">
+</span><span class="nn">[Install]</span><span class="w">
+</span><span class="py">WantedBy</span><span class="p">=</span><span class="s">multi-user.target</span>
 </code></pre></div></div>
 
 <h3 id="서비스-파일-옵션-설명">서비스 파일 옵션 설명</h3>
@@ -2973,27 +3070,27 @@ nano .env
 
 <p><strong>server.py 수정:</strong></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">os</span>
+<span class="kn">from</span> <span class="n">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 
-<span class="n">load_dotenv</span><span class="p">()</span>
+<span class="nf">load_dotenv</span><span class="p">()</span>
 
 <span class="c1"># 환경 변수 읽기
-</span><span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">"ENVIRONMENT"</span><span class="p">,</span> <span class="s">"development"</span><span class="p">)</span>
-<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">"DEBUG"</span><span class="p">,</span> <span class="s">"False"</span><span class="p">)</span> <span class="o">==</span> <span class="s">"True"</span>
-<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">"SECRET_KEY"</span><span class="p">,</span> <span class="s">"default-secret-key"</span><span class="p">)</span>
-<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">"DATABASE_URL"</span><span class="p">)</span>
+</span><span class="n">ENVIRONMENT</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">ENVIRONMENT</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">development</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">DEBUG</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">False</span><span class="sh">"</span><span class="p">)</span> <span class="o">==</span> <span class="sh">"</span><span class="s">True</span><span class="sh">"</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">SECRET_KEY</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">default-secret-key</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">DATABASE_URL</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="nf">getenv</span><span class="p">(</span><span class="sh">"</span><span class="s">DATABASE_URL</span><span class="sh">"</span><span class="p">)</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s">"FastAPI Server"</span><span class="p">,</span>
+<span class="n">app</span> <span class="o">=</span> <span class="nc">FastAPI</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="sh">"</span><span class="s">FastAPI Server</span><span class="sh">"</span><span class="p">,</span>
     <span class="n">debug</span><span class="o">=</span><span class="n">DEBUG</span>
 <span class="p">)</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/config"</span><span class="p">)</span>
+<span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/config</span><span class="sh">"</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_config</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s">"environment"</span><span class="p">:</span> <span class="n">ENVIRONMENT</span><span class="p">,</span>
-        <span class="s">"debug"</span><span class="p">:</span> <span class="n">DEBUG</span>
+        <span class="sh">"</span><span class="s">environment</span><span class="sh">"</span><span class="p">:</span> <span class="n">ENVIRONMENT</span><span class="p">,</span>
+        <span class="sh">"</span><span class="s">debug</span><span class="sh">"</span><span class="p">:</span> <span class="n">DEBUG</span>
         <span class="c1"># SECRET_KEY는 노출하지 않음
 </span>    <span class="p">}</span>
 </code></pre></div></div>
@@ -3002,14 +3099,14 @@ nano .env
 
 <p>systemd 서비스 파일에서 .env 로드:</p>
 
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Service]</span>
-<span class="py">EnvironmentFile</span><span class="p">=</span><span class="s">-/home/ubuntu/reactbase/.env</span>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Service]</span><span class="w">
+</span><span class="py">EnvironmentFile</span><span class="p">=</span><span class="s">-/home/ubuntu/reactbase/.env</span>
 </code></pre></div></div>
 
 <p>또는 직접 환경 변수 설정:</p>
 
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Service]</span>
-<span class="py">Environment</span><span class="p">=</span><span class="s">"ENVIRONMENT=production"</span>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[Service]</span><span class="w">
+</span><span class="py">Environment</span><span class="p">=</span><span class="s">"ENVIRONMENT=production"</span>
 <span class="py">Environment</span><span class="p">=</span><span class="s">"DEBUG=False"</span>
 <span class="py">Environment</span><span class="p">=</span><span class="s">"PORT=8000"</span>
 </code></pre></div></div>
@@ -3103,27 +3200,27 @@ nano .env
 
 <p><strong>Python logging 설정:</strong></p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">logging</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">logging</span>
 
 <span class="c1"># 로그 설정
-</span><span class="n">logging</span><span class="p">.</span><span class="n">basicConfig</span><span class="p">(</span>
+</span><span class="n">logging</span><span class="p">.</span><span class="nf">basicConfig</span><span class="p">(</span>
     <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="p">.</span><span class="n">INFO</span><span class="p">,</span>
-    <span class="nb">format</span><span class="o">=</span><span class="s">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="sh">'</span><span class="s">%(asctime)s - %(name)s - %(levelname)s - %(message)s</span><span class="sh">'</span><span class="p">,</span>
     <span class="n">handlers</span><span class="o">=</span><span class="p">[</span>
-        <span class="n">logging</span><span class="p">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s">'/var/log/fastapi/app.log'</span><span class="p">),</span>
-        <span class="n">logging</span><span class="p">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+        <span class="n">logging</span><span class="p">.</span><span class="nc">FileHandler</span><span class="p">(</span><span class="sh">'</span><span class="s">/var/log/fastapi/app.log</span><span class="sh">'</span><span class="p">),</span>
+        <span class="n">logging</span><span class="p">.</span><span class="nc">StreamHandler</span><span class="p">()</span>
     <span class="p">]</span>
 <span class="p">)</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="p">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="p">.</span><span class="nf">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/test"</span><span class="p">)</span>
+<span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/test</span><span class="sh">"</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-    <span class="n">logger</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"Test endpoint called"</span><span class="p">)</span>
-    <span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="s">"Debug information"</span><span class="p">)</span>
-    <span class="n">logger</span><span class="p">.</span><span class="n">warning</span><span class="p">(</span><span class="s">"Warning message"</span><span class="p">)</span>
-    <span class="n">logger</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s">"Error occurred"</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s">"status"</span><span class="p">:</span> <span class="s">"ok"</span><span class="p">}</span>
+    <span class="n">logger</span><span class="p">.</span><span class="nf">info</span><span class="p">(</span><span class="sh">"</span><span class="s">Test endpoint called</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="nf">debug</span><span class="p">(</span><span class="sh">"</span><span class="s">Debug information</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="nf">warning</span><span class="p">(</span><span class="sh">"</span><span class="s">Warning message</span><span class="sh">"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="sh">"</span><span class="s">Error occurred</span><span class="sh">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">status</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">ok</span><span class="sh">"</span><span class="p">}</span>
 </code></pre></div></div>
 
 <h3 id="로그-로테이션">로그 로테이션</h3>
@@ -3273,7 +3370,7 @@ systemd-analyze verify /etc/systemd/system/fastapi.service
         <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-Proto</span> <span class="nv">$scheme</span><span class="p">;</span>
         
         <span class="c1"># WebSocket 지원</span>
-        <span class="kn">proxy_http_version</span> <span class="mi">1</span><span class="s">.1</span><span class="p">;</span>
+        <span class="kn">proxy_http_version</span> <span class="mf">1.1</span><span class="p">;</span>
         <span class="kn">proxy_set_header</span> <span class="s">Upgrade</span> <span class="nv">$http_upgrade</span><span class="p">;</span>
         <span class="kn">proxy_set_header</span> <span class="s">Connection</span> <span class="s">"upgrade"</span><span class="p">;</span>
         
@@ -3376,9 +3473,9 @@ systemd-analyze verify /etc/systemd/system/fastapi.service
 <p><strong>ExecStart 수정:</strong></p>
 
 <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">ExecStart</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase/venv/bin/uvicorn server:app </span><span class="se">\
-</span>    <span class="s">--host 127.0.0.1 </span><span class="se">\ </span> <span class="c"># 127.0.0.1로 변경 (0.0.0.0에서)
-</span>    <span class="s">--port 8000 </span><span class="se">\
-</span>    <span class="s">--workers 4</span>
+</span><span class="w">    </span><span class="s">--host 127.0.0.1 </span><span class="se">\ </span><span class="w"> </span><span class="c"># 127.0.0.1로 변경 (0.0.0.0에서)
+</span><span class="w">    </span><span class="s">--port 8000 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--workers 4</span>
 </code></pre></div></div>
 
 <p><strong>서비스 재시작:</strong></p>
@@ -3479,7 +3576,7 @@ systemd-analyze verify /etc/systemd/system/fastapi.service
         <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
         <span class="kn">proxy_set_header</span> <span class="s">X-Forwarded-Proto</span> <span class="nv">$scheme</span><span class="p">;</span>
         
-        <span class="kn">proxy_http_version</span> <span class="mi">1</span><span class="s">.1</span><span class="p">;</span>
+        <span class="kn">proxy_http_version</span> <span class="mf">1.1</span><span class="p">;</span>
         <span class="kn">proxy_set_header</span> <span class="s">Upgrade</span> <span class="nv">$http_upgrade</span><span class="p">;</span>
         <span class="kn">proxy_set_header</span> <span class="s">Connection</span> <span class="s">"upgrade"</span><span class="p">;</span>
     <span class="p">}</span>
@@ -3582,27 +3679,27 @@ systemd-analyze verify /etc/systemd/system/fastapi.service
 
 <p><strong>jail.local 내용:</strong></p>
 
-<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[DEFAULT]</span>
-<span class="py">bantime</span> <span class="p">=</span> <span class="s">3600  # 1시간 차단</span>
-<span class="py">findtime</span> <span class="p">=</span> <span class="s">600  # 10분 내</span>
-<span class="py">maxretry</span> <span class="p">=</span> <span class="s">5    # 5회 시도 실패 시 차단</span>
-
-<span class="c"># SSH 보호
-</span><span class="nn">[sshd]</span>
-<span class="py">enabled</span> <span class="p">=</span> <span class="s">true</span>
-<span class="py">port</span> <span class="p">=</span> <span class="s">22</span>
-<span class="py">logpath</span> <span class="p">=</span> <span class="s">/var/log/auth.log</span>
-
-<span class="c"># Nginx 보호 (선택사항)
-</span><span class="nn">[nginx-http-auth]</span>
-<span class="py">enabled</span> <span class="p">=</span> <span class="s">true</span>
-<span class="py">port</span> <span class="p">=</span> <span class="s">http,https</span>
-<span class="py">logpath</span> <span class="p">=</span> <span class="s">/var/log/nginx/error.log</span>
-
-<span class="nn">[nginx-limit-req]</span>
-<span class="py">enabled</span> <span class="p">=</span> <span class="s">true</span>
-<span class="py">port</span> <span class="p">=</span> <span class="s">http,https</span>
-<span class="py">logpath</span> <span class="p">=</span> <span class="s">/var/log/nginx/error.log</span>
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">[DEFAULT]</span><span class="w">
+</span><span class="py">bantime</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">3600  # 1시간 차단</span>
+<span class="py">findtime</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">600  # 10분 내</span>
+<span class="py">maxretry</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">5    # 5회 시도 실패 시 차단</span>
+<span class="w">
+</span><span class="c"># SSH 보호
+</span><span class="nn">[sshd]</span><span class="w">
+</span><span class="py">enabled</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">true</span>
+<span class="py">port</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">22</span>
+<span class="py">logpath</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">/var/log/auth.log</span>
+<span class="w">
+</span><span class="c"># Nginx 보호 (선택사항)
+</span><span class="nn">[nginx-http-auth]</span><span class="w">
+</span><span class="py">enabled</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">true</span>
+<span class="py">port</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">http,https</span>
+<span class="py">logpath</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">/var/log/nginx/error.log</span>
+<span class="w">
+</span><span class="nn">[nginx-limit-req]</span><span class="w">
+</span><span class="py">enabled</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">true</span>
+<span class="py">port</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">http,https</span>
+<span class="py">logpath</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">/var/log/nginx/error.log</span>
 </code></pre></div></div>
 
 <p><strong>Fail2ban 시작:</strong></p>
@@ -3691,9 +3788,9 @@ AllowUsers ubuntu
 
 <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># /etc/systemd/system/fastapi.service
 </span><span class="py">ExecStart</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase/venv/bin/uvicorn server:app </span><span class="se">\
-</span>    <span class="s">--host 127.0.0.1 </span><span class="se">\
-</span>    <span class="s">--port 8000 </span><span class="se">\
-</span>    <span class="s">--workers 4  # CPU 코어 수 * 2 + 1</span>
+</span><span class="w">    </span><span class="s">--host 127.0.0.1 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--port 8000 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--workers 4  # CPU 코어 수 * 2 + 1</span>
 </code></pre></div></div>
 
 <p><strong>Worker 클래스 선택:</strong></p>
@@ -3705,21 +3802,21 @@ AllowUsers ubuntu
 
 <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Gunicorn + Uvicorn workers
 </span><span class="py">ExecStart</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase/venv/bin/gunicorn server:app </span><span class="se">\
-</span>    <span class="s">--workers 4 </span><span class="se">\
-</span>    <span class="s">--worker-class uvicorn.workers.UvicornWorker </span><span class="se">\
-</span>    <span class="s">--bind 127.0.0.1:8000 </span><span class="se">\
-</span>    <span class="s">--access-logfile /var/log/fastapi/access.log </span><span class="se">\
-</span>    <span class="s">--error-logfile /var/log/fastapi/error.log</span>
+</span><span class="w">    </span><span class="s">--workers 4 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--worker-class uvicorn.workers.UvicornWorker </span><span class="se">\
+</span><span class="w">    </span><span class="s">--bind 127.0.0.1:8000 </span><span class="se">\
+</span><span class="w">    </span><span class="s">--access-logfile /var/log/fastapi/access.log </span><span class="se">\
+</span><span class="w">    </span><span class="s">--error-logfile /var/log/fastapi/error.log</span>
 </code></pre></div></div>
 
 <h3 id="데이터베이스-연결-풀링">데이터베이스 연결 풀링</h3>
 
 <p>데이터베이스를 사용하는 경우 연결 풀을 사용합니다:</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
-<span class="kn">from</span> <span class="nn">sqlalchemy.pool</span> <span class="kn">import</span> <span class="n">QueuePool</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="n">sqlalchemy.pool</span> <span class="kn">import</span> <span class="n">QueuePool</span>
 
-<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="nf">create_engine</span><span class="p">(</span>
     <span class="n">DATABASE_URL</span><span class="p">,</span>
     <span class="n">poolclass</span><span class="o">=</span><span class="n">QueuePool</span><span class="p">,</span>
     <span class="n">pool_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
@@ -3737,23 +3834,23 @@ AllowUsers ubuntu
 <span class="nb">sudo </span>systemctl <span class="nb">enable </span>redis-server
 </code></pre></div></div>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">redis</span> <span class="kn">import</span> <span class="n">Redis</span>
+<span class="kn">from</span> <span class="n">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
 
-<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
-<span class="n">redis_client</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s">'localhost'</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">6379</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decode_responses</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">app</span> <span class="o">=</span> <span class="nc">FastAPI</span><span class="p">()</span>
+<span class="n">redis_client</span> <span class="o">=</span> <span class="nc">Redis</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="sh">'</span><span class="s">localhost</span><span class="sh">'</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">6379</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decode_responses</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<span class="o">@</span><span class="n">app</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/cached-data"</span><span class="p">)</span>
+<span class="nd">@app.get</span><span class="p">(</span><span class="sh">"</span><span class="s">/cached-data</span><span class="sh">"</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_cached_data</span><span class="p">():</span>
     <span class="c1"># 캐시 확인
-</span>    <span class="n">cached</span> <span class="o">=</span> <span class="n">redis_client</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"data_key"</span><span class="p">)</span>
+</span>    <span class="n">cached</span> <span class="o">=</span> <span class="n">redis_client</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">data_key</span><span class="sh">"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">cached</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s">"data"</span><span class="p">:</span> <span class="n">cached</span><span class="p">,</span> <span class="s">"source"</span><span class="p">:</span> <span class="s">"cache"</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">data</span><span class="sh">"</span><span class="p">:</span> <span class="n">cached</span><span class="p">,</span> <span class="sh">"</span><span class="s">source</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">cache</span><span class="sh">"</span><span class="p">}</span>
     
     <span class="c1"># 데이터 조회 및 캐싱
-</span>    <span class="n">data</span> <span class="o">=</span> <span class="n">expensive_operation</span><span class="p">()</span>
-    <span class="n">redis_client</span><span class="p">.</span><span class="n">setex</span><span class="p">(</span><span class="s">"data_key"</span><span class="p">,</span> <span class="mi">3600</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>  <span class="c1"># 1시간 TTL
-</span>    <span class="k">return</span> <span class="p">{</span><span class="s">"data"</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="s">"source"</span><span class="p">:</span> <span class="s">"database"</span><span class="p">}</span>
+</span>    <span class="n">data</span> <span class="o">=</span> <span class="nf">expensive_operation</span><span class="p">()</span>
+    <span class="n">redis_client</span><span class="p">.</span><span class="nf">setex</span><span class="p">(</span><span class="sh">"</span><span class="s">data_key</span><span class="sh">"</span><span class="p">,</span> <span class="mi">3600</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>  <span class="c1"># 1시간 TTL
+</span>    <span class="k">return</span> <span class="p">{</span><span class="sh">"</span><span class="s">data</span><span class="sh">"</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="sh">"</span><span class="s">source</span><span class="sh">"</span><span class="p">:</span> <span class="sh">"</span><span class="s">database</span><span class="sh">"</span><span class="p">}</span>
 </code></pre></div></div>
 
 <h3 id="정적-파일-최적화">정적 파일 최적화</h3>
@@ -4160,7 +4257,7 @@ dmesg | <span class="nb">grep</span> <span class="nt">-i</span> <span class="s2"
 
 <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># /etc/systemd/system/fastapi.service
 </span><span class="py">ExecStart</span><span class="p">=</span><span class="s">/home/ubuntu/reactbase/venv/bin/uvicorn server:app </span><span class="se">\
-</span>    <span class="s">--workers 2  # 줄임</span>
+</span><span class="w">    </span><span class="s">--workers 2  # 줄임</span>
 </code></pre></div></div>
 
 <ol>
@@ -4200,8 +4297,8 @@ free <span class="nt">-h</span>
 </code></pre></div></div>
 
 <div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># systemd 타임아웃
-</span><span class="nn">[Service]</span>
-<span class="py">TimeoutStartSec</span><span class="p">=</span><span class="s">120</span>
+</span><span class="nn">[Service]</span><span class="w">
+</span><span class="py">TimeoutStartSec</span><span class="p">=</span><span class="s">120</span>
 <span class="py">TimeoutStopSec</span><span class="p">=</span><span class="s">120</span>
 </code></pre></div></div>
 
@@ -4484,7 +4581,7 @@ sftp <span class="nt">-i</span> /path/to/key.pem ubuntu@&lt;IP&gt;
 <ul>
   <li><a href="https://www.reddit.com/r/faq">공식 문서</a></li>
   <li><a href="https://www.udemy.com/course/social-media-analysis/">튜토리얼</a></li>
-</ul>]]></content><author><name>정현류</name></author><category term="QA Engineer" /><category term="qa" /><category term="reputation-management" /><category term="online-platform" /><category term="risk-management" /><category term="case-study" /><summary type="html"><![CDATA[온라인 플랫폼에서의 평판 관리와 리스크 관리의 중요성을 보여주는 Codesmith 사례 분석]]></summary></entry><entry><title type="html">70,000명 Discord 사용자의 신분증 정보 유출 가능성</title><link href="http://localhost:4000/my-blog/qa%20engineer/2025/10/09/70000-discord.html" rel="alternate" type="text/html" title="70,000명 Discord 사용자의 신분증 정보 유출 가능성" /><published>2025-10-09T23:28:44+09:00</published><updated>2025-10-09T23:28:44+09:00</updated><id>http://localhost:4000/my-blog/qa%20engineer/2025/10/09/70000-discord</id><content type="html" xml:base="http://localhost:4000/my-blog/qa%20engineer/2025/10/09/70000-discord.html"><![CDATA[<h2 id="요약">요약</h2>
+</ul>]]></content><author><name>류정현</name><email>jhryu115@gmail.com</email></author><category term="QA Engineer" /><category term="qa" /><category term="reputation-management" /><category term="online-platform" /><category term="risk-management" /><category term="case-study" /><summary type="html"><![CDATA[온라인 플랫폼에서의 평판 관리와 리스크 관리의 중요성을 보여주는 Codesmith 사례 분석]]></summary></entry><entry><title type="html">70,000명 Discord 사용자의 신분증 정보 유출 가능성</title><link href="http://localhost:4000/my-blog/qa%20engineer/2025/10/09/70000-discord.html" rel="alternate" type="text/html" title="70,000명 Discord 사용자의 신분증 정보 유출 가능성" /><published>2025-10-09T23:28:44+09:00</published><updated>2025-10-09T23:28:44+09:00</updated><id>http://localhost:4000/my-blog/qa%20engineer/2025/10/09/70000-discord</id><content type="html" xml:base="http://localhost:4000/my-blog/qa%20engineer/2025/10/09/70000-discord.html"><![CDATA[<h2 id="요약">요약</h2>
 
 <p>Discord는 서드파티 고객지원 업체의 보안 사고로 인해 약 70,000명의 사용자의 정부 발급 신분증 사진이 노출될 가능성이 있다고 발표했습니다. 이번 사고는 Discord의 자체 시스템이 아닌 외부 서비스 공급자에서 발생하였으며, 공격자는 실제 피해 규모보다 더 큰 영향을 미쳤다고 주장하고 있습니다.</p>
 
@@ -4521,7 +4618,7 @@ sftp <span class="nt">-i</span> /path/to/key.pem ubuntu@&lt;IP&gt;
 
 <ul>
   <li><a href="https://news.hada.io/topic?id=23539">Hada News</a></li>
-</ul>]]></content><author><name>정현류</name></author><category term="QA Engineer" /><category term="security" /><category term="discord" /><category term="data-breach" /><category term="qa" /><category term="third-party-risk" /><summary type="html"><![CDATA[Discord 서드파티 고객지원 업체의 보안 사고로 인한 신분증 정보 유출 가능성과 QA 관점의 분석]]></summary></entry><entry><title type="html">DIY - 다양한 DIY 프로젝트 안내 및 팁</title><link href="http://localhost:4000/my-blog/daily%20life/2025/09/25/diy-guide-and-tips.html" rel="alternate" type="text/html" title="DIY - 다양한 DIY 프로젝트 안내 및 팁" /><published>2025-09-25T17:01:36+09:00</published><updated>2025-09-25T17:01:36+09:00</updated><id>http://localhost:4000/my-blog/daily%20life/2025/09/25/diy-guide-and-tips</id><content type="html" xml:base="http://localhost:4000/my-blog/daily%20life/2025/09/25/diy-guide-and-tips.html"><![CDATA[<h1 id="diy-다양한-diy-프로젝트-안내-및-팁">DIY: 다양한 DIY 프로젝트 안내 및 팁</h1>
+</ul>]]></content><author><name>류정현</name><email>jhryu115@gmail.com</email></author><category term="QA Engineer" /><category term="security" /><category term="discord" /><category term="data-breach" /><category term="qa" /><category term="third-party-risk" /><summary type="html"><![CDATA[Discord 서드파티 고객지원 업체의 보안 사고로 인한 신분증 정보 유출 가능성과 QA 관점의 분석]]></summary></entry><entry><title type="html">DIY - 다양한 DIY 프로젝트 안내 및 팁</title><link href="http://localhost:4000/my-blog/daily%20life/2025/09/25/diy-guide-and-tips.html" rel="alternate" type="text/html" title="DIY - 다양한 DIY 프로젝트 안내 및 팁" /><published>2025-09-25T17:01:36+09:00</published><updated>2025-09-25T17:01:36+09:00</updated><id>http://localhost:4000/my-blog/daily%20life/2025/09/25/diy-guide-and-tips</id><content type="html" xml:base="http://localhost:4000/my-blog/daily%20life/2025/09/25/diy-guide-and-tips.html"><![CDATA[<h1 id="diy-다양한-diy-프로젝트-안내-및-팁">DIY: 다양한 DIY 프로젝트 안내 및 팁</h1>
 
 <p>DIY(Do It Yourself)는 스스로 만들고 수리하는 것을 의미합니다. 일상 생활에서 자신만의 창의성을 발휘할 수 있는 좋은 방법입니다. 이번 글에서는 DIY의 개념과 여러 가지 DIY 프로젝트 아이디어, 그리고 유용한 팁에 대해 자세히 알아보겠습니다.</p>
 
@@ -4609,7 +4706,7 @@ sftp <span class="nt">-i</span> /path/to/key.pem ubuntu@&lt;IP&gt;
 
 <p>DIY는 시간과 노력을 요구하지만, 그 보상은 언제나 당신의 기대 이상입니다. 창의성이 발휘되는 한편, 실용적인 결과물을 만들어 낼 수 있습니다. 이제 여러분도 DIY 프로젝트에 도전해 보세요! 주말을 알차게 보내고, 스스로 만든 작품으로 자부심을 느낄 수 있을 것입니다.</p>
 
-<p>이 글을 통해 DIY라는 주제가 얼마나 흥미롭고 유익한지 느끼셨기를 바랍니다. 도전하고, 배우고, 성장하는 즐거운 여정을 시작해보세요!</p>]]></content><author><name>정현류</name></author><category term="Daily Life" /><category term="diy" /><category term="handmade" /><category term="crafts" /><category term="hobby" /><category term="tips" /><summary type="html"><![CDATA[집에서 즐길 수 있는 다양한 DIY 프로젝트와 실용적인 팁]]></summary></entry><entry><title type="html">여행지에서의 현지 음식 즐기기 팁</title><link href="http://localhost:4000/my-blog/daily%20life/2025/09/25/local-food-tips-travel.html" rel="alternate" type="text/html" title="여행지에서의 현지 음식 즐기기 팁" /><published>2025-09-25T08:19:36+09:00</published><updated>2025-09-25T08:19:36+09:00</updated><id>http://localhost:4000/my-blog/daily%20life/2025/09/25/local-food-tips-travel</id><content type="html" xml:base="http://localhost:4000/my-blog/daily%20life/2025/09/25/local-food-tips-travel.html"><![CDATA[<p>여행을 떠날 때, 현지 문화를 경험하는 가장 좋은 방법 중 하나는 바로 그 지역의 음식을 즐기는 것입니다. 음식은 단순한 연료가 아니라, 그 지역의 역사와 전통을 담고 있는 중요한 요소입니다. 이번 글에서는 다양한 여행지에서 현지 음식을 맛볼 수 있는 팁을 공유하고자 합니다.</p>
+<p>이 글을 통해 DIY라는 주제가 얼마나 흥미롭고 유익한지 느끼셨기를 바랍니다. 도전하고, 배우고, 성장하는 즐거운 여정을 시작해보세요!</p>]]></content><author><name>류정현</name><email>jhryu115@gmail.com</email></author><category term="Daily Life" /><category term="diy" /><category term="handmade" /><category term="crafts" /><category term="hobby" /><category term="tips" /><summary type="html"><![CDATA[집에서 즐길 수 있는 다양한 DIY 프로젝트와 실용적인 팁]]></summary></entry><entry><title type="html">여행지에서의 현지 음식 즐기기 팁</title><link href="http://localhost:4000/my-blog/daily%20life/2025/09/25/local-food-tips-travel.html" rel="alternate" type="text/html" title="여행지에서의 현지 음식 즐기기 팁" /><published>2025-09-25T08:19:36+09:00</published><updated>2025-09-25T08:19:36+09:00</updated><id>http://localhost:4000/my-blog/daily%20life/2025/09/25/local-food-tips-travel</id><content type="html" xml:base="http://localhost:4000/my-blog/daily%20life/2025/09/25/local-food-tips-travel.html"><![CDATA[<p>여행을 떠날 때, 현지 문화를 경험하는 가장 좋은 방법 중 하나는 바로 그 지역의 음식을 즐기는 것입니다. 음식은 단순한 연료가 아니라, 그 지역의 역사와 전통을 담고 있는 중요한 요소입니다. 이번 글에서는 다양한 여행지에서 현지 음식을 맛볼 수 있는 팁을 공유하고자 합니다.</p>
 
 <h2 id="1-미리-조사하기">1. 미리 조사하기</h2>
 
@@ -4649,4 +4746,4 @@ sftp <span class="nt">-i</span> /path/to/key.pem ubuntu@&lt;IP&gt;
 
 <h2 id="결론">결론</h2>
 
-<p>여행을 하면서 현지 음식을 즐기는 것은 그 지역의 문화를 경험하고, 새로운 맛의 세계를 탐험하는 중요한 방법입니다. 미리 조사하고, 현지인에게 물어보고, 길거리 음식을 도전하는 등 여러 방법을 통해 더욱 풍성한 여행을 만들어보세요. 이러한 팁을 활용한다면 여러분의 다음 여행은 더욱 특별하고 기억에 남는 경험이 될 것입니다.</p>]]></content><author><name>정현류</name></author><category term="Daily Life" /><category term="travel" /><category term="food" /><category term="tips" /><category term="local-cuisine" /><summary type="html"><![CDATA[여행지에서 현지 음식을 제대로 즐기는 방법]]></summary></entry></feed>
+<p>여행을 하면서 현지 음식을 즐기는 것은 그 지역의 문화를 경험하고, 새로운 맛의 세계를 탐험하는 중요한 방법입니다. 미리 조사하고, 현지인에게 물어보고, 길거리 음식을 도전하는 등 여러 방법을 통해 더욱 풍성한 여행을 만들어보세요. 이러한 팁을 활용한다면 여러분의 다음 여행은 더욱 특별하고 기억에 남는 경험이 될 것입니다.</p>]]></content><author><name>류정현</name><email>jhryu115@gmail.com</email></author><category term="Daily Life" /><category term="travel" /><category term="food" /><category term="tips" /><category term="local-cuisine" /><summary type="html"><![CDATA[여행지에서 현지 음식을 제대로 즐기는 방법]]></summary></entry></feed>
