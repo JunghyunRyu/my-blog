@@ -5,7 +5,7 @@ gem "jekyll", "4.3.3"
 
 # Jekyll 플러그인
 group :jekyll_plugins do
-  gem "jekyll-remote-theme"
+  gem "jekyll-remote-theme", "~> 0.5"
   gem "jekyll-feed", "~> 0.12"
   gem "jekyll-redirect-from"
   gem "jekyll-seo-tag"
