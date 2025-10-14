@@ -3,11 +3,20 @@
     {%- for social in site.minima.social_links -%}
       <li>
         {%- if social.platform == "email" -%}
-          <a href="mailto:{{ social.user_url }}"><svg class="svg-icon"><use xlink:href="{{ '/assets/minima-social-icons.svg#email' | relative_url }}"></use></svg> <span class="username">{{ social.user_url }}</span></a>
+          <a href="mailto:{{ social.user_url }}">
+            <svg class="svg-icon"><use xlink:href="{{ '/assets/minima-social-icons.svg#email' | relative_url }}"></use></svg> 
+            <span class="username">{{ social.user_url }}</span>
+          </a>
         {%- elsif social.platform == "github" -%}
-          <a href="https://github.com/{{ social.user_url }}"><svg class="svg-icon"><use xlink:href="{{ '/assets/minima-social-icons.svg#github' | relative_url }}"></use></svg> <span class="username">{{ social.user_url }}</span></a>
+          <a href="{{ social.user_url }}">
+            <svg class="svg-icon"><use xlink:href="{{ '/assets/minima-social-icons.svg#github' | relative_url }}"></use></svg> 
+            <span class="username">GitHub</span>
+          </a>
         {%- elsif social.platform == "rss" -%}
-          <a href="{{ social.user_url }}"><svg class="svg-icon"><use xlink:href="{{ '/assets/minima-social-icons.svg#rss' | relative_url }}"></use></svg> <span class="username">RSS</span></a>
+          <a href="{{ social.user_url }}">
+            <svg class="svg-icon"><use xlink:href="{{ '/assets/minima-social-icons.svg#rss' | relative_url }}"></use></svg> 
+            <span class="username">RSS</span>
+          </a>
         {%- endif -%}
       </li>
     {%- endfor -%}
