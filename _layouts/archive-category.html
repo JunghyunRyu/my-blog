@@ -11,17 +11,17 @@ layout: default
           <i class="fas fa-th"></i>
           <span>전체</span>
         </a>
-        <a href="{{ '/categories/qa-engineer/' | relative_url }}" class="category-item {% if page.title == 'QA Engineer' %}active{% endif %}" data-category="qa-engineer">
+        <a href="{{ '/categories/qa-engineer/' | relative_url }}" class="category-item {% if page.title == 'QA Engineer' or page.title == 'qa-engineer' %}active{% endif %}" data-category="qa-engineer">
           <i class="fas fa-code"></i>
           <span>QA Engineer</span>
           <span class="category-count">{{ site.categories['QA Engineer'] | size }}</span>
         </a>
-        <a href="{{ '/categories/learning/' | relative_url }}" class="category-item {% if page.title == 'Learning' %}active{% endif %}" data-category="learning">
+        <a href="{{ '/categories/learning/' | relative_url }}" class="category-item {% if page.title == 'Learning' or page.title == 'learning' %}active{% endif %}" data-category="learning">
           <i class="fas fa-book"></i>
           <span>Learning</span>
           <span class="category-count">{{ site.categories['Learning'] | size }}</span>
         </a>
-        <a href="{{ '/categories/daily-life/' | relative_url }}" class="category-item {% if page.title == 'Daily Life' %}active{% endif %}" data-category="daily-life">
+        <a href="{{ '/categories/daily-life/' | relative_url }}" class="category-item {% if page.title == 'Daily Life' or page.title == 'daily-life' %}active{% endif %}" data-category="daily-life">
           <i class="fas fa-home"></i>
           <span>Daily Life</span>
           <span class="category-count">{{ site.categories['Daily Life'] | size }}</span>
