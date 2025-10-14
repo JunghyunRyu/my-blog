@@ -1,0 +1,33 @@
+[Unit]
+Description=GeekNews Blog Automation Service
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/my-blog-cli
+Environment="PATH=/home/ubuntu/my-blog-cli/venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+EnvironmentFile=/home/ubuntu/my-blog-cli/.env
+
+# 스케줄러 실행
+ExecStart=/home/ubuntu/my-blog-cli/venv/bin/python /home/ubuntu/my-blog-cli/scripts/run_scheduler.py
+
+# 재시작 정책
+Restart=always
+RestartSec=60
+
+# 로그 설정
+StandardOutput=append:/home/ubuntu/my-blog-cli/logs/service.log
+StandardError=append:/home/ubuntu/my-blog-cli/logs/service.error.log
+
+# 리소스 제한
+MemoryMax=512M
+CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target
+
+

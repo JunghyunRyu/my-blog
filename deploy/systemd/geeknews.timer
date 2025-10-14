@@ -1,0 +1,16 @@
+[Unit]
+Description=GeekNews Blog Automation Timer (Hourly)
+Requires=geeknews-oneshot.service
+
+[Timer]
+# 매시간 정각에 실행
+OnCalendar=hourly
+# 시스템 재시작 시 놓친 실행을 보상
+Persistent=true
+# 랜덤 지연 (서버 부하 분산)
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
+
+
