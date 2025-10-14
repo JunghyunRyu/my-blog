@@ -295,14 +295,19 @@ def write_post(
             if guide.get("steps"):
                 content_lines.append("")
                 content_lines.append("**실행 단계:**")
+                content_lines.append("")
                 steps = guide.get("steps", "")
                 if isinstance(steps, str):
                     for step in steps.split(","):
-                        content_lines.append(f"- {step.strip()}")
+                        # AI가 이미 "1. ...", "2. ..." 형식으로 생성하므로 그대로 사용
+                        content_lines.append(f"{step.strip()}")
                 else:
                     for step in steps:
-                        content_lines.append(f"- {step}")
-            content_lines.append("")
+                        # AI가 이미 "1. ...", "2. ..." 형식으로 생성하므로 그대로 사용
+                        content_lines.append(f"{step}")
+                content_lines.append("")
+            else:
+                content_lines.append("")
 
     # 학습 로드맵
     if qa_result.learning_roadmap:

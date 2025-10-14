@@ -1,63 +1,47 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# 줄바꿈 문자 정책 설정
+# 모든 텍스트 파일은 LF로 정규화
+* text=auto eol=lf
 
-# Source code
-*.py text eol=lf
-*.js text eol=lf
-*.ts text eol=lf
-*.tsx text eol=lf
-*.jsx text eol=lf
-
-# Configuration files
-*.yml text eol=lf
-*.yaml text eol=lf
-*.json text eol=lf
-*.xml text eol=lf
-*.toml text eol=lf
-
-# Shell scripts
-*.sh text eol=lf
-*.bash text eol=lf
-
-# Ruby/Jekyll
-*.rb text eol=lf
-*.gemspec text eol=lf
-Gemfile text eol=lf
-Gemfile.lock text eol=lf
-
-# Markdown
-*.md text eol=lf
+# Jekyll 관련 파일들
 *.markdown text eol=lf
-
-# HTML/CSS
+*.md text eol=lf
 *.html text eol=lf
 *.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
 
-# Documentation
-*.txt text eol=lf
-*.md text eol=lf
+# Python 파일
+*.py text eol=lf
+*.pyw text eol=lf
 
-# Binary files
+# 설정 파일
+*.ini text eol=lf
+*.toml text eol=lf
+*.cfg text eol=lf
+*.conf text eol=lf
+
+# 스크립트
+*.sh text eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+
+# 바이너리 파일
 *.png binary
 *.jpg binary
 *.jpeg binary
 *.gif binary
 *.ico binary
+*.svg binary
 *.woff binary
 *.woff2 binary
 *.ttf binary
 *.eot binary
-*.svg binary
-*.webmanifest binary
 
-# Archives
-*.zip binary
-*.tar binary
-*.gz binary
-
-# Executables
-*.exe binary
-*.dll binary
-*.so binary
-*.dylib binary
-
+# Windows 관련 파일 (CRLF 유지)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
