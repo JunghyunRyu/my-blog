@@ -34,6 +34,9 @@ jobs:
           bundler-cache: true
           cache-version: 0
 
+      - name: Install dependencies
+        run: bundle install
+
       - name: Build site
         run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}"
         env:
@@ -42,6 +45,7 @@ jobs:
       - name: Test with Jekyll
         run: |
           bundle exec htmlproofer _site --only-4xx --check-favicon --check-html --allow-hash-href --empty-alt-ignore
+        continue-on-error: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

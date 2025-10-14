@@ -35,11 +35,12 @@ lang: ko-KR
 timezone: Asia/Seoul
 
 # 빌드 설정
-theme: jekyll-theme-chirpy
-# remote_theme: cotes2020/jekyll-theme-chirpy  # GitHub Pages용
+# theme: jekyll-theme-chirpy
+remote_theme: cotes2020/jekyll-theme-chirpy  # GitHub Pages용
 
 # 플러그인
 plugins:
+  - jekyll-remote-theme
   - jekyll-feed
   - jekyll-redirect-from
   - jekyll-seo-tag

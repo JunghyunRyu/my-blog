@@ -1,10 +1,11 @@
 source "https://rubygems.org"
 
-# Chirpy 테마 사용
-gem "jekyll-theme-chirpy", "~> 7.0"
+# GitHub Pages 호환 gem
+gem "github-pages", group: :jekyll_plugins
 
 # Jekyll 플러그인
 group :jekyll_plugins do
+  gem "jekyll-remote-theme"
   gem "jekyll-feed", "~> 0.12"
   gem "jekyll-redirect-from"
   gem "jekyll-seo-tag"
