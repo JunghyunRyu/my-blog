@@ -1,55 +1,43 @@
-# GeekNews 블로그 자동화 - 필수 의존성
-# Python 3.11+ 필요
+# GeekNews QA professional-grade automation system - essential dependencies
+# Windows PowerShell environment optimization
 
-# ============================================
-# OpenAI API (필수)
-# ============================================
-openai>=1.0.0
+# Web automation
+playwright>=1.40.0
+asyncio
 
-# ============================================
-# HTTP 클라이언트
-# ============================================
-requests>=2.31.0
-urllib3>=2.0.0
-
-# ============================================
-# RSS/Atom 피드 파싱
-# ============================================
-feedparser>=6.0.10
-
-# ============================================
-# 환경 변수 관리
-# ============================================
+# Environment configuration
 python-dotenv>=1.0.0
 
-# ============================================
-# 날짜/시간 처리 (Python 3.9+ 내장이지만 명시)
-# ============================================
-# zoneinfo는 Python 3.9+ 표준 라이브러리에 포함
+# File I/O
+aiofiles>=23.2.0
 
-# ============================================
-# 타입 힌팅 지원 (Python 3.11+ 에서는 대부분 불필요)
-# ============================================
+# Data processing
+beautifulsoup4>=4.12.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Text processing
+lxml>=4.9.0
+
+# RSS/Atom feed parsing
+feedparser>=6.0.10
+
+# Web search (DuckDuckGo - no API key required)
+duckduckgo-search>=3.9.0
+
+# Article content extraction (optional)
+newspaper3k>=0.2.8
+
+# Development and debugging (optional)
+rich>=13.0.0
+
+# Windows-specific support
+colorama>=0.4.6
+
+# Type hinting support (for Python <=3.8)
 typing-extensions>=4.0.0
 
-# ============================================
-# 선택적 의존성 (개발/테스트)
-# ============================================
-# pytest>=7.4.0          # 테스트 프레임워크
-# flake8>=6.0.0          # 코드 린트
-# black>=23.0.0          # 코드 포매터
-# isort>=5.12.0          # import 정렬
+# Async support
+asyncio-throttle>=1.0.2
 
-# ============================================
-# 제거된 의존성 (더 이상 사용하지 않음)
-# ============================================
-# playwright         # 스크래퍼 전용 (제거됨)
-# aiofiles           # 스크래퍼 전용 (제거됨)
-# asyncio            # Python 내장 모듈
-# asyncio-throttle   # 미사용
-# beautifulsoup4     # 미사용
-# lxml               # 미사용
-# newspaper3k        # 미사용
-# duckduckgo-search  # 미사용 (urllib로 충분)
-# rich               # 미사용
-# colorama           # 미사용

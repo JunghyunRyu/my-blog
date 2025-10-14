@@ -162,3 +162,4 @@ echo "  - 1회 실행: python scripts/run_once.py"
 echo "  - 로그 확인: tail -f logs/*.log"
 echo ""
 
+

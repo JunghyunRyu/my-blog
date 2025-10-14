@@ -1,0 +1,304 @@
+---
+layout: default
+---
+
+<div class="home">
+  <!-- 카테고리 바 섹션 -->
+  <div class="categories-bar-section">
+    <div class="container">
+      <div class="categories-bar">
+        <a href="{{ '/' | relative_url }}" class="category-item active" data-category="all">
+          <i class="fas fa-th"></i>
+          <span>전체</span>
+        </a>
+        <a href="{{ '/categories/qa-engineer/' | relative_url }}" class="category-item" data-category="qa-engineer">
+          <i class="fas fa-code"></i>
+          <span>QA Engineer</span>
+          <span class="category-count">{{ site.categories['QA Engineer'] | size }}</span>
+        </a>
+        <a href="{{ '/categories/learning/' | relative_url }}" class="category-item" data-category="learning">
+          <i class="fas fa-book"></i>
+          <span>Learning</span>
+          <span class="category-count">{{ site.categories['Learning'] | size }}</span>
+        </a>
+        <a href="{{ '/categories/daily-life/' | relative_url }}" class="category-item" data-category="daily-life">
+          <i class="fas fa-home"></i>
+          <span>Daily Life</span>
+          <span class="category-count">{{ site.categories['Daily Life'] | size }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 최근 포스트 섹션 -->
+  <div class="recent-posts-section">
+    <div class="container">
+      <h2 class="section-title">최근 포스트</h2>
+      <div class="posts-list">
+        {% for post in site.posts limit: 20 %}
+          <article class="post-card" data-categories="{% for category in post.categories %}{{ category | downcase | replace: ' ', '-' }} {% endfor %}">
+            <div class="post-meta">
+              <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y년 %m월 %d일" }}</time>
+              {% if post.categories.size > 0 %}
+                {% assign first_category = post.categories[0] %}
+                {% if first_category == 'QA Engineer' %}
+                  <span class="post-category qa-engineer">QA Engineer</span>
+                {% elsif first_category == 'Learning' %}
+                  <span class="post-category learning">Learning</span>
+                {% elsif first_category == 'Daily Life' %}
+                  <span class="post-category daily-life">Daily Life</span>
+                {% else %}
+                  <span class="post-category">{{ first_category }}</span>
+                {% endif %}
+              {% endif %}
+            </div>
+            <h3 class="post-title">
+              <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            </h3>
+            {% if post.summary %}
+              <p class="post-excerpt">{{ post.summary | strip_html | truncatewords: 30 }}</p>
+            {% endif %}
+            <div class="post-footer">
+              <a href="{{ post.url | relative_url }}" class="read-more">더 읽기 →</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* 카테고리 바 스타일 */
+.categories-bar-section {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.5rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.categories-bar {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0.5rem 0;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--body-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.category-item:hover {
+  background: var(--link-color);
+  color: white;
+  border-color: var(--link-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.category-item.active {
+  background: var(--link-color);
+  color: white;
+  border-color: var(--link-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.category-item i {
+  font-size: 1rem;
+}
+
+.category-count {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* 최근 포스트 섹션 */
+.recent-posts-section {
+  padding: 3rem 0;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  text-align: center;
+}
+
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.post-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: var(--link-color);
+}
+
+.post-card.hidden {
+  display: none;
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.post-meta time {
+  display: flex;
+  align-items: center;
+}
+
+.post-meta time::before {
+  content: "📅";
+  margin-right: 0.5rem;
+}
+
+.post-category {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.post-category.qa-engineer {
+  background: #4A90E2;
+  color: white;
+}
+
+.post-category.learning {
+  background: #50C878;
+  color: white;
+}
+
+.post-category.daily-life {
+  background: #FF6B6B;
+  color: white;
+}
+
+.post-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.post-title a {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.post-title a:hover {
+  color: var(--link-color);
+}
+
+.post-excerpt {
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin: 0 0 1.5rem 0;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.read-more {
+  color: var(--link-color);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.read-more:hover {
+  gap: 1rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .categories-bar {
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .category-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .post-card {
+    padding: 1.5rem;
+  }
+
+  .post-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.post-card {
+  animation: fadeIn 0.5s ease-out;
+}
+</style>
+

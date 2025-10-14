@@ -1,52 +1,110 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-#
-# If you need help with YAML syntax, here are some quick references for you:
-# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
-# https://learnxinyminutes.com/docs/yaml/
-#
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
+# ========================================
+# Chirpy 테마 설정
+# ========================================
 
+# 사이트 정보
 title: 개발 블로그 (jhryu's blogs)
-description: >- # this means to ignore newlines until "baseurl:"
-  정현류의 개발 블로그입니다. 프로그래밍, 기술, 그리고 일상에 대한 이야기를 담습니다.
-baseurl: "/my-blog" # the subpath of your site, e.g. /blog
-url: "https://junghyunryu.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: 
-github_username: junghyunryu
+tagline: QA Engineer & Developer
+description: 정현류의 개발 블로그입니다. 프로그래밍, 기술, 그리고 일상에 대한 이야기를 담습니다.
+url: https://junghyunryu.github.io
+baseurl: /my-blog
 
-# Build settings
-theme: minima
+# 테마
+theme: jekyll-theme-chirpy
+
+# 사용자 정보
+author:
+  name: 정현류
+  bio: QA Engineer & Developer
+  location: South Korea
+  email: # 이메일 주소를 여기에 입력하세요
+  twitter: # Twitter 사용자명 (선택사항)
+  github: junghyunryu
+
+# 소셜 미디어
+social:
+  github: junghyunryu
+  # twitter: # Twitter 사용자명
+  # facebook: # Facebook 사용자명
+  # linkedin: # LinkedIn 사용자명
+  # stackoverflow: # Stack Overflow 사용자 ID
+  # telegram: # Telegram 사용자명
+
+# 언어 및 시간대
+lang: ko-KR
+timezone: Asia/Seoul
+
+# 빌드 설정
+theme: jekyll-theme-chirpy
+# remote_theme: cotes2020/jekyll-theme-chirpy  # GitHub Pages용
+
+# 플러그인
 plugins:
   - jekyll-feed
+  - jekyll-redirect-from
+  - jekyll-seo-tag
+  - jekyll-archives
+  - jekyll-sitemap
 
-# Exclude from processing.
-# The following items will not be processed, by default.
-# Any item listed under the `exclude:` key here will be automatically added to
-# the internal "default list".
-#
-# Excluded items can be processed by explicitly listing the directories or
-# their entries' file path in the `include:` list.
-#
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+# 페이지 설정
+paginate: 10
+paginate_path: /page:num/
+
+# 카테고리 및 태그
+category_archive:
+  type: jekyll-archives
+  path: /categories/
+tag_archive:
+  type: jekyll-archives
+  path: /tags/
+
+# 아카이브
+jekyll-archives:
+  enabled:
+    - categories
+    - tags
+  layouts:
+    category: category
+    tag: tag
+  permalinks:
+    category: /categories/:name/
+    tag: /tags/:name/
+
+# SEO 설정
+seo:
+  type: WebSite
+  image: /assets/img/avatar.png
+
+# 댓글 시스템 (선택사항)
+# comments:
+#   active: giscus
+#   giscus:
+#     repo: junghyunryu/junghyunryu.github.io
+#     repo_id: # Giscus repo ID
+#     category: # Giscus category
+#     category_id: # Giscus category ID
+
+# 검색 기능
+search: true
+
+# 다크 모드
+mode:
+  dark: true
+  light: true
+
+# 타이포그래피
+typography_serif: false
+typography_monospace: false
+
+# 제외할 파일/디렉토리
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - venv/

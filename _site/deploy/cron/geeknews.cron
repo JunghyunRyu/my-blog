@@ -21,3 +21,4 @@ MAILTO=""
 # 매주 일요일 자정에 로그 정리 (7일 이상 된 로그 삭제)
 0 0 * * 0 find /home/ubuntu/my-blog-cli/logs -name "*.log" -mtime +7 -delete
 
+

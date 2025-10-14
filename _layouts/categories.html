@@ -1,0 +1,132 @@
+---
+layout: default
+---
+
+<article class="px-1">
+  <div id="page-category">
+    <h1 class="ps-lg-2">
+      <i class="far fa-folder-open fa-fw text-muted"></i>
+      카테고리
+    </h1>
+    
+    <div class="categories-grid">
+      {% for category in site.categories %}
+        {% assign category_name = category[0] %}
+        {% assign category_posts = category[1] %}
+        {% assign category_slug = category_name | downcase | replace: ' ', '-' %}
+        
+        <div class="category-card">
+          <a href="{{ '/categories/' | append: category_slug | append: '/' | relative_url }}" class="category-link">
+            <div class="category-icon">
+              {% if category_name == 'QA Engineer' %}
+                <i class="fas fa-code"></i>
+              {% elsif category_name == 'Learning' %}
+                <i class="fas fa-book"></i>
+              {% elsif category_name == 'Daily Life' %}
+                <i class="fas fa-home"></i>
+              {% else %}
+                <i class="far fa-folder"></i>
+              {% endif %}
+            </div>
+            <div class="category-info">
+              <h3 class="category-name">{{ category_name }}</h3>
+              <p class="category-count">{{ category_posts.size }}개의 포스트</p>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</article>
+
+<style>
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.category-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: var(--link-color);
+}
+
+.category-link {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+.category-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--link-color), var(--link-color-hover));
+  border-radius: 12px;
+  font-size: 1.5rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.category-info {
+  flex: 1;
+}
+
+.category-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--text-color);
+}
+
+.category-count {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .category-link {
+    padding: 1.5rem;
+  }
+  
+  .category-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+  
+  .category-name {
+    font-size: 1.1rem;
+  }
+}
+
+/* 다크 모드 지원 */
+@media (prefers-color-scheme: dark) {
+  .category-card {
+    background: var(--card-bg);
+  }
+}
+</style>
+

@@ -3,8 +3,7 @@ layout: post
 title: "EC2 서버에 Nginx와 Application Server(uvicorn/FastAPI) 연결 설정, 운영 팁까지"
 date: 2025-10-12 13:05:00 +0900
 categories: [Learning]
-tags: [aws, ec2, nginx, fastapi, uvicorn, ubuntu, systemd, devops]
-description: "AWS EC2에서 Nginx와 FastAPI 애플리케이션 서버를 연결 설정하고 운영하는 방법"
+tags: [EC2, Nginx, FastAPI, Uvicorn, Ubuntu, systemd, ReverseProxy, SFTP, DevOps, AWS]
 ---
 
 # EC2 서버에 Nginx와 Application Server 연결 설정, 운영 팁까지
