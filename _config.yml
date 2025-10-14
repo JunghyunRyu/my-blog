@@ -43,7 +43,7 @@ paginate_path: /page:num/
 jekyll-archives:
   enabled:
     - categories
-    - tags
+    # - tags  # 태그 아카이브 비활성화
   layouts:
     category: archive-category
     tag: archive-tag
