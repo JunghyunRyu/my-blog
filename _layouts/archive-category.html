@@ -41,6 +41,18 @@ layout: default
           <article class="post-card">
             <div class="post-meta">
               <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y년 %m월 %d일" }}</time>
+              {% if post.categories.size > 0 %}
+                {% assign first_category = post.categories[0] %}
+                {% if first_category == 'QA Engineer' %}
+                  <span class="post-category qa-engineer">QA Engineer</span>
+                {% elsif first_category == 'Learning' %}
+                  <span class="post-category learning">Learning</span>
+                {% elsif first_category == 'Daily Life' %}
+                  <span class="post-category daily-life">Daily Life</span>
+                {% else %}
+                  <span class="post-category">{{ first_category }}</span>
+                {% endif %}
+              {% endif %}
             </div>
             <h3 class="post-title">
               <a href="{{ post.url | relative_url }}">{{ post.title }}</a>

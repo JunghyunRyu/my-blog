@@ -1,7 +1,7 @@
 ---
 layout: page
 icon: fas fa-info-circle
-order: 2
+order: 0
 ---
 
 ## 안녕하세요! 👋
@@ -46,5 +46,5 @@ QA 엔지니어로서 품질 보증과 테스트 자동화에 깊은 관심을 �
 ### 연락처
 
 - GitHub: [@junghyunryu](https://github.com/junghyunryu)
-- 블로그: [현재 페이지](https://junghyunryu.github.io)
+- 블로그: [현재 페이지](https://junghyunryu.github.io/my-blog/)
 

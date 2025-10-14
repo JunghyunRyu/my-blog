@@ -53,7 +53,7 @@
         <a href="/my-blog/categories/qa-engineer/" class="category-item" data-category="qa-engineer">
           <i class="fas fa-code"></i>
           <span>QA Engineer</span>
-          <span class="category-count">9</span>
+          <span class="category-count">10</span>
         </a>
         <a href="/my-blog/categories/learning/" class="category-item" data-category="learning">
           <i class="fas fa-book"></i>
@@ -74,6 +74,27 @@
     <div class="container">
       <h2 class="section-title">최근 포스트</h2>
       <div class="posts-list">
+        
+          <article class="post-card" data-categories="qa-engineer ">
+            <div class="post-meta">
+              <time datetime="2025-10-15T01:53:42+09:00">2025년 10월 15일</time>
+              
+                
+                
+                  <span class="post-category qa-engineer">QA Engineer</span>
+                
+              
+            </div>
+            <h3 class="post-title">
+              <a href="/my-blog/qa%20engineer/2025/10/15/show-gn-autodev.html">Show GN: AutoDev: 바이브 코딩을 자동화해주는 도구</a>
+            </h3>
+            
+              <p class="post-excerpt">AutoDev는 바이브 코딩을 자동화하여 소프트웨어 개발의 효율성을 크게 향상시키는 도구입니다. 이 도구는 작업을 맡기면 자동으로 PR을 생성하고, CI 실패 및 PR 리뷰를 처리하여 개발자들이 보다 창의적인 작업에 집중할 수 있도록...</p>
+            
+            <div class="post-footer">
+              <a href="/my-blog/qa%20engineer/2025/10/15/show-gn-autodev.html" class="read-more">더 읽기 →</a>
+            </div>
+          </article>
         
           <article class="post-card" data-categories="qa-engineer ">
             <div class="post-meta">
@@ -444,265 +465,10 @@
             </div>
           </article>
         
-          <article class="post-card" data-categories="qa-engineer ">
-            <div class="post-meta">
-              <time datetime="2025-09-19T16:40:03+09:00">2025년 09월 19일</time>
-              
-                
-                
-                  <span class="post-category qa-engineer">QA Engineer</span>
-                
-              
-            </div>
-            <h3 class="post-title">
-              <a href="/my-blog/qa%20engineer/2025/09/19/ai-governance-model-for-qa-engineers-2026.html">2026년 QA Engineer가 주도해야 할 AI 품질 거버넌스 모델</a>
-            </h3>
-            
-            <div class="post-footer">
-              <a href="/my-blog/qa%20engineer/2025/09/19/ai-governance-model-for-qa-engineers-2026.html" class="read-more">더 읽기 →</a>
-            </div>
-          </article>
-        
       </div>
     </div>
   </div>
 </div>
-
-<style>
-/* 카테고리 바 스타일 */
-.categories-bar-section {
-  background: var(--card-bg);
-  border-bottom: 1px solid var(--border-color);
-  padding: 1.5rem 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.categories-bar {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  padding: 0.5rem 0;
-}
-
-.category-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: var(--body-bg);
-  border: 2px solid var(--border-color);
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: var(--text-color);
-}
-
-.category-item:hover {
-  background: #0056b3;
-  color: white !important;
-  border-color: #0056b3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-weight: 700;
-}
-
-.category-item.active {
-  background: #0056b3;
-  color: white !important;
-  border-color: #0056b3;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-weight: 700;
-}
-
-.category-item i {
-  font-size: 1rem;
-}
-
-.category-count {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.2rem 0.6rem;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-/* 최근 포스트 섹션 */
-.recent-posts-section {
-  padding: 3rem 0;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  color: var(--text-color);
-  text-align: center;
-}
-
-.posts-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.post-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 2rem;
-  transition: all 0.3s ease;
-  opacity: 1;
-  transform: scale(1);
-}
-
-.post-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  border-color: var(--link-color);
-}
-
-.post-card.hidden {
-  display: none;
-}
-
-.post-meta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-}
-
-.post-meta time {
-  display: flex;
-  align-items: center;
-}
-
-.post-meta time::before {
-  content: "📅";
-  margin-right: 0.5rem;
-}
-
-.post-category {
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.post-category.qa-engineer {
-  background: #4A90E2;
-  color: white;
-}
-
-.post-category.learning {
-  background: #50C878;
-  color: white;
-}
-
-.post-category.daily-life {
-  background: #FF6B6B;
-  color: white;
-}
-
-.post-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0 0 1rem 0;
-  line-height: 1.4;
-}
-
-.post-title a {
-  color: var(--text-color);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.post-title a:hover {
-  color: var(--link-color);
-}
-
-.post-excerpt {
-  color: var(--text-muted);
-  line-height: 1.7;
-  margin: 0 0 1.5rem 0;
-}
-
-.post-footer {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.read-more {
-  color: var(--link-color);
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.read-more:hover {
-  gap: 1rem;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-  .categories-bar {
-    gap: 0.25rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .category-item {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-  }
-
-  .section-title {
-    font-size: 1.5rem;
-  }
-
-  .post-card {
-    padding: 1.5rem;
-  }
-
-  .post-title {
-    font-size: 1.25rem;
-  }
-}
-
-/* 애니메이션 */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.post-card {
-  animation: fadeIn 0.5s ease-out;
-}
-</style>
 
 
       </div>
@@ -716,10 +482,14 @@
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
-          <li class="p-name">{&quot;name&quot; =&gt; &quot;류정현&quot;, &quot;email&quot; =&gt; &quot;jhryu115@gmail.com&quot;}</li></ul>
+          <li class="p-name">류정현</li></ul>
       </div>
 
-      <div class="footer-col footer-col-2"><ul class="social-media-list"></ul>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/junghyunryu">
+            <svg class="svg-icon"><use xlink:href="/my-blog/assets/minima-social-icons.svg#github"></use></svg> 
+            <span class="username">GitHub</span>
+          </a></li></ul>
+
 </div>
 
       <div class="footer-col footer-col-3">
@@ -730,6 +500,7 @@
   </div>
 
 </footer>
+
 </body>
 
 </html>
