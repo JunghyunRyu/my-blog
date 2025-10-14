@@ -10,7 +10,7 @@ url: https://junghyunryu.github.io
 baseurl: /my-blog
 
 # 테마
-theme: jekyll-theme-chirpy
+# theme: jekyll-theme-chirpy  # GitHub Actions에서 remote_theme 사용
 
 # 사용자 정보
 author:
