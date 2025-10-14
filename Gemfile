@@ -1,11 +1,12 @@
 source "https://rubygems.org"
 
-# Jekyll 버전 고정 (jekyll-remote-theme 호환성)
-gem "jekyll", "4.3.3"
+# Jekyll 버전 - jekyll-remote-theme과 호환되는 버전
+gem "jekyll", "~> 3.9"
+gem "webrick", "~> 1.8"
 
 # Jekyll 플러그인
 group :jekyll_plugins do
-  gem "jekyll-remote-theme", "~> 0.4"
+  gem "jekyll-remote-theme"
   gem "jekyll-feed", "~> 0.12"
   gem "jekyll-redirect-from"
   gem "jekyll-seo-tag"
