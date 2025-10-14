@@ -97,6 +97,12 @@ mode:
 typography_serif: false
 typography_monospace: false
 
+# Markdown 설정
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
 # 제외할 파일/디렉토리
 exclude:
   - .sass-cache/

@@ -3,7 +3,8 @@ source "https://rubygems.org"
 # Jekyll 버전 - jekyll-remote-theme과 호환되는 버전
 gem "jekyll", "~> 3.9"
 gem "webrick", "~> 1.8"
-gem "kramdown-parser-gfm"
+gem "kramdown", "~> 2.3"
+gem "kramdown-parser-gfm", "~> 1.1"
 
 # Jekyll 플러그인
 group :jekyll_plugins do
