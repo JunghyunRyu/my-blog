@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
-# Jekyll 최신 버전
-gem "jekyll", "~> 4.3"
+# Jekyll 버전 고정 (jekyll-remote-theme 호환성)
+gem "jekyll", "4.3.3"
 
 # Jekyll 플러그인
 group :jekyll_plugins do
