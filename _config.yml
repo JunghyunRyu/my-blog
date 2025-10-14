@@ -59,6 +59,13 @@ kramdown:
   syntax_highlighter_opts:
     default_lang: plaintext
 
+# Minima 테마 설정
+minima:
+  social_links:
+    - { platform: github, user_url: "https://github.com/junghyunryu" }
+  custom_css:
+    - /assets/css/custom.css
+
 # 제외할 파일/디렉토리
 exclude:
   - .sass-cache/
