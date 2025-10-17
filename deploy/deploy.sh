@@ -62,6 +62,23 @@ else
     }
     
     echo ""
+    echo "🧠 MCP 서버 상태 확인..."
+    if systemctl is-active --quiet mcp-sequentialthinking.service 2>/dev/null; then
+        echo "✅ MCP 서버 실행 중"
+        sudo systemctl status mcp-sequentialthinking.service --no-pager --lines=3
+    else
+        echo -e "${YELLOW}⚠️  MCP 서버가 실행되지 않고 있습니다. 시작 중...${NC}"
+        sudo systemctl start mcp-sequentialthinking.service
+        sleep 2
+        if systemctl is-active --quiet mcp-sequentialthinking.service; then
+            echo "✅ MCP 서버 시작 완료"
+        else
+            echo -e "${RED}❌ MCP 서버 시작 실패${NC}"
+            echo "로그 확인: sudo journalctl -u mcp-sequentialthinking -n 20"
+        fi
+    fi
+    
+    echo ""
     echo "🔧 서비스 재시작..."
     
     # systemd 서비스가 실행 중인지 확인

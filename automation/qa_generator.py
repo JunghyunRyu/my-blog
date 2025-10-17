@@ -39,9 +39,25 @@ class QAProvider(t.Protocol):
 class QAContentGenerator:
     """AI 기반 또는 규칙 기반으로 QA 결과를 생성한다."""
 
-    def __init__(self, provider: QAProvider | None = None, research_data: t.Any = None):
+    def __init__(self, provider: QAProvider | None = None, research_data: t.Any = None, enable_mcp: bool | None = None):
         self._provider = provider or self._build_provider()
         self.research_data = research_data
+        
+        # MCP 클라이언트 초기화
+        self.mcp_client = None
+        if enable_mcp is None:
+            enable_mcp = os.getenv("ENABLE_MCP", "true").lower() in ("true", "1", "yes")
+        
+        if enable_mcp:
+            try:
+                from .mcp_client import create_mcp_client
+                self.mcp_client = create_mcp_client()
+                if self.mcp_client:
+                    print("✓ MCP Sequential Thinking 활성화됨")
+            except ImportError:
+                print("⚠️ MCP 클라이언트 모듈을 찾을 수 없습니다.")
+            except Exception as exc:
+                print(f"⚠️ MCP 클라이언트 초기화 실패: {exc}")
 
     def _build_provider(self) -> QAProvider:
         api_key = os.getenv("OPENAI_API_KEY")
@@ -52,13 +68,58 @@ class QAContentGenerator:
 
     def generate(self, item: t.Mapping[str, t.Any], research_data: t.Any = None) -> QAResult:
         try:
-            # research_data를 provider에 전달
-            if hasattr(self._provider, 'set_research_data') and research_data:
-                self._provider.set_research_data(research_data)
+            # MCP 사전 분석 수행
+            mcp_insights = None
+            if self.mcp_client:
+                mcp_insights = self._run_mcp_analysis(item)
+            
+            # research_data와 MCP 인사이트를 provider에 전달
+            if hasattr(self._provider, 'set_research_data'):
+                if research_data:
+                    self._provider.set_research_data(research_data)
+                if mcp_insights and hasattr(self._provider, 'set_mcp_insights'):
+                    self._provider.set_mcp_insights(mcp_insights)
+            
             return self._provider.generate(item)
         except Exception as exc:  # pylint: disable=broad-except
             print(f"AI 생성 중 오류 발생: {exc}. 규칙 기반 백업을 사용합니다.")
             return RuleBasedProvider().generate(item)
+    
+    def _run_mcp_analysis(self, item: t.Mapping[str, t.Any]) -> dict[str, t.Any] | None:
+        """MCP Sequential Thinking으로 기사를 사전 분석한다."""
+        if not self.mcp_client:
+            return None
+        
+        try:
+            title = item.get("title", "")
+            summary = item.get("summary", "")
+            
+            problem = f"""
+            다음 기술 기사를 QA Engineer 관점에서 분석하세요:
+            
+            제목: {title}
+            요약: {summary}
+            
+            다음 관점에서 단계적으로 분석해주세요:
+            1. 이 기술이 QA 업무에 미치는 영향
+            2. 실무 적용 시 고려사항
+            3. 학습이 필요한 핵심 기술
+            4. 잠재적 위험 요소
+            """
+            
+            depth = int(os.getenv("MCP_THINKING_DEPTH", "3"))
+            result = self.mcp_client.think(problem.strip(), depth=depth)
+            
+            if result.get("error"):
+                print(f"  ⚠️ MCP 분석 실패: {result.get('error')}")
+                return None
+            
+            print(f"  ✓ MCP 분석 완료 (사고 단계: {len(result.get('thoughts', []))})")
+            return result
+            
+        except Exception as exc:
+            print(f"  ⚠️ MCP 분석 중 오류: {exc}")
+            return None
 
 
 class OpenAIProvider:
@@ -70,10 +131,15 @@ class OpenAIProvider:
         self.api_key = api_key
         self.model = model
         self.research_data: t.Any = None
+        self.mcp_insights: dict[str, t.Any] | None = None
     
     def set_research_data(self, research_data: t.Any) -> None:
         """웹 연구 데이터를 설정한다."""
         self.research_data = research_data
+    
+    def set_mcp_insights(self, mcp_insights: dict[str, t.Any]) -> None:
+        """MCP Sequential Thinking 분석 결과를 설정한다."""
+        self.mcp_insights = mcp_insights
 
     def generate(self, item: t.Mapping[str, t.Any]) -> QAResult:
         prompt = self._build_prompt(item)
@@ -123,6 +189,11 @@ class OpenAIProvider:
         if self.research_data:
             research_context = self._format_research_data(self.research_data)
         
+        # MCP 인사이트 포함
+        mcp_context = ""
+        if self.mcp_insights:
+            mcp_context = self._format_mcp_insights(self.mcp_insights)
+        
         return textwrap.dedent(
             f"""
             당신은 시니어 QA 엔지니어이자 기술 전문가입니다. 아래 GeekNews 기사를 분석하여 
@@ -135,6 +206,8 @@ class OpenAIProvider:
             - 발행일: {item.get('published_at', '')}
 
             {research_context}
+
+            {mcp_context}
 
             다음 JSON 스키마에 맞춰 응답하세요:
             {{
@@ -322,6 +395,38 @@ class OpenAIProvider:
                 context_parts.append(f"  - {opinion.get('title', '')} (댓글: {opinion.get('comments', 0)})")
         
         return "\n".join(context_parts) if len(context_parts) > 1 else ""
+    
+    def _format_mcp_insights(self, mcp_insights: dict[str, t.Any]) -> str:
+        """MCP Sequential Thinking 분석 결과를 프롬프트에 포함할 수 있는 형식으로 변환한다."""
+        if not mcp_insights or mcp_insights.get("error"):
+            return ""
+        
+        context_parts = ["MCP Sequential Thinking 분석 결과:"]
+        
+        # 사고 과정
+        thoughts = mcp_insights.get("thoughts", [])
+        if thoughts:
+            context_parts.append("\n분석 사고 과정:")
+            for i, thought in enumerate(thoughts[:5], 1):
+                context_parts.append(f"  {i}. {thought}")
+        
+        # 인사이트
+        insights = mcp_insights.get("insights", [])
+        if insights:
+            context_parts.append("\n핵심 인사이트:")
+            for insight in insights[:3]:
+                context_parts.append(f"  - {insight}")
+        
+        # 결론
+        conclusion = mcp_insights.get("conclusion", "")
+        if conclusion:
+            context_parts.append(f"\n종합 결론: {conclusion}")
+        
+        if len(context_parts) > 1:
+            context_parts.append("\n위 MCP 분석 결과를 참고하여 더 깊이 있고 구조화된 콘텐츠를 생성하세요.")
+            return "\n".join(context_parts)
+        
+        return ""
 
     def _parse_response(self, content: str, item: t.Mapping[str, t.Any]) -> QAResult:
         json_text = _extract_json(content)

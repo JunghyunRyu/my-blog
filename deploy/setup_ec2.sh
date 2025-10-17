@@ -42,6 +42,35 @@ sudo apt-get install -y \
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
 
 echo ""
+echo "🟢 Node.js 18 LTS 설치 중..."
+# nvm 설치
+if [ ! -d "$HOME/.nvm" ]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+else
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    echo "nvm이 이미 설치되어 있습니다."
+fi
+
+# Node.js 18 LTS 설치
+nvm install 18
+nvm use 18
+nvm alias default 18
+
+# Node.js 버전 확인
+node --version
+npm --version
+
+echo ""
+echo "🧠 MCP Sequential Thinking 서버 설치 중..."
+# MCP 서버는 npx로 실행하므로 별도 설치 불필요
+# 하지만 캐시를 위해 한 번 다운로드
+npx -y @modelcontextprotocol/server-sequentialthinking --version || echo "MCP 서버 준비 완료"
+
+echo ""
 echo "📂 프로젝트 디렉토리로 이동..."
 if [ ! -d "$PROJECT_DIR" ]; then
     echo -e "${RED}❌ 프로젝트 디렉토리를 찾을 수 없습니다: $PROJECT_DIR${NC}"
@@ -88,11 +117,66 @@ echo "🏥 헬스체크 실행..."
 python scripts/health_check.py || true
 
 echo ""
+echo "🧠 MCP Sequential Thinking 서비스 설정 중..."
+# Node.js 경로 동적 감지
+NODE_VERSION=$(node --version | sed 's/v//')
+NODE_PATH="$HOME/.nvm/versions/node/v$NODE_VERSION/bin"
+
+# systemd 서비스 파일 생성 (동적 경로 적용)
+cat > /tmp/mcp-sequentialthinking.service << EOF
+[Unit]
+Description=MCP Sequential Thinking Server
+Documentation=https://github.com/modelcontextprotocol/servers
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=$USER
+Group=$USER
+WorkingDirectory=$HOME
+Environment="PATH=$NODE_PATH:/usr/local/bin:/usr/bin:/bin"
+Environment="NODE_ENV=production"
+ExecStart=$NODE_PATH/npx -y @modelcontextprotocol/server-sequentialthinking
+Restart=always
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+MemoryMax=256M
+CPUQuota=25%
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mcp-sequentialthinking
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo cp /tmp/mcp-sequentialthinking.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable mcp-sequentialthinking.service
+sudo systemctl start mcp-sequentialthinking.service
+
+echo "✅ MCP 서버 systemd 서비스가 시작되었습니다."
+echo ""
+echo "MCP 서버 상태 확인:"
+echo "  sudo systemctl status mcp-sequentialthinking"
+
+echo ""
+echo "🔧 Git 설정 확인..."
+# Git 사용자 설정 (없는 경우에만)
+git config user.name > /dev/null 2>&1 || git config --global user.name "GeekNews Bot"
+git config user.email > /dev/null 2>&1 || git config --global user.email "bot@geeknews.local"
+echo "✅ Git 사용자 설정 완료"
+echo "   사용자명: $(git config user.name)"
+echo "   이메일: $(git config user.email)"
+
+echo ""
 echo "================================"
 echo "설정 방식 선택"
 echo "================================"
 echo "1) systemd 서비스 (추천) - 백그라운드 지속 실행"
-echo "2) systemd 타이머 - 정해진 시간마다 실행"
+echo "2) systemd 타이머 - 정해진 시간마다 실행 (권장)"
 echo "3) cron - 전통적인 방식"
 echo "4) 설정하지 않음"
 echo ""
@@ -154,12 +238,28 @@ echo ""
 echo "다음 단계:"
 echo "  1. .env 파일 편집: nano .env"
 echo "  2. OPENAI_API_KEY 설정"
-echo "  3. 수동 테스트: python scripts/run_once.py"
+echo "  3. MCP 설정 (ENABLE_MCP, MCP_SERVER_URL)"
+echo "  4. Git 사용자 정보 설정 (GIT_USER_NAME, GIT_USER_EMAIL)"
+echo "  5. GitHub SSH 키 또는 Personal Access Token 설정"
+echo "  6. 수동 테스트: python scripts/run_once.py"
 echo ""
 echo "유용한 명령어:"
 echo "  - 헬스체크: python scripts/health_check.py"
 echo "  - 1회 실행: python scripts/run_once.py"
+echo "  - MCP 서버 상태: sudo systemctl status mcp-sequentialthinking"
+echo "  - GeekNews 타이머 상태: systemctl list-timers geeknews.timer"
 echo "  - 로그 확인: tail -f logs/*.log"
+echo "  - MCP 로그: sudo journalctl -u mcp-sequentialthinking -f"
+echo ""
+echo "GitHub 인증 설정 (자동 Push를 위해 필수):"
+echo "  SSH 키 방식:"
+echo "    1. ssh-keygen -t ed25519 -C 'your-email@example.com'"
+echo "    2. cat ~/.ssh/id_ed25519.pub 출력 후 GitHub에 등록"
+echo "    3. ssh -T git@github.com 으로 연결 테스트"
+echo "  또는 Personal Access Token 방식:"
+echo "    1. GitHub에서 PAT 생성 (repo 권한 필요)"
+echo "    2. git config --global credential.helper store"
+echo "    3. git push 시 토큰 입력"
 echo ""
 
 

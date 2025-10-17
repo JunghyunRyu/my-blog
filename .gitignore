@@ -1,6 +1,201 @@
+# ============================================
+# Python
+# ============================================
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+coverage.xml
+*.cover
+
+# ============================================
+# Sensitive Information (중요!)
+# ============================================
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# API Keys and credentials
+*.key
+*.pem
+credentials.json
+secrets.json
+
+# SSH keys
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+
+# ============================================
+# Jekyll
+# ============================================
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+
+# ============================================
+# Node.js (MCP 서버용)
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.npm
+
+# ============================================
+# Logs
+# ============================================
+logs/
+*.log
+nohup.out
+pip-log.txt
+
+# ============================================
+# Data & State Files (실행 중 생성되는 데이터)
+# ============================================
+data/geeknews_state.json
+data/*.json
+data/*.db
+data/*.sqlite
+
+# ============================================
+# IDE & Editors
+# ============================================
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ============================================
+# OS Files
+# ============================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ============================================
+# Temporary Files
+# ============================================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.orig
+
+# ============================================
+# Backup Files
+# ============================================
+*.backup
+backup/
+backups/
+old/
+
+# ============================================
+# Project Specific
+# ============================================
+# Old scripts (deprecated)
 /article_generator.py
-/venv/
-/_site/
-/.sass-cache/
-/.jekyll-cache/
-/.jekyll-metadata
+
+# Test data
+test_output/
+*.test.md
+
+# Local configuration overrides
+local_config.py
+config.local.py
+
+# ============================================
+# Keep These (via negation)
+# ============================================
+# Keep example files
+!env.example
+!.env.example
+
+# Keep sample data
+!automation/sample_feed.xml
+
+# Keep documentation
+!README.md
+!docs/*.md
+!CONTRIBUTING.md
+!LICENSE
+
+# Keep deployment configs (without secrets)
+!deploy/*.sh
+!deploy/systemd/*.service
+!deploy/systemd/*.timer
+!deploy/cron/*.cron

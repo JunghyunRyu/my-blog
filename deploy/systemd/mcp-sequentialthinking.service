@@ -1,0 +1,38 @@
+[Unit]
+Description=MCP Sequential Thinking Server
+Documentation=https://github.com/modelcontextprotocol/servers
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu
+
+# Node.js 환경 경로 (nvm 사용)
+# setup_ec2.sh 실행 시 자동으로 Node.js 경로가 설정됩니다
+Environment="PATH=/home/ubuntu/.nvm/versions/node/v18.20.5/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="NODE_ENV=production"
+
+# MCP Sequential Thinking 서버 실행
+ExecStart=/home/ubuntu/.nvm/versions/node/v18.20.5/bin/npx -y @modelcontextprotocol/server-sequentialthinking
+
+# 재시작 정책
+Restart=always
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+
+# 리소스 제한
+MemoryMax=256M
+CPUQuota=25%
+
+# 로그 설정
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=mcp-sequentialthinking
+
+[Install]
+WantedBy=multi-user.target
+

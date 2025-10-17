@@ -1,7 +1,8 @@
 [Unit]
 Description=GeekNews Blog Automation (One-shot)
-After=network-online.target
+After=network-online.target mcp-sequentialthinking.service
 Wants=network-online.target
+Requires=mcp-sequentialthinking.service
 
 [Service]
 Type=oneshot

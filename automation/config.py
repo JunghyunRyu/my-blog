@@ -157,6 +157,7 @@ class Config:
         # 카테고리별 포스트 디렉토리도 생성
         (cls.POSTS_DIR / "learning").mkdir(parents=True, exist_ok=True)
         (cls.POSTS_DIR / "qa-engineer").mkdir(parents=True, exist_ok=True)
+        (cls.POSTS_DIR / "daily-life").mkdir(parents=True, exist_ok=True)
 
 
 # 설정 유효성 검사 (import 시 자동 실행)

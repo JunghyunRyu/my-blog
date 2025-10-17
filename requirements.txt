@@ -41,3 +41,7 @@ typing-extensions>=4.0.0
 # Async support
 asyncio-throttle>=1.0.2
 
+# MCP 통합
+httpx>=0.24.0
+anyio>=3.7.0
+

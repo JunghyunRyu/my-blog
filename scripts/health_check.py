@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import subprocess
 import sys
 import urllib.request
 from datetime import datetime
@@ -17,7 +18,7 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from geeknews.config import Config
+from automation.config import Config
 
 
 def check_config() -> tuple[bool, list[str]]:
@@ -187,6 +188,134 @@ def check_directories() -> tuple[bool, str]:
         return False, "일부 디렉토리 없음"
 
 
+def check_nodejs() -> tuple[bool, str]:
+    """Node.js 설치를 확인합니다."""
+    print("\n🟢 Node.js 확인 중...")
+    
+    try:
+        result = subprocess.run(
+            ["node", "--version"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        if result.returncode == 0:
+            version = result.stdout.strip()
+            print(f"  ✅ Node.js 설치됨: {version}")
+            return True, version
+        else:
+            print("  ❌ Node.js가 설치되어 있지 않습니다.")
+            return False, "미설치"
+    except FileNotFoundError:
+        print("  ❌ Node.js가 설치되어 있지 않습니다.")
+        return False, "미설치"
+    except Exception as e:
+        print(f"  ⚠️  Node.js 확인 실패: {e}")
+        return False, str(e)
+
+
+def check_mcp_server() -> tuple[bool, str]:
+    """MCP Sequential Thinking 서버 연결을 확인합니다."""
+    print("\n🧠 MCP 서버 확인 중...")
+    
+    # MCP 비활성화 확인
+    if os.getenv("ENABLE_MCP", "true").lower() not in ("true", "1", "yes"):
+        print("  ℹ️  MCP가 비활성화되어 있습니다.")
+        return True, "비활성화"
+    
+    mcp_url = os.getenv("MCP_SERVER_URL", "http://localhost:3000")
+    
+    try:
+        # HTTP 헬스체크 시도
+        request = urllib.request.Request(
+            f"{mcp_url}/health",
+            headers={"User-Agent": "HealthCheck/1.0"}
+        )
+        
+        with urllib.request.urlopen(request, timeout=5) as response:
+            if response.status == 200:
+                print(f"  ✅ MCP 서버 연결 성공: {mcp_url}")
+                return True, "정상"
+            else:
+                print(f"  ⚠️  MCP 서버 응답 이상: HTTP {response.status}")
+                return False, f"HTTP {response.status}"
+                
+    except urllib.error.URLError as e:
+        print(f"  ❌ MCP 서버에 연결할 수 없습니다: {e}")
+        print(f"     확인: sudo systemctl status mcp-sequentialthinking")
+        return False, "연결 실패"
+    except Exception as e:
+        print(f"  ⚠️  MCP 서버 확인 실패: {e}")
+        return False, str(e)
+
+
+def check_git_config() -> tuple[bool, str]:
+    """Git 설정을 확인합니다."""
+    print("\n🔧 Git 설정 확인 중...")
+    
+    errors = []
+    
+    # Git 사용자 이름 확인
+    try:
+        result = subprocess.run(
+            ["git", "config", "user.name"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            username = result.stdout.strip()
+            print(f"  ✅ Git user.name: {username}")
+        else:
+            print("  ❌ Git user.name이 설정되지 않았습니다.")
+            errors.append("user.name 미설정")
+    except Exception as e:
+        print(f"  ⚠️  Git user.name 확인 실패: {e}")
+        errors.append(f"user.name 오류: {e}")
+    
+    # Git 사용자 이메일 확인
+    try:
+        result = subprocess.run(
+            ["git", "config", "user.email"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            email = result.stdout.strip()
+            print(f"  ✅ Git user.email: {email}")
+        else:
+            print("  ❌ Git user.email이 설정되지 않았습니다.")
+            errors.append("user.email 미설정")
+    except Exception as e:
+        print(f"  ⚠️  Git user.email 확인 실패: {e}")
+        errors.append(f"user.email 오류: {e}")
+    
+    # Git 원격 저장소 확인
+    try:
+        result = subprocess.run(
+            ["git", "remote", "-v"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+            cwd=Config.PROJECT_ROOT
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            remotes = result.stdout.strip().split('\n')
+            print(f"  ✅ Git 원격 저장소: {len(remotes)}개 등록됨")
+        else:
+            print("  ⚠️  Git 원격 저장소가 설정되지 않았습니다.")
+            errors.append("원격 저장소 미설정")
+    except Exception as e:
+        print(f"  ⚠️  Git 원격 저장소 확인 실패: {e}")
+        errors.append(f"원격 저장소 오류: {e}")
+    
+    if errors:
+        return False, ", ".join(errors)
+    else:
+        return True, "정상"
+
+
 def main() -> int:
     """헬스체크를 실행합니다."""
     print("=" * 80)
@@ -198,6 +327,9 @@ def main() -> int:
         ("설정", check_config),
         ("OpenAI API", check_openai_api),
         ("네트워크", check_network),
+        ("Node.js", check_nodejs),
+        ("MCP 서버", check_mcp_server),
+        ("Git 설정", check_git_config),
         ("디스크", check_disk_space),
         ("디렉토리", check_directories),
         ("마지막 실행", check_last_run),

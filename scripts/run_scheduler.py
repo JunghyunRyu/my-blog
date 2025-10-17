@@ -15,8 +15,8 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from geeknews.config import Config
-from geeknews.pipeline import run_pipeline, resolve_timezone
+from automation.config import Config
+from automation.geeknews_pipeline import run_pipeline, resolve_timezone
 
 
 def main() -> None:

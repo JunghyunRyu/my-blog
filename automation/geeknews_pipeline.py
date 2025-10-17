@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
 from pathlib import Path
 import textwrap
 import typing as t
@@ -538,6 +539,15 @@ def run_pipeline(
     save_state(processed)
     print(f"  → 상태 저장 완료")
     
+    # 6. GitHub에 자동 push
+    git_push_success = False
+    if created_files and os.getenv("AUTO_GIT_PUSH", "true").lower() in ("true", "1", "yes"):
+        try:
+            from scripts.git_push import auto_push_posts
+            git_push_success = auto_push_posts(created_files, project_dir=Path.cwd())
+        except Exception as exc:
+            print(f"\n⚠️  Git 자동 푸시 실패: {exc}")
+    
     # 요약 출력
     print("\n" + "=" * 80)
     print("파이프라인 실행 완료")
@@ -548,6 +558,14 @@ def run_pipeline(
         print("\n생성된 포스트 목록:")
         for path in created_files:
             print(f"  ✓ {path}")
+    
+    if git_push_success:
+        print("\n✅ GitHub 자동 푸시 완료")
+    elif created_files:
+        print("\nℹ️  GitHub 푸시를 수동으로 실행하세요:")
+        print("   git add _posts/ data/")
+        print("   git commit -m 'Add new posts'")
+        print("   git push")
     
     print("=" * 80)
     
