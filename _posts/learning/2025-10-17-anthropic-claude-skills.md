@@ -2,7 +2,7 @@
 layout: post
 title: "Anthropic, Claude Skills 공개"
 date: 2025-10-17 00:26:07 +0000
-categories: ['GeekNews', 'QA', 'AI']
+categories: [Learning]
 tags: ['GeekNews', 'QA', 'AI']
 summary: "Anthropic은 Claude Skills 기능을 공개하여 사용자가 맞춤형 에이전트를 쉽게 만들고 추가할 수 있는 기능을 제공하고 있습니다. 이 기술은 사용자가 SKILLS.md 파일과 회사 리소스를 포함한 zip 파일을 업로드하여 새로운 스킬을 추가하고, 이를 통해 발표 자료를 자동으로 생성하는 과정을 보여줍니다. 이러한 혁신은 AI 기반의 소프트웨어 개발 및 품질 보증 프로세스에 큰 변화를 가져올 것으로 기대되며, 특히 기업들이 AI를 활용하여 효율성을 높이고 있습니다. AI 기술의 발전은 QA 엔지니어들이 더 전략적인 업무에 집중할 수 있도록 도와줄 것입니다."
 original_url: "https://news.hada.io/topic?id=23701"
