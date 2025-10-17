@@ -220,20 +220,41 @@ def write_post(
     elif timezone is not None:
         published_dt = published_dt.astimezone(timezone)
 
+    # 타겟 카테고리 결정 (AI의 blog_category를 최우선으로 사용)
+    if qa_result and qa_result.blog_category:
+        # AI가 선택한 카테고리 사용 (Learning, QA Engineer, Daily Life)
+        ai_category = qa_result.blog_category
+        # 디렉토리 이름으로 변환 (category_name은 공백 유지)
+        if ai_category == "QA Engineer":
+            target_category = "qa-engineer"
+            category_name = "QA Engineer"
+        elif ai_category == "Daily Life":
+            target_category = "daily-life"
+            category_name = "Daily Life"
+        else:  # Learning
+            target_category = "learning"
+            category_name = "Learning"
+    else:
+        # AI가 카테고리를 제공하지 않은 경우 기본값 사용
+        target_category = "learning"
+        category_name = "Learning"
+    
     slug = slugify(item["title"])
     filename = f"{published_dt:%Y-%m-%d}-{slug}.md"
-    filepath = POSTS_DIR / filename
+    
+    # 타겟 카테고리별 디렉토리에 저장
+    target_dir = POSTS_DIR / target_category
+    target_dir.mkdir(parents=True, exist_ok=True)
+    filepath = target_dir / filename
 
-    # 카테고리 및 태그 결정
-    categories = ["GeekNews", "QA"]
-    tags = ["GeekNews", "QA"]
+    # 태그 결정
+    tags = []
     
     if metrics and metrics.categories:
-        categories.extend(metrics.categories)
-        tags.extend(metrics.categories)
+        # AI, QA, DevOps 등의 세부 태그만 추가
+        tags.extend([cat for cat in metrics.categories if cat not in ["GeekNews", "Technology"]])
     
     # 중복 제거
-    categories = list(dict.fromkeys(categories))
     tags = list(dict.fromkeys(tags))
 
     front_matter = textwrap.dedent(
@@ -242,7 +263,7 @@ def write_post(
         layout: post
         title: "{item['title']}"
         date: {published_dt:%Y-%m-%d %H:%M:%S %z}
-        categories: {categories}
+        categories: [{category_name}]
         tags: {tags}
         summary: "{qa_result.summary.strip()}"
         original_url: "{item['link']}"

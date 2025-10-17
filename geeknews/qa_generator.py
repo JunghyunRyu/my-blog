@@ -26,6 +26,7 @@ class QAResult:
     learning_roadmap: list[dict[str, t.Any]] = field(default_factory=list)
     expert_opinions: list[dict[str, str]] = field(default_factory=list)
     technical_level: str = "advanced"  # "advanced" 또는 "practical"
+    blog_category: str = "Learning"  # "Learning", "QA Engineer", "Daily Life"
 
 
 class QAProvider(t.Protocol):
@@ -143,6 +144,8 @@ class OpenAIProvider:
 
             다음 JSON 스키마에 맞춰 응답하세요:
             {{
+              "blog_category": "이 기사가 속할 블로그 카테고리를 정확히 하나만 선택하세요. 반드시 다음 3개 중 하나만 선택해야 합니다: 'Learning' (기술 트렌드, 새로운 도구/프레임워크, 개발 방법론, AI/ML 기술, 프로그래밍 언어 등), 'QA Engineer' (테스트 자동화, QA 도구, 품질 보증 프로세스, 테스팅 전략, QA 업무 관련), 'Daily Life' (일상적인 주제, 여행, 요리, 라이프스타일, 취미, 쇼핑 등). 절대로 복수의 카테고리나 다른 값을 입력하지 마세요.",
+              
               "technical_level": "이 기사의 기술적 난이도를 판단합니다. 'advanced' (신기술 발표, 연구 논문, 복잡한 아키텍처, 고급 엔지니어 대상) 또는 'practical' (QA 도구 사용법, 테스팅 베스트 프랙티스, 실무 가이드)",
               
               "summary": "3-5문장의 긴 문단으로 기사의 핵심 내용을 요약합니다. 주요 기술 트렌드, 혁신적 변화, 비즈니스 및 기술적 영향을 중심으로 작성하되, 가능한 경우 관련 출처나 통계를 자연스럽게 인용하세요(예: 'tricentis.com에 따르면...'). 이 기술이 왜 중요한지, 어떤 기업들이 도입하고 있는지, 그리고 결과적으로 업계에 어떤 변화를 가져오는지를 포함하여 서술하세요.",
@@ -368,10 +371,15 @@ class OpenAIProvider:
         learning_roadmap = _ensure_learning_roadmap_list(payload.get("learning_roadmap"))
         expert_opinions = _ensure_expert_opinions_list(payload.get("expert_opinions"))
         technical_level = str(payload.get("technical_level", "advanced")).lower()
+        blog_category = str(payload.get("blog_category", "Learning")).strip()
         
         # technical_level 유효성 검증
         if technical_level not in ["advanced", "practical"]:
             technical_level = "advanced"
+        
+        # blog_category 유효성 검증 (정확히 3개 중 하나만 허용)
+        if blog_category not in ["Learning", "QA Engineer", "Daily Life"]:
+            blog_category = "Learning"
 
         return QAResult(
             summary=summary, 
@@ -382,7 +390,8 @@ class OpenAIProvider:
             practical_guide=practical_guide,
             learning_roadmap=learning_roadmap,
             expert_opinions=expert_opinions,
-            technical_level=technical_level
+            technical_level=technical_level,
+            blog_category=blog_category
         )
 
 

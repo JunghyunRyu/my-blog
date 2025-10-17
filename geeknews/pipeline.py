@@ -226,16 +226,24 @@ def write_post(
     # 제목에 별점 추가
     title_with_priority = f"{item['title']} {stars}"
     
-    # 타겟 카테고리 결정 (AI 분석 우선, 그 다음 metrics 기반)
-    if qa_result and qa_result.technical_level == "practical":
-        target_category = "qa-engineer"
-    elif metrics and metrics.target_category:
-        target_category = metrics.target_category
+    # 타겟 카테고리 결정 (AI의 blog_category를 최우선으로 사용)
+    if qa_result and qa_result.blog_category:
+        # AI가 선택한 카테고리 사용 (Learning, QA Engineer, Daily Life)
+        ai_category = qa_result.blog_category
+        # 디렉토리 이름으로 변환 (category_name은 공백 유지)
+        if ai_category == "QA Engineer":
+            target_category = "qa-engineer"
+            category_name = "QA Engineer"
+        elif ai_category == "Daily Life":
+            target_category = "daily-life"
+            category_name = "Daily Life"
+        else:  # Learning
+            target_category = "learning"
+            category_name = "Learning"
     else:
+        # AI가 카테고리를 제공하지 않은 경우 기본값 사용
         target_category = "learning"
-    
-    # 카테고리 이름 변환
-    category_name = "QA Engineer" if target_category == "qa-engineer" else "Learning"
+        category_name = "Learning"
     
     slug = slugify(item["title"])
     filename = f"{published_dt:%Y-%m-%d}-{slug}.md"
@@ -245,8 +253,7 @@ def write_post(
     target_dir.mkdir(parents=True, exist_ok=True)
     filepath = target_dir / filename
 
-    # 카테고리 및 태그 결정 (GeekNews 제거, 메인 카테고리만 사용)
-    categories = [category_name]
+    # 태그 결정
     tags = []
     
     if metrics and metrics.categories:
@@ -265,7 +272,7 @@ def write_post(
         layout: post
         title: "{title_with_priority}"
         date: {published_dt:%Y-%m-%d %H:%M:%S %z}
-        categories: {categories}
+        categories: [{category_name}]
         tags: {tags}
         priority: {priority_score}
         summary: "{qa_result.summary.strip()}"
