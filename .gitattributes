@@ -1,47 +1,54 @@
-# 줄바꿈 문자 정책 설정
-# 모든 텍스트 파일은 LF로 정규화
+# .gitattributes 파일 - 줄바꿈 규칙 명시
+# 이 파일은 Git이 각 파일 타입에 대해 어떤 줄바꿈 방식을 사용할지 명시합니다.
+
+# 모든 텍스트 파일에 대해 LF 사용 (Unix 스타일)
 * text=auto eol=lf
 
-# Jekyll 관련 파일들
-*.markdown text eol=lf
-*.md text eol=lf
-*.html text eol=lf
-*.css text eol=lf
-*.js text eol=lf
-*.json text eol=lf
-*.xml text eol=lf
-*.yml text eol=lf
-*.yaml text eol=lf
-
-# Python 파일
-*.py text eol=lf
-*.pyw text eol=lf
-
-# 설정 파일
-*.ini text eol=lf
-*.toml text eol=lf
-*.cfg text eol=lf
-*.conf text eol=lf
-
-# 스크립트
-*.sh text eol=lf
+# Windows 배치 파일과 PowerShell 스크립트는 CRLF 사용
 *.bat text eol=crlf
-*.ps1 text eol=crlf
 *.cmd text eol=crlf
+*.ps1 text eol=crlf
 
-# 바이너리 파일
+# 바이너리 파일은 줄바꿈 변환하지 않음
 *.png binary
 *.jpg binary
 *.jpeg binary
 *.gif binary
 *.ico binary
-*.svg binary
-*.woff binary
-*.woff2 binary
-*.ttf binary
-*.eot binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.exe binary
+*.dll binary
 
-# Windows 관련 파일 (CRLF 유지)
-*.bat text eol=crlf
-*.cmd text eol=crlf
-*.ps1 text eol=crlf
+# Python 파일
+*.py text eol=lf
+
+# 웹 파일들
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+
+# 마크다운 파일
+*.md text eol=lf
+
+# 설정 파일들
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.conf text eol=lf
+
+# 문서 파일들
+*.txt text eol=lf
+*.rst text eol=lf
+
+# 쉘 스크립트 (Unix 스타일)
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Makefile
+Makefile text eol=lf

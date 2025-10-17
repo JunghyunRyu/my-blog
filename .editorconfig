@@ -66,3 +66,25 @@ indent_style = space
 indent_size = 4
 end_of_line = crlf
 
+# Configuration files
+[*.{env,ini,cfg,conf}]
+end_of_line = lf
+charset = utf-8
+
+# Git files
+[.gitignore]
+end_of_line = lf
+
+[.gitattributes]
+end_of_line = lf
+
+# Documentation files
+[*.{txt,rst}]
+end_of_line = lf
+charset = utf-8
+
+# Jekyll files
+[*.{yml,yaml}]
+end_of_line = lf
+charset = utf-8
+
