@@ -1,12 +1,12 @@
 ---
-       layout: post
-       title: "Andrej Karpathy – AGI는 아직 10년 남았음"
-       date: 2025-10-19 00:19:53 +0000
-       categories: [Learning]
-       tags: ['AI', 'Development']
-       summary: "- **Andrej Karpathy**는 AGI 개발에는 최소 **10년**이 더 걸릴 것으로 전망함. 현존하는 **AI 에이전트**들은 인상적이지만, **지속 학습**이나 인간 수준의 다양하고 깊이 있는 사고에 미치지 못하며, RL(강화학습)은 상당히 비효율적인 방법임"
-       original_url: "https://news.hada.io/topic?id=23732"
-       ---
+layout: post
+title: "Andrej Karpathy – AGI는 아직 10년 남았음"
+date: 2025-10-19 00:19:53 +0000
+categories: [Learning]
+tags: ['AI', 'Development']
+summary: "- **Andrej Karpathy**는 AGI 개발에는 최소 **10년**이 더 걸릴 것으로 전망함. 현존하는 **AI 에이전트**들은 인상적이지만, **지속 학습**이나 인간 수준의 다양하고 깊이 있는 사고에 미치지 못하며, RL(강화학습)은 상당히 비효율적인 방법임"
+original_url: "https://news.hada.io/topic?id=23732"
+---
 
 ## 요약
 

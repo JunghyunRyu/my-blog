@@ -1,12 +1,12 @@
 ---
-       layout: post
-       title: "Claude Skills는 굉장하다, MCP보다 더 큰 혁신일지도"
-       date: 2025-10-19 00:19:21 +0000
-       categories: [Learning]
-       tags: ['AI']
-       summary: "- Anthropic이 발표한 **Claude Skills**는 모델이 특정 작업을 수행할 때 필요한 지침, 스크립트, 리소스를 폴더 형태로 제공하는 새로운 패턴으로, **작업별 전문성을 동적으로 로드**하는 방식. Skills는 Markdown 파일과 선택적 스크립트로 구성되며, 세션 시작 시 각 스킬을 동적으로 로드하여 전문성 있는 작업 수행이 가능"
-       original_url: "https://news.hada.io/topic?id=23734"
-       ---
+layout: post
+title: "Claude Skills는 굉장하다, MCP보다 더 큰 혁신일지도"
+date: 2025-10-19 00:19:21 +0000
+categories: [Learning]
+tags: ['AI']
+summary: "- Anthropic이 발표한 **Claude Skills**는 모델이 특정 작업을 수행할 때 필요한 지침, 스크립트, 리소스를 폴더 형태로 제공하는 새로운 패턴으로, **작업별 전문성을 동적으로 로드**하는 방식. Skills는 Markdown 파일과 선택적 스크립트로 구성되며, 세션 시작 시 각 스킬을 동적으로 로드하여 전문성 있는 작업 수행이 가능"
+original_url: "https://news.hada.io/topic?id=23734"
+---
 
 ## 요약
 
@@ -19,7 +19,7 @@
 **Q:** 이 소식이 다루는 핵심 변화는 무엇인가요?
 
 **A:** 기사 'Claude Skills는 굉장하다, MCP보다 더 큰 혁신일지도'는 다음을 강조합니다: 
-- Anthropic이 발표한 **Claude Skills**는 모델이 특정 작업을 수행할 때 필요한 지침, 스크립트, 리소스를 폴더 형태로 제공하는 새로운 패턴으로, **작업별 전문성을 동적으로 로드**하는 방식
+- Anthropic이 발표한 **Claude Skills**는 모델이 특정 작업을 수행할 때 필요한 지침, 스크립트, 리소스를 xyz 형태로 제공하는 새로운 패턴으로, **작업별 전문성을 동적으로 로드**하는 방식
 - Skills는 Markdown 파일과 선택적 스크립트로 구성되며, 세션 시작 시 각 스킬을 동적으로 로드하여 전문성 있는 작업 수행이 가능
 - 이는 기존의 MCP(Model Context Protocol)보다 더 큰 혁신으로 평가받고 있음
 
