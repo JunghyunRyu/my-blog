@@ -6,10 +6,14 @@ from __future__ import annotations
 
 import re
 import typing as t
-import urllib.error
-import urllib.request
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    REQUESTS_AVAILABLE = False
 
 
 @dataclass
@@ -95,14 +99,17 @@ class ContentFilter:
     
     def _scrape_metrics(self, url: str) -> tuple[int, int]:
         """GeekNews 페이지에서 투표수와 댓글 수를 스크래핑한다."""
+        if not REQUESTS_AVAILABLE:
+            return 0, 0
+        
         try:
-            request = urllib.request.Request(
+            response = requests.get(
                 url,
-                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
+                timeout=10
             )
-            
-            with urllib.request.urlopen(request, timeout=10) as response:
-                html = response.read().decode("utf-8", errors="ignore")
+            response.raise_for_status()
+            html = response.text
             
             # 투표수 추출 (예: <span class="vote_count">123</span>)
             votes = 0

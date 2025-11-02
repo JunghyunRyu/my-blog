@@ -24,7 +24,8 @@ lxml>=4.9.0
 feedparser>=6.0.10
 
 # Web search (DuckDuckGo - no API key required)
-duckduckgo-search>=3.9.0
+# Note: duckduckgo-search has been renamed to ddgs
+ddgs>=1.0.0
 
 # Article content extraction (optional)
 newspaper3k>=0.2.8

@@ -21,6 +21,13 @@ python automation/geeknews_pipeline.py --max-posts 3
 """
 from __future__ import annotations
 
+# Windows 콘솔 인코딩 문제 해결
+import sys
+import io
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 import argparse
 import datetime as dt
 import json
@@ -29,9 +36,14 @@ from pathlib import Path
 import textwrap
 import typing as t
 import unicodedata
-import urllib.error
-import urllib.request
 import xml.etree.ElementTree as ET
+
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    REQUESTS_AVAILABLE = False
+    print("⚠️ requests 라이브러리가 설치되지 않았습니다. 'pip install requests'로 설치하세요.")
 
 try:  # pragma: no cover - 런타임에서만 필요
     from .qa_generator import QAContentGenerator, QAResult
@@ -63,21 +75,49 @@ class FeedItem(t.TypedDict):
 
 def fetch_feed(url: str = DEFAULT_FEED_URL) -> list[FeedItem]:
     """RSS 또는 Atom 피드를 가져와서 FeedItem 목록을 반환한다."""
-    try:
-        with urllib.request.urlopen(url) as response:
-            raw = response.read()
-    except urllib.error.URLError as exc:
-        raise RuntimeError(f"RSS 피드에 접근할 수 없습니다: {exc}") from exc
-
-    root = ET.fromstring(raw)
+    if not REQUESTS_AVAILABLE:
+        raise RuntimeError("requests 라이브러리가 필요합니다. 'pip install requests'를 실행하세요.")
     
-    # Atom 피드인지 RSS 피드인지 확인
-    if root.tag.endswith("}feed") or root.tag == "feed":
-        # Atom 피드 처리
-        return _parse_atom_feed(root)
-    else:
-        # RSS 피드 처리
-        return _parse_rss_feed(root)
+    max_retries = 3
+    retry_delay = 2
+    
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(
+                url,
+                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
+                timeout=30
+            )
+            response.raise_for_status()
+            
+            root = ET.fromstring(response.content)
+            
+            # Atom 피드인지 RSS 피드인지 확인
+            if root.tag.endswith("}feed") or root.tag == "feed":
+                # Atom 피드 처리
+                return _parse_atom_feed(root)
+            else:
+                # RSS 피드 처리
+                return _parse_rss_feed(root)
+                
+        except requests.RequestException as exc:
+            if attempt < max_retries - 1:
+                import time
+                print(f"⚠️ RSS 피드 접근 실패. {retry_delay}초 후 재시도... ({attempt + 1}/{max_retries})")
+                time.sleep(retry_delay)
+                continue
+            raise RuntimeError(f"RSS 피드에 접근할 수 없습니다 (모든 재시도 실패): {exc}") from exc
+        except ET.ParseError as exc:
+            raise RuntimeError(f"RSS 피드 XML 파싱 실패: {exc}") from exc
+        except Exception as exc:
+            if attempt < max_retries - 1:
+                import time
+                print(f"⚠️ RSS 피드 처리 중 오류. 재시도 중... ({attempt + 1}/{max_retries})")
+                time.sleep(retry_delay)
+                continue
+            raise RuntimeError(f"RSS 피드 처리 중 예상치 못한 오류: {exc}") from exc
+    
+    raise RuntimeError(f"RSS 피드를 가져올 수 없습니다 ({max_retries}번 재시도 실패)")
 
 
 def _parse_rss_feed(root: ET.Element) -> list[FeedItem]:
@@ -425,8 +465,12 @@ def run_pipeline(
     
     # 1. RSS 피드 수집
     print("\n[1단계] RSS 피드 수집 중...")
-    items = fetch_feed(feed_url)
-    print(f"  → 총 {len(items)}개 항목 수집 완료")
+    try:
+        items = fetch_feed(feed_url)
+        print(f"  → 총 {len(items)}개 항목 수집 완료")
+    except Exception as exc:
+        print(f"\n[!] RSS 피드 수집 실패: {exc}")
+        return []
     
     # 수집된 RSS 피드 항목 상세 출력
     if items:
@@ -465,7 +509,7 @@ def run_pipeline(
         print("  ℹ️ 새로운 항목이 없습니다.")
     
     if not new_items:
-        print("\n✓ 새로운 GeekNews 항목이 없습니다.")
+        print("\n[OK] 새로운 GeekNews 항목이 없습니다.")
         return []
     
     # 3. 콘텐츠 필터링 및 우선순위 결정
@@ -482,7 +526,7 @@ def run_pipeline(
         print(f"      AI 관련: {metrics.is_ai_related}, 카테고리: {', '.join(metrics.categories)}")
     
     if not filtered_items:
-        print("\n✓ 필터링 조건을 만족하는 항목이 없습니다.")
+        print("\n[OK] 필터링 조건을 만족하는 항목이 없습니다.")
         return []
     
     # 4. 웹 연구 및 QA 콘텐츠 생성
@@ -527,7 +571,7 @@ def run_pipeline(
         print(f"    → 블로그 포스트 작성 중...")
         try:
             filepath = write_post(item, qa_result, metrics=metrics, timezone=timezone)
-            print(f"       ✓ 생성 완료: {filepath.name}")
+            print(f"       [OK] 생성 완료: {filepath.name}")
             created_files.append(filepath)
             processed.add(item["guid"])
         except Exception as exc:
@@ -557,12 +601,12 @@ def run_pipeline(
     if created_files:
         print("\n생성된 포스트 목록:")
         for path in created_files:
-            print(f"  ✓ {path}")
+            print(f"  [OK] {path}")
     
     if git_push_success:
-        print("\n✅ GitHub 자동 푸시 완료")
+        print("\n[SUCCESS] GitHub 자동 푸시 완료")
     elif created_files:
-        print("\nℹ️  GitHub 푸시를 수동으로 실행하세요:")
+        print("\n[INFO] GitHub 푸시를 수동으로 실행하세요:")
         print("   git add _posts/ data/")
         print("   git commit -m 'Add new posts'")
         print("   git push")
@@ -643,7 +687,7 @@ def main(argv: list[str] | None = None) -> int:
             min_votes=args.min_votes
         )
     except Exception as exc:  # pylint: disable=broad-except
-        print(f"\n❌ 파이프라인 실행 중 오류: {exc}")
+        print(f"\n[ERROR] 파이프라인 실행 중 오류: {exc}")
         import traceback
         traceback.print_exc()
         return 1

@@ -11,10 +11,26 @@ import json
 import re
 import time
 import typing as t
-import urllib.error
-import urllib.parse
-import urllib.request
 from dataclasses import dataclass, field
+
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    REQUESTS_AVAILABLE = False
+    print("⚠️ requests 라이브러리가 설치되지 않았습니다. 'pip install requests'로 설치하세요.")
+
+try:
+    # ddgs (구 duckduckgo_search) 라이브러리 사용
+    try:
+        from ddgs import DDGS
+    except ImportError:
+        # 하위 호환성을 위해 구버전도 지원
+        from duckduckgo_search import DDGS
+    DDGS_AVAILABLE = True
+except ImportError:
+    DDGS_AVAILABLE = False
+    print("⚠️ ddgs 라이브러리가 설치되지 않았습니다. 'pip install ddgs'로 설치하세요.")
 
 
 @dataclass
@@ -76,61 +92,60 @@ class WebResearcher:
     
     def _search_web(self, query: str) -> list[WebResource]:
         """DuckDuckGo를 사용하여 웹 검색을 수행한다."""
+        if not DDGS_AVAILABLE:
+            print(f"⚠️ DuckDuckGo 검색 라이브러리를 사용할 수 없습니다. 빈 결과 반환.")
+            return []
+        
         try:
-            # DuckDuckGo Instant Answer API 사용
-            encoded_query = urllib.parse.quote(query)
-            url = f"https://api.duckduckgo.com/?q={encoded_query}&format=json&no_html=1&skip_disambig=1"
-            
-            request = urllib.request.Request(
-                url,
-                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
-            )
-            
-            with urllib.request.urlopen(request, timeout=10) as response:
-                data = json.loads(response.read().decode("utf-8"))
-            
             results: list[WebResource] = []
             
-            # RelatedTopics에서 결과 추출
-            related_topics = data.get("RelatedTopics", [])
-            for topic in related_topics[:self.max_search_results]:
-                if isinstance(topic, dict) and "Text" in topic and "FirstURL" in topic:
-                    results.append(WebResource(
-                        title=topic.get("Text", "")[:100],
-                        url=topic.get("FirstURL", ""),
-                        snippet=topic.get("Text", ""),
-                        source="duckduckgo"
-                    ))
-            
-            # Abstract가 있으면 추가
-            if data.get("Abstract") and data.get("AbstractURL"):
-                results.insert(0, WebResource(
-                    title=data.get("Heading", "Related Article"),
-                    url=data.get("AbstractURL", ""),
-                    snippet=data.get("Abstract", ""),
-                    source="duckduckgo"
-                ))
+            # duckduckgo-search 라이브러리 사용
+            with DDGS() as ddgs:
+                search_results = ddgs.text(
+                    query, 
+                    max_results=self.max_search_results,
+                    region='kr-kr',  # 한국 지역 우선
+                    safesearch='moderate'
+                )
+                
+                for result in search_results:
+                    if isinstance(result, dict):
+                        results.append(WebResource(
+                            title=result.get("title", "")[:100],
+                            url=result.get("href", "") or result.get("link", ""),
+                            snippet=result.get("body", "") or result.get("snippet", ""),
+                            source="duckduckgo"
+                        ))
             
             return results[:self.max_search_results]
             
         except Exception as exc:
-            print(f"웹 검색 중 오류: {exc}")
+            print(f"⚠️ 웹 검색 중 오류: {exc}")
+            # 에러 발생 시 빈 리스트 반환 (크래시 방지)
             return []
     
     def _search_expert_opinions(self, title: str) -> list[dict[str, str]]:
         """HackerNews API를 통해 전문가 의견을 검색한다."""
+        if not REQUESTS_AVAILABLE:
+            return []
+        
         try:
             # HackerNews Algolia API 사용
-            encoded_query = urllib.parse.quote(title[:100])
-            url = f"https://hn.algolia.com/api/v1/search?query={encoded_query}&tags=story&hitsPerPage=3"
+            url = f"https://hn.algolia.com/api/v1/search"
+            params = {
+                "query": title[:100],
+                "tags": "story",
+                "hitsPerPage": 3
+            }
             
-            request = urllib.request.Request(
+            response = requests.get(
                 url,
-                headers={"User-Agent": "Mozilla/5.0"}
+                params=params,
+                headers={"User-Agent": "Mozilla/5.0"},
+                timeout=10
             )
-            
-            with urllib.request.urlopen(request, timeout=10) as response:
-                data = json.loads(response.read().decode("utf-8"))
+            response.raise_for_status()
+            data = response.json()
             
             opinions: list[dict[str, str]] = []
             
@@ -146,8 +161,14 @@ class WebResearcher:
             
             return opinions
             
+        except requests.RequestException as exc:
+            print(f"⚠️ HackerNews API 연결 실패: {exc}")
+            return []
+        except json.JSONDecodeError as exc:
+            print(f"⚠️ HackerNews API 응답 파싱 실패: {exc}")
+            return []
         except Exception as exc:
-            print(f"전문가 의견 검색 중 오류: {exc}")
+            print(f"⚠️ 전문가 의견 검색 중 오류: {exc}")
             return []
     
     def _search_related_articles(self, title: str) -> list[WebResource]:
@@ -159,26 +180,36 @@ class WebResearcher:
             
             for site in sites[:2]:  # 최대 2개 사이트
                 query = f"{title[:50]} {site}"
-                site_results = self._search_web(query)
-                results.extend(site_results[:1])  # 각 사이트에서 1개씩
+                try:
+                    site_results = self._search_web(query)
+                    results.extend(site_results[:1])  # 각 사이트에서 1개씩
+                except Exception as site_exc:
+                    print(f"⚠️ {site} 검색 실패: {site_exc}")
+                    continue
             
             return results
             
         except Exception as exc:
-            print(f"관련 기사 검색 중 오류: {exc}")
+            print(f"⚠️ 관련 기사 검색 중 오류: {exc}")
             return []
 
 
 def extract_article_content(url: str) -> str:
     """주어진 URL에서 기사 본문을 추출한다 (간단한 버전)."""
+    if not REQUESTS_AVAILABLE:
+        print("⚠️ requests 라이브러리가 필요합니다.")
+        return ""
+    
     try:
-        request = urllib.request.Request(
+        response = requests.get(
             url,
-            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
+            timeout=15
         )
+        response.raise_for_status()
         
-        with urllib.request.urlopen(request, timeout=15) as response:
-            html = response.read().decode("utf-8", errors="ignore")
+        # 인코딩 자동 감지
+        html = response.text
         
         # 간단한 텍스트 추출 (HTML 태그 제거)
         text = re.sub(r"<script[^>]*>.*?</script>", "", html, flags=re.DOTALL | re.IGNORECASE)
@@ -188,8 +219,14 @@ def extract_article_content(url: str) -> str:
         
         return text[:5000]  # 최대 5000자
         
+    except requests.RequestException as exc:
+        print(f"⚠️ 기사 URL 접근 실패: {exc}")
+        return ""
+    except UnicodeDecodeError as exc:
+        print(f"⚠️ 기사 본문 인코딩 오류: {exc}")
+        return ""
     except Exception as exc:
-        print(f"기사 본문 추출 중 오류: {exc}")
+        print(f"⚠️ 기사 본문 추출 중 오류: {exc}")
         return ""
 
 

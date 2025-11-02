@@ -28,11 +28,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `requirements.txt`에 MCP 의존성 추가 (httpx, anyio)
 - `deploy/setup_ec2.sh`에 Node.js 및 MCP 설치 추가
 - `deploy/deploy.sh`에 MCP 서버 상태 체크 추가
+- **urllib → requests 마이그레이션 완료** (2025-10-24)
+  - `web_researcher.py`: DuckDuckGo 검색 및 전문가 의견 수집
+  - `content_filter.py`: 메트릭 스크래핑
+  - `geeknews_pipeline.py`: RSS 피드 수집
+  - `health_check.py`: 네트워크 및 API 상태 체크
 
 ### Fixed
 - 로그 파일 Git 제외 (`nohup.out` 삭제)
 - Python 캐시 파일 Git 제외
 - 민감한 정보 Git 제외 강화
+- Windows 콘솔 인코딩 문제 해결
+- DuckDuckGo 검색 라이브러리 deprecated 문제 해결 (ddgs로 전환)
 
 ---
 

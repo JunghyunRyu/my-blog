@@ -10,9 +10,15 @@ import os
 import shutil
 import subprocess
 import sys
-import urllib.request
 from datetime import datetime
 from pathlib import Path
+
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    REQUESTS_AVAILABLE = False
+    print("⚠️ requests 라이브러리가 설치되지 않았습니다.")
 
 # 프로젝트 루트를 Python 경로에 추가
 project_root = Path(__file__).parent.parent
@@ -44,29 +50,33 @@ def check_openai_api() -> tuple[bool, str]:
         print("  ❌ API 키가 설정되지 않았습니다.")
         return False, "API 키 미설정"
     
+    if not REQUESTS_AVAILABLE:
+        print("  ❌ requests 라이브러리가 필요합니다.")
+        return False, "라이브러리 미설치"
+    
     try:
         # 간단한 API 호출로 키 유효성 검증
         url = "https://api.openai.com/v1/models"
-        request = urllib.request.Request(
+        response = requests.get(
             url,
             headers={
                 "Authorization": f"Bearer {Config.OPENAI_API_KEY}",
-            }
+            },
+            timeout=10
         )
-        
-        with urllib.request.urlopen(request, timeout=10) as response:
-            data = json.loads(response.read().decode("utf-8"))
-            model_count = len(data.get("data", []))
-            print(f"  ✅ API 키가 유효합니다. (사용 가능한 모델: {model_count}개)")
-            return True, "정상"
+        response.raise_for_status()
+        data = response.json()
+        model_count = len(data.get("data", []))
+        print(f"  ✅ API 키가 유효합니다. (사용 가능한 모델: {model_count}개)")
+        return True, "정상"
             
-    except urllib.error.HTTPError as e:
-        if e.code == 401:
+    except requests.HTTPError as e:
+        if e.response.status_code == 401:
             print("  ❌ API 키가 유효하지 않습니다.")
             return False, "인증 실패"
         else:
-            print(f"  ⚠️  API 호출 오류: HTTP {e.code}")
-            return False, f"HTTP {e.code}"
+            print(f"  ⚠️  API 호출 오류: HTTP {e.response.status_code}")
+            return False, f"HTTP {e.response.status_code}"
     except Exception as e:
         print(f"  ⚠️  API 테스트 실패: {e}")
         return False, str(e)
@@ -76,6 +86,10 @@ def check_network() -> tuple[bool, str]:
     """네트워크 연결을 확인합니다."""
     print("\n🌐 네트워크 연결 테스트 중...")
     
+    if not REQUESTS_AVAILABLE:
+        print("  ❌ requests 라이브러리가 필요합니다.")
+        return False, "라이브러리 미설치"
+    
     test_urls = [
         ("GeekNews RSS", Config.GEEKNEWS_FEED_URL),
         ("OpenAI API", "https://api.openai.com"),
@@ -84,12 +98,12 @@ def check_network() -> tuple[bool, str]:
     all_ok = True
     for name, url in test_urls:
         try:
-            request = urllib.request.Request(
+            response = requests.get(
                 url,
-                headers={"User-Agent": "Mozilla/5.0"}
+                headers={"User-Agent": "Mozilla/5.0"},
+                timeout=10
             )
-            with urllib.request.urlopen(request, timeout=10) as response:
-                print(f"  ✅ {name}: 연결 성공 (HTTP {response.status})")
+            print(f"  ✅ {name}: 연결 성공 (HTTP {response.status_code})")
         except Exception as e:
             print(f"  ❌ {name}: 연결 실패 ({e})")
             all_ok = False

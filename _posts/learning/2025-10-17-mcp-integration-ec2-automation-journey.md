@@ -49,14 +49,14 @@ Jekyll 블로그 포스트 생성
 
 #### 문제 1: 단편적인 AI 분석
 
-```python
+{% highlight python %}
 # 기존 프롬프트
 prompt = f"""
 이 기사를 QA Engineer 관점에서 분석하세요:
 제목: {title}
 요약: {summary}
 """
-```
+{% endhighlight %}
 
 **문제점:**
 - AI가 결과만 제시하고 **사고 과정이 보이지 않음**
@@ -64,7 +64,7 @@ prompt = f"""
 - 복잡한 기술 기사일수록 분석의 깊이가 부족
 
 **실제 예시:**
-```
+{% highlight text %}
 입력: "Kubernetes 1.29에서 새로운 스케줄러 기능 추가"
 
 기존 출력:
@@ -75,13 +75,13 @@ prompt = f"""
  2단계: 새로운 스케줄링 정책의 엣지 케이스 식별
  3단계: 롤백 시나리오 테스트 계획 수립
  결론: QA는 다음 3가지에 집중해야..."
-```
+{% endhighlight %}
 
 #### 문제 2: 컨텍스트의 한계
 
 OpenAI API는 강력하지만, **단일 요청**에서는 복잡한 추론이 제한적입니다.
 
-```python
+{% highlight python %}
 # 한 번의 API 호출로 모든 것을 요구
 response = openai.chat.completions.create(
     messages=[
@@ -89,7 +89,7 @@ response = openai.chat.completions.create(
         {"role": "user", "content": prompt}
     ]
 )
-```
+{% endhighlight %}
 
 **문제:**
 - 프롬프트가 길어질수록 토큰 비용 증가
@@ -98,13 +98,13 @@ response = openai.chat.completions.create(
 
 #### 문제 3: 수동 운영의 비효율
 
-```bash
+{% highlight bash %}
 # 매일 반복하는 작업
 1. 로컬에서 실행: python scripts/run_once.py
 2. 생성된 포스트 검토
 3. Git add, commit, push
 4. GitHub Pages 빌드 대기 (5-10분)
-```
+{% endhighlight %}
 
 **시간 소요:**
 - 스크립트 실행: 5분
@@ -135,14 +135,14 @@ AI도 이런 **Sequential Thinking**(순차적 사고)를 하도록 만들면, �
 #### 옵션 1: Chain-of-Thought Prompting
 
 **개념:**
-```python
+{% highlight python %}
 prompt = """
 Let's think step by step:
 1. First, identify the main technology...
 2. Then, analyze the QA implications...
 3. Finally, conclude...
 """
-```
+{% endhighlight %}
 
 **장점:**
 - ✅ 즉시 구현 가능
@@ -155,17 +155,17 @@ Let's think step by step:
 - ❌ 복잡도에 따라 품질 편차 큼
 
 **실험 결과:**
-```python
+{% highlight python %}
 # 테스트: 복잡한 기술 기사 분석
 토큰 사용: 2,500 토큰 (기존 대비 2배)
 분석 깊이: 중간 (기존 대비 30% 개선)
 일관성: 낮음 (기사 복잡도에 따라 변동)
-```
+{% endhighlight %}
 
 #### 옵션 2: Self-Consistency with Multiple Sampling
 
 **개념:**
-```python
+{% highlight python %}
 # 같은 질문을 여러 번 물어서 일관된 답 찾기
 responses = []
 for _ in range(5):
@@ -173,7 +173,7 @@ for _ in range(5):
     responses.append(response)
 
 final_answer = vote(responses)  # 다수결
-```
+{% endhighlight %}
 
 **장점:**
 - ✅ 더 신뢰할 수 있는 결과
@@ -185,16 +185,16 @@ final_answer = vote(responses)  # 다수결
 - ❌ 여전히 사고 과정 불투명
 
 **비용 분석:**
-```
+{% highlight text %}
 기존: $2/일 × 30일 = $60/월
 이 방법: $10/일 × 30일 = $300/월
 ↑ 5배 증가, 예산 초과!
-```
+{% endhighlight %}
 
 #### 옵션 3: MCP (Model Context Protocol) + Sequential Thinking
 
 **개념:**
-```python
+{% highlight python %}
 # MCP Sequential Thinking 서버 활용
 result = mcp_client.think(
     problem="이 기사를 QA 관점에서 단계적으로 분석",
@@ -207,7 +207,7 @@ result = mcp_client.think(
 #   "insights": ["인사이트1", "인사이트2", ...],
 #   "conclusion": "최종 결론"
 # }
-```
+{% endhighlight %}
 
 **장점:**
 - ✅ 표준화된 프로토콜 (Anthropic 주도)
@@ -261,7 +261,7 @@ result = mcp_client.think(
 
 ### 3.1 시스템 아키텍처
 
-```
+{% highlight text %}
 ┌─────────────────────────────────────────────────────────┐
 │                    EC2 Instance (t2.micro)               │
 │                                                          │
@@ -303,11 +303,11 @@ result = mcp_client.think(
 │                   GitHub Pages                          │
 │              (Automatic Jekyll Build)                   │
 └─────────────────────────────────────────────────────────┘
-```
+{% endhighlight %}
 
 ### 3.2 데이터 흐름 설계
 
-```python
+{% highlight python %}
 # ========== 1단계: RSS 수집 ==========
 items = fetch_rss("https://feeds.feedburner.com/geeknews-feed")
 # 반환: [{"title": "...", "link": "...", "summary": "..."}]
@@ -381,7 +381,7 @@ post_file = write_post(item, qa_result)
 # ========== 7단계: Git 자동 Push ⭐ ==========
 auto_push_posts([post_file])
 # git add → commit → push → GitHub Pages 자동 빌드
-```
+{% endhighlight %}
 
 ### 3.3 주요 설계 결정 및 근거
 
@@ -389,7 +389,7 @@ auto_push_posts([post_file])
 
 **선택: 하이브리드 (비동기 클라이언트 + 동기 래퍼)**
 
-```python
+{% highlight python %}
 # 비동기 클라이언트 (미래 대비)
 class SequentialThinkingClient:
     async def think(self, problem: str) -> dict:
@@ -401,7 +401,7 @@ class SequentialThinkingClient:
 class SyncSequentialThinkingClient:
     def think(self, problem: str) -> dict:
         return asyncio.run(self.async_client.think(problem))
-```
+{% endhighlight %}
 
 **근거:**
 - ✅ 기존 동기 파이프라인과 호환
@@ -412,7 +412,7 @@ class SyncSequentialThinkingClient:
 
 **선택: Graceful Degradation (우아한 성능 저하)**
 
-```python
+{% highlight python %}
 def generate(self, item):
     # MCP 시도
     mcp_insights = None
@@ -425,7 +425,7 @@ def generate(self, item):
     
     # MCP 없이도 작동
     return self.provider.generate(item, mcp_insights)
-```
+{% endhighlight %}
 
 **근거:**
 - ✅ MCP 서버 다운 시에도 시스템 작동
@@ -436,7 +436,7 @@ def generate(self, item):
 
 **선택: 파이프라인과 Git 로직 분리**
 
-```python
+{% highlight python %}
 # ❌ 안 좋은 방식
 def run_pipeline():
     created_files = []
@@ -457,7 +457,7 @@ def run_pipeline():
     # 별도 단계로 분리
     if AUTO_GIT_PUSH:
         auto_push_posts(created_files)
-```
+{% endhighlight %}
 
 **근거:**
 - ✅ 단일 책임 원칙 (SRP)
@@ -468,22 +468,22 @@ def run_pipeline():
 
 **선택: systemd service (Docker 대신)**
 
-```ini
+{% highlight ini %}
 # /etc/systemd/system/mcp-sequentialthinking.service
 [Service]
 ExecStart=/home/ubuntu/.nvm/versions/node/v18.20.5/bin/npx \
     -y @modelcontextprotocol/server-sequentialthinking
 Restart=always
-```
+{% endhighlight %}
 
 **대안: Docker**
-```yaml
+{% highlight yaml %}
 # docker-compose.yml
 services:
   mcp:
     image: node:18
     command: npx -y @modelcontextprotocol/server-sequentialthinking
-```
+{% endhighlight %}
 
 **systemd 선택 근거:**
 - ✅ t2.micro에서 Docker 오버헤드 부담
@@ -499,7 +499,7 @@ services:
 
 **파일: `automation/mcp_client.py`**
 
-```python
+{% highlight python %}
 """MCP Sequential Thinking 클라이언트
 
 핵심 기능:
@@ -612,7 +612,7 @@ def create_mcp_client() -> SyncSequentialThinkingClient | None:
     except Exception as e:
         print(f"⚠️ MCP 클라이언트 생성 실패: {e}")
         return None
-```
+{% endhighlight %}
 
 **구현 포인트:**
 
@@ -1101,7 +1101,7 @@ process = subprocess.Popen(
 
 HTTP API가 아닌 **stdio 트랜스포트**가 MCP 표준이지만, 실제 프로덕션 환경에서는 MCP 서버가 제공하는 기능보다 **폴백 메커니즘**에 더 집중하기로 결정.
 
-```python
+{% highlight python %}
 # 실용적 접근
 if mcp_available:
     try:
@@ -1114,7 +1114,7 @@ if result:
     use_mcp_insights(result)
 else:
     proceed_without_mcp()
-```
+{% endhighlight %}
 
 **배운 점:**
 - 새로운 프로토콜 도입 시 **폴백이 최우선**
@@ -1125,7 +1125,7 @@ else:
 **문제:**
 로컬 개발(Windows) → EC2 배포(Linux)에서 경로 관련 버그 발생
 
-```python
+{% highlight python %}
 # ❌ Windows에서는 작동, Linux에서 실패
 file_path = "_posts\\learning\\2025-10-17-post.md"
 
@@ -1135,10 +1135,10 @@ file_path = "_posts" + "/" + "learning" + "/" + filename
 # ✅ pathlib 사용
 from pathlib import Path
 file_path = Path("_posts") / "learning" / filename
-```
+{% endhighlight %}
 
 **해결:**
-```python
+{% highlight python %}
 # 크로스 플랫폼 코드
 from pathlib import Path
 
@@ -1150,7 +1150,7 @@ class Config:
     # 카테고리별 디렉토리
     LEARNING_DIR = POSTS_DIR / "learning"
     QA_ENGINEER_DIR = POSTS_DIR / "qa-engineer"
-```
+{% endhighlight %}
 
 **배운 점:**
 - `pathlib.Path` 사용 → OS 독립적
@@ -1176,7 +1176,7 @@ ExecStart=/home/ubuntu/.nvm/versions/node/v18.20.5/bin/npx ...
 ```
 
 **해결:**
-```bash
+{% highlight bash %}
 # ✅ 동적 감지
 NODE_VERSION=$(node --version | sed 's/v//')
 NODE_PATH="$HOME/.nvm/versions/node/v$NODE_VERSION/bin"
@@ -1187,7 +1187,7 @@ cat > /tmp/mcp-sequentialthinking.service << EOF
 Environment="PATH=$NODE_PATH:/usr/local/bin:/usr/bin:/bin"
 ExecStart=$NODE_PATH/npx -y @modelcontextprotocol/server-sequentialthinking
 EOF
-```
+{% endhighlight %}
 
 **배운 점:**
 - 설치 시점에 경로 동적 생성
@@ -1278,13 +1278,13 @@ echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 ```
 
 **해결 3: 실행 최적화**
-```python
+{% highlight python %}
 # OpenAI API 호출 시 스트리밍 비활성화
 stream=False  # 메모리 버퍼 감소
 
 # MCP depth 제한
 depth = min(int(os.getenv("MCP_THINKING_DEPTH", "3")), 3)
-```
+{% endhighlight %}
 
 **최종 메모리 사용:**
 ```

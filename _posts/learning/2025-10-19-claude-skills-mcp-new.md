@@ -4,7 +4,7 @@ title: "Claude Skills는 굉장하다, MCP보다 더 큰 혁신일지도"
 date: 2025-10-19 00:19:21 +0000
 categories: [Learning]
 tags: ['AI']
-summary: "- Anthropic이 발표한 **Claude Skills**는 모델이 특정 작업을 수행할 때 필요한 지침, 스크립트, 리소스를 폴더 형태로 제공하는 새로운 패턴으로, **작업별 전문성을 동적으로 로드**하는 방식. Skills는 Markdown 파일과 선택적 스크립트로 구성되며, 세션 시작 시 각 스킬을 동적으로 로드하여 전문성 있는 작업 수행이 가능"
+summary: "- Anthropic이 발표한 Claude Skills는 모델이 특정 작업을 수행할 때 필요한 지침, 스크립트, 리소스를 폴더 형태로 제공하는 새로운 패턴으로, 작업별 전문성을 동적으로 로드하는 방식. Skills는 Markdown 파일과 선택적 스크립트로 구성되며, 세션 시작 시 각 스킬을 동적으로 로드하여 전문성 있는 작업 수행이 가능"
 original_url: "https://news.hada.io/topic?id=23734"
 ---
 

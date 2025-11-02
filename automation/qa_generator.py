@@ -170,15 +170,47 @@ class OpenAIProvider:
             },
         )
 
-        try:
-            with urllib.request.urlopen(request, timeout=120) as response:
-                data = json.loads(response.read().decode("utf-8"))
-                content = data["choices"][0]["message"]["content"]
-                return self._parse_response(content, item)
-        except urllib.error.HTTPError as exc:
-            raise RuntimeError(f"OpenAI API 호출 실패 (HTTP {exc.code}): {exc.reason}") from exc
-        except Exception as exc:
-            raise RuntimeError(f"OpenAI API 호출 중 오류: {exc}") from exc
+        max_retries = 3
+        retry_delay = 2  # 초
+        
+        for attempt in range(max_retries):
+            try:
+                with urllib.request.urlopen(request, timeout=120) as response:
+                    data = json.loads(response.read().decode("utf-8"))
+                    content = data["choices"][0]["message"]["content"]
+                    return self._parse_response(content, item)
+            except urllib.error.HTTPError as exc:
+                error_body = exc.read().decode("utf-8") if exc.fp else ""
+                if exc.code == 429:  # Rate limit
+                    if attempt < max_retries - 1:
+                        import time
+                        wait_time = retry_delay * (attempt + 1)
+                        print(f"⚠️ OpenAI API rate limit. {wait_time}초 후 재시도 ({attempt + 1}/{max_retries})...")
+                        time.sleep(wait_time)
+                        continue
+                elif exc.code >= 500:  # Server error
+                    if attempt < max_retries - 1:
+                        import time
+                        print(f"⚠️ OpenAI API 서버 오류 (HTTP {exc.code}). 재시도 중... ({attempt + 1}/{max_retries})")
+                        time.sleep(retry_delay)
+                        continue
+                raise RuntimeError(f"OpenAI API 호출 실패 (HTTP {exc.code}): {exc.reason}\n{error_body}") from exc
+            except urllib.error.URLError as exc:
+                if attempt < max_retries - 1:
+                    import time
+                    print(f"⚠️ OpenAI API 연결 실패. 재시도 중... ({attempt + 1}/{max_retries})")
+                    time.sleep(retry_delay)
+                    continue
+                raise RuntimeError(f"OpenAI API 연결 실패: {exc}") from exc
+            except json.JSONDecodeError as exc:
+                raise RuntimeError(f"OpenAI API 응답 JSON 파싱 실패: {exc}") from exc
+            except KeyError as exc:
+                raise RuntimeError(f"OpenAI API 응답 형식 오류: {exc}") from exc
+            except Exception as exc:
+                raise RuntimeError(f"OpenAI API 호출 중 예상치 못한 오류: {exc}") from exc
+        
+        # 모든 재시도 실패
+        raise RuntimeError(f"OpenAI API 호출이 {max_retries}번 모두 실패했습니다.")
 
     def _build_prompt(self, item: t.Mapping[str, t.Any]) -> str:
         description = item.get("summary") or ""
@@ -247,10 +279,6 @@ class OpenAIProvider:
                   "skills": [
                     "기술의 기본 개념과 작동 원리 이해",
                     "간단한 도구나 플랫폼 사용 경험 쌓기 (초보자 수준)"
-                  ],
-                  "resources": [
-                    "관련 블로그 포스트나 공식 문서 (구체적인 제목과 출처를 명시하세요. 예: 'Tricentis 블로그: 5 AI Trends Shaping Software Testing 2025')",
-                    "무료 온라인 코스나 튜토리얼 (구체적인 플랫폼과 과정명을 제시하세요. 예: 'Test Automation University - Visual AI 테스트 과정')"
                   ]
                 }},
                 {{
@@ -258,10 +286,6 @@ class OpenAIProvider:
                   "skills": [
                     "머신러닝 및 데이터 과학 기초 지식 (Python 등 프로그래밍 언어 활용)",
                     "관련 테스트 자동화 프레임워크 및 도구 심화 학습"
-                  ],
-                  "resources": [
-                    "전문 자격증 교육과정 및 자료 (구체적으로 명시하세요. 예: 'ISTQB AI Testing 자격증 자료 및 교육과정 (공식 Syllabus, 샘플 시험)')",
-                    "실습 위주 온라인 강좌나 워크샵 (구체적인 과정명 제시. 예: '온라인 강좌: AI in Software Testing (실습 위주 튜토리얼)')"
                   ]
                 }},
                 {{
@@ -269,10 +293,6 @@ class OpenAIProvider:
                   "skills": [
                     "AI 모델 커스터마이징 및 현장 적용 능력 (예: 결함 예측 모델 개발)",
                     "AI 품질 거버넌스 및 윤리 준수 방안 습득"
-                  ],
-                  "resources": [
-                    "전문 서적이나 심층 기술 자료 (구체적인 서적명 제시. 예: '전문 서적: AI와 소프트웨어 테스팅')",
-                    "국제 컨퍼런스 및 커뮤니티 참여 (구체적인 행사명 제시. 예: 'AI Testing 포럼, QA 콘퍼런스')"
                   ]
                 }}
               ],
@@ -310,19 +330,6 @@ class OpenAIProvider:
               "follow_ups": [
                 "이 기술과 관련하여 추가로 조사하면 좋을 구체적인 주제나 키워드를 제시합니다 (예: '생성형 AI를 활용한 테스트 데이터 및 시나리오 생성 기법 연구')",
                 "관련 기술 동향이나 신기술 모니터링 항목을 구체적으로 제안합니다 (예: 'Agentic AI (자율 에이전트) 기술의 QA 분야 적용 가능성 모니터링')"
-              ],
-              
-              "resources": [
-                {{
-                  "label": "구체적인 문서 제목이나 자료명을 명시합니다 (예: 'ISTQB 생성형 AI 테스팅 Syllabus v1.0'). 가능한 경우 실제 존재하는 자료의 정확한 이름을 사용하세요.",
-                  "url": "https://... (실제 URL이 있다면 정확히 기입하고, 없다면 빈 문자열로 남겨두세요)",
-                  "type": "documentation"
-                }},
-                {{
-                  "label": "튜토리얼이나 가이드의 구체적인 제목을 제시합니다 (예: 'ChatGPT를 활용한 테스트 자동화 가이드 (PractiTest 블로그)'). 출처도 함께 명시하세요.",
-                  "url": "https://... (실제 URL을 제공하세요. 예: https://www.practitest.com/resource-center/blog/chatgpt-prompts-for-software-testing/)",
-                  "type": "tutorial"
-                }}
               ]
             }}
 
