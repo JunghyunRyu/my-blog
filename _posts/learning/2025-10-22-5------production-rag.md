@@ -1,14 +1,14 @@
 ---
-       layout: post
-       title: "5백만 건 이상의 문서를 처리하며 얻은 Production RAG 경험"
-       date: 2025-10-22 08:06:35 +0900
-       categories: [Learning]
-       tags: ['AI', 'QA']
-       summary: "- **8개월간 RAG(검색 증강 생성)** 프로젝트를 진행하며 실제로 효과적인 방법과 시간 낭비였던 방법을 구분함
+layout: post
+title: "5백만 건 이상의 문서를 처리하며 얻은 Production RAG 경험"
+date: 2025-10-22 08:06:35 +0900
+categories: [Learning]
+tags: ['AI', 'QA']
+summary: "- **8개월간 RAG(검색 증강 생성)** 프로젝트를 진행하며 실제로 효과적인 방법과 시간 낭비였던 방법을 구분함
 - 초기에는 **Langchain과 Llamaindex**를 사용하여 프로토타입을 빠르게 완성했지만, 실제 사용자 피드백에서 성능 한계를 경험함
 문서 검색 성능을 개..."
-       original_url: "https://news.hada.io/topic?id=23812"
-       ---
+original_url: "https://news.hada.io/topic?id=23812"
+---
 
 ## 요약
 

@@ -1,13 +1,13 @@
 ---
-       layout: post
-       title: "알리바바 클라우드, GPU 풀링 시스템 ‘Aegaeon’으로 엔비디아 GPU 사용량 82% 절감"
-       date: 2025-10-22 08:08:08 +0900
-       categories: [Learning]
-       tags: ['AI', 'Development']
-       summary: "- 알리바바 클라우드가 개발한 **Aegaeon 풀링 시스템**은 **GPU 활용 효율을 9배 높여**, 동일한 LLM 서비스에 필요한 **엔비디아 GPU 수를 82% 줄였음** 
+layout: post
+title: "알리바바 클라우드, GPU 풀링 시스템 'Aegaeon'으로 엔비디아 GPU 사용량 82% 절감"
+date: 2025-10-22 08:08:08 +0900
+categories: [Learning]
+tags: ['AI', 'Development']
+summary: "- 알리바바 클라우드가 개발한 **Aegaeon 풀링 시스템**은 **GPU 활용 효율을 9배 높여**, 동일한 LLM 서비스에 필요한 **엔비디아 GPU 수를 82% 줄였음** 
 이 시스템은 GPU를 모델별로 고정하지 않고 토큰 단위로 가상화하여 공유 풀에서 동적으로 스케..."
-       original_url: "https://news.hada.io/topic?id=23805"
-       ---
+original_url: "https://news.hada.io/topic?id=23805"
+---
 
 ## 요약
 

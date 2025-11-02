@@ -1,16 +1,16 @@
 ---
-       layout: post
-       title: "프롬프트 엔지니어링의 진화: AI 창의성을 2배 끌어올리는 Verbalized Sampling"
-       date: 2025-10-23 20:18:57 +0900
-       categories: [Learning]
-       tags: ['AI']
-       summary: "Stanford 연구팀이 AI 모델의 창의성을 즉시 2배 높이는 간단한 프롬프팅 기법을 공개했습니다. 모델 재훈련 없이 단 한 문장을 추가하는 것만으로 반복적이고 진부한 답변 문제를 해결할 수 있다는 놀라운 발견입니다.
+layout: post
+title: "프롬프트 엔지니어링의 진화: AI 창의성을 2배 끌어올리는 Verbalized Sampling"
+date: 2025-10-23 20:18:57 +0900
+categories: [Learning]
+tags: ['AI']
+summary: "Stanford 연구팀이 AI 모델의 창의성을 즉시 2배 높이는 간단한 프롬프팅 기법을 공개했습니다. 모델 재훈련 없이 단 한 문장을 추가하는 것만으로 반복적이고 진부한 답변 문제를 해결할 수 있다는 놀라운 발견입니다.
 
 핵심 포인트:
 
 **한 문장의 마법**: “확률값과 함께 5개 응답"
-       original_url: "https://news.hada.io/topic?id=23859"
-       ---
+original_url: "https://news.hada.io/topic?id=23859"
+---
 
 ## 요약
 

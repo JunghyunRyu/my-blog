@@ -298,19 +298,15 @@ def write_post(
     # 중복 제거
     tags = list(dict.fromkeys(tags))
 
-    front_matter = textwrap.dedent(
-        f"""\
-        ---
-        layout: post
-        title: "{item['title']}"
-        date: {published_dt:%Y-%m-%d %H:%M:%S %z}
-        categories: [{category_name}]
-        tags: {tags}
-        summary: "{qa_result.summary.strip()}"
-        original_url: "{item['link']}"
-        ---
-        """
-    ).strip()
+    front_matter = f"""---
+layout: post
+title: "{item['title']}"
+date: {published_dt:%Y-%m-%d %H:%M:%S %z}
+categories: [{category_name}]
+tags: {tags}
+summary: "{qa_result.summary.strip()}"
+original_url: "{item['link']}"
+---"""
 
     content_lines = [front_matter, "", "## 요약", "", qa_result.summary.strip() or "(요약 준비 중)", ""]
 

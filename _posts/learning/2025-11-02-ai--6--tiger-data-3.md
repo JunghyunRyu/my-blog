@@ -1,14 +1,14 @@
 ---
-       layout: post
-       title: "프로덕션 AI 에이전트 6주 구축기: Tiger Data의 3가지 핵심 인사이트"
-       date: 2025-11-02 14:46:39 +0000
-       categories: [Learning]
-       tags: ['AI']
-       summary: "Tiger Data 팀은 6주 만에 회사 직원 50%가 매일 사용하는 Slack AI 에이전트 'Eon'을 구축하고, 전체 과정을 오픈소스로 공개했습니다. 데모 수준이 아닌 실제 프로덕션 안정성에 초점을 맞췄으며, LLM 호출이 아닌 실전 문제(맥락 유지, API 다운, 동시 요청 등)를 해결한 점이 핵심입니다.
+layout: post
+title: "프로덕션 AI 에이전트 6주 구축기: Tiger Data의 3가지 핵심 인사이트"
+date: 2025-11-02 14:46:39 +0000
+categories: [Learning]
+tags: ['AI']
+summary: "Tiger Data 팀은 6주 만에 회사 직원 50%가 매일 사용하는 Slack AI 에이전트 'Eon'을 구축하고, 전체 과정을 오픈소스로 공개했습니다. 데모 수준이 아닌 실제 프로덕션 안정성에 초점을 맞췄으며, LLM 호출이 아닌 실전 문제(맥락 유지, API 다운, 동시 요청 등)를 해결한 점이 핵심입니다.
 
 1. 시간을 이해"
-       original_url: "https://news.hada.io/topic?id=24091"
-       ---
+original_url: "https://news.hada.io/topic?id=24091"
+---
 
 ## 요약
 

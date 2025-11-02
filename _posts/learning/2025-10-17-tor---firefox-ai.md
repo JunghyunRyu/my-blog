@@ -1,14 +1,14 @@
 ---
-       layout: post
-       title: "Tor 브라우저, 다양한 Firefox AI 기능 제거"
-       date: 2025-10-17 02:49:26 +0000
-       categories: [Learning]
-       tags: ['AI']
-       summary: "- Tor Browser 15.0a4는 **Firefox의 AI 관련 기능**을 제거했으며, 이는 **보안과 프라이버시** 문제 때문임
+layout: post
+title: "Tor 브라우저, 다양한 Firefox AI 기능 제거"
+date: 2025-10-17 02:49:26 +0000
+categories: [Learning]
+tags: ['AI']
+summary: "- Tor Browser 15.0a4는 **Firefox의 AI 관련 기능**을 제거했으며, 이는 **보안과 프라이버시** 문제 때문임
 - 이번 버전은 **브랜딩** 및 서비스 통합 요소들도 삭제하고, Tor 브라우저 특성에 맞게 **UI와 다크 테마** 지원을 개선함
 ..."
-       original_url: "https://news.hada.io/topic?id=23714"
-       ---
+original_url: "https://news.hada.io/topic?id=23714"
+---
 
 ## 요약
 

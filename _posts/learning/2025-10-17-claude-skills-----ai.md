@@ -1,14 +1,14 @@
 ---
-       layout: post
-       title: "Claude Skills - 워크플로우에 맞게 AI를 맞춤화하기"
-       date: 2025-10-17 02:50:10 +0000
-       categories: [Learning]
-       tags: ['AI']
-       summary: "- Anthropic의 **Claude Skills**는 사용자의 **업무 흐름에 맞춰 AI의 전문성을 확장**할 수 있도록 해줌
+layout: post
+title: "Claude Skills - 워크플로우에 맞게 AI를 맞춤화하기"
+date: 2025-10-17 02:50:10 +0000
+categories: [Learning]
+tags: ['AI']
+summary: "- Anthropic의 **Claude Skills**는 사용자의 **업무 흐름에 맞춰 AI의 전문성을 확장**할 수 있도록 해줌
 - Skill은 **명령, 스크립트, 리소스가 포함된 폴더 단위 구성 요소**로, Claude가 작업 시 필요한 순간에만 로드함
 Excel·PowerPoint 생성, 브랜..."
-       original_url: "https://news.hada.io/topic?id=23713"
-       ---
+original_url: "https://news.hada.io/topic?id=23713"
+---
 
 ## 요약
 
