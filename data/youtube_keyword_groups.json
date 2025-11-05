@@ -14,22 +14,7 @@
         "Playwright Page Object Model"
       ],
       "description": "Playwright 테스트 자동화 관련 콘텐츠"
-    },
-    {
-      "name": "cicd",
-      "category": "learning",
-      "priority": "high",
-      "enabled": true,
-      "keywords": [
-        "GitHub Actions reusable workflows matrix",
-        "Argo CD progressive delivery",
-        "Terraform in CI security scanning",
-        "AWS CodePipeline Playwright",
-        "GitHub Actions tutorial",
-        "GitOps best practices"
-      ],
-      "description": "CI/CD 및 GitOps 관련 콘텐츠"
-    },
+    },    
     {
       "name": "ai_testing",
       "category": "qa-engineer",
@@ -57,20 +42,7 @@
         "API testing tutorial"
       ],
       "description": "일반 QA 및 테스트 자동화 콘텐츠"
-    },
-    {
-      "name": "devops",
-      "category": "learning",
-      "priority": "medium",
-      "enabled": false,
-      "keywords": [
-        "Kubernetes tutorial",
-        "Docker best practices",
-        "AWS DevOps",
-        "Terraform tutorial"
-      ],
-      "description": "DevOps 및 인프라 관련 콘텐츠 (일단 비활성)"
-    }
+    }    
   ],
   "notes": [
     "카테고리별로 키워드를 그룹화하여 블로그 포스트 자동 분류에 사용",
