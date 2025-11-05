@@ -36,9 +36,9 @@ powershell -ExecutionPolicy Bypass -File scripts\register_windows_task.ps1 -Pyth
 ## 동작 흐름
 1) 소스 수집: RSS + (YouTube: 채널/워치리스트/키워드 그룹) + (Gmail 선택적)
 2) 중복 제거 (`data/geeknews_state.json` 기준)
-3) 필터링/우선순위 결정 (`ContentFilter`) + **카테고리 자동 태깅**
+3) 필터링/우선순위 결정 (`ContentFilter`) + **카테고리 자동 태깅** + **시리즈 메타데이터**
 4) 웹 연구(선택) → AI 요약/인사이트 생성 (`QAContentGenerator`)
-5) 포스트 생성: front matter에 `thumbnail`, `video_url`, `images`, `charts`, `category` 지원
+5) 포스트 생성: front matter에 `thumbnail`, `video_url`, `images`, `charts`, `category`, `series`, `series_order` 지원
 6) Git 자동 푸시(환경변수 `AUTO_GIT_PUSH=true` 시)
 
 ## YouTube 콘텐츠 수집
@@ -68,6 +68,7 @@ powershell -ExecutionPolicy Bypass -File scripts\register_windows_task.ps1 -Pyth
 - `enabled: true`: 활성 채널만 수집
 - `priority`: 우선순위 표시 (실제 수집 순서는 파일 순서대로)
 - `category`: 블로그 포스트 카테고리 자동 분류 (향후 지원)
+- `series`, `series_order`: 시리즈 관리 (선택사항, 워치리스트와 동일하게 사용 가능)
 
 **채널 ID 찾기**:
 - 채널 페이지 → 소스 보기 → `"channelId":"UC..."`
@@ -99,6 +100,21 @@ powershell -ExecutionPolicy Bypass -File scripts\register_windows_task.ps1 -Pyth
 - `enabled: true`: 활성 비디오만 수집
 - `priority`, `tags`: 분류 및 우선순위 표시용
 - 날짜 필터 없음: 워치리스트는 발행일과 관계없이 수집
+
+**시리즈 관리**:
+워치리스트에서 시리즈 콘텐츠를 체계적으로 관리할 수 있습니다:
+```json
+{
+  "video_id": "mCy4ZJZvRMc",
+  "title": "Get started with end-to-end testing: Playwright (Ep.1)",
+  "series": "Playwright 입문",
+  "series_order": 1,
+  "enabled": true
+}
+```
+- `series`: 시리즈 이름 (포스트 front matter에 추가됨)
+- `series_order`: 시리즈 내 순서 (1부터 시작)
+- 시리즈 정보는 블로그에서 연속 콘텐츠 탐색에 활용
 
 **사용 사례**:
 - 중요한 튜토리얼 시리즈 (예: Playwright 입문편)
