@@ -75,6 +75,8 @@ class Config:
     YOUTUBE_CHANNELS_FILE: Path = DATA_DIR / "youtube_channels.json"
     YOUTUBE_WATCHLIST_ENABLED: bool = os.getenv("YOUTUBE_WATCHLIST_ENABLED", "true").lower() == "true"
     YOUTUBE_WATCHLIST_FILE: Path = DATA_DIR / "youtube_watchlist.json"
+    YOUTUBE_KEYWORD_GROUPS_ENABLED: bool = os.getenv("YOUTUBE_KEYWORD_GROUPS_ENABLED", "true").lower() == "true"
+    YOUTUBE_KEYWORD_GROUPS_FILE: Path = DATA_DIR / "youtube_keyword_groups.json"
 
     # ========================================
     # Gmail 뉴스레터 인입 설정
@@ -145,6 +147,28 @@ class Config:
                 return [vid for vid in watchlist if vid.get("enabled", False)]
         except Exception as e:
             print(f"⚠️ 워치리스트 로드 실패: {e}", file=sys.stderr)
+            return []
+    
+    @classmethod
+    def load_keyword_groups(cls) -> list[dict]:
+        """YouTube 키워드 그룹을 로드합니다.
+        
+        Returns:
+            키워드 그룹 정보 딕셔너리 리스트. 파일이 없거나 오류 시 빈 리스트 반환.
+        """
+        import json
+        
+        if not cls.YOUTUBE_KEYWORD_GROUPS_FILE.exists():
+            return []
+        
+        try:
+            with open(cls.YOUTUBE_KEYWORD_GROUPS_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                groups = data.get("keyword_groups", [])
+                # enabled=true인 그룹만 반환
+                return [grp for grp in groups if grp.get("enabled", False)]
+        except Exception as e:
+            print(f"⚠️ 키워드 그룹 로드 실패: {e}", file=sys.stderr)
             return []
     
     @classmethod
@@ -241,6 +265,10 @@ class Config:
         if cls.YOUTUBE_WATCHLIST_ENABLED:
             watchlist = cls.load_watchlist()
             print(f"  워치리스트 비디오 수: {len(watchlist)}")
+        print(f"  키워드 그룹: {'활성화' if cls.YOUTUBE_KEYWORD_GROUPS_ENABLED else '비활성화'}")
+        if cls.YOUTUBE_KEYWORD_GROUPS_ENABLED:
+            groups = cls.load_keyword_groups()
+            print(f"  키워드 그룹 수: {len(groups)}")
 
         print(f"\n[Gmail]")
         print(f"  라벨: {cls.GMAIL_LABEL}")
