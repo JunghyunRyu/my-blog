@@ -552,19 +552,56 @@ def run_pipeline(
             except Exception as exc:
                 print(f"  ⚠️ 워치리스트 수집 실패: {exc}")
         
-        # 3. 키워드 기반 수집 (추가)
-        try:
-            yt_kw_raw = youtube_collector.collect(
-                api_key=Config.YOUTUBE_API_KEY,
-                keywords=Config.YOUTUBE_KEYWORDS,
-                max_results=Config.YOUTUBE_MAX_RESULTS,
-                region_code=Config.YOUTUBE_REGION_CODE,
-                published_after_days=Config.YOUTUBE_PUBLISHED_AFTER_DAYS,
-            )
-            print(f"  → 키워드 검색: {len(yt_kw_raw)}개")
-            yt_all_raw.extend(yt_kw_raw)
-        except Exception as exc:
-            print(f"  ⚠️ 키워드 수집 실패: {exc}")
+        # 3. 키워드 기반 수집
+        if Config.YOUTUBE_KEYWORD_GROUPS_ENABLED:
+            # 키워드 그룹별로 수집
+            try:
+                keyword_groups = Config.load_keyword_groups()
+                if keyword_groups:
+                    print(f"  → 키워드 그룹 {len(keyword_groups)}개에서 수집 중...")
+                    for grp in keyword_groups:
+                        grp_name = grp.get("name", "Unknown")
+                        grp_category = grp.get("category", "learning")
+                        keywords = grp.get("keywords", [])
+                        
+                        if not keywords:
+                            continue
+                        
+                        try:
+                            # 키워드 리스트를 쉼표로 연결
+                            keywords_str = ", ".join(keywords)
+                            grp_videos = youtube_collector.collect(
+                                api_key=Config.YOUTUBE_API_KEY,
+                                keywords=keywords_str,
+                                max_results=Config.YOUTUBE_MAX_RESULTS,
+                                region_code=Config.YOUTUBE_REGION_CODE,
+                                published_after_days=Config.YOUTUBE_PUBLISHED_AFTER_DAYS,
+                            )
+                            # 각 비디오에 카테고리 메타데이터 추가
+                            for vid in grp_videos:
+                                vid["category"] = grp_category
+                                vid["keyword_group"] = grp_name
+                            
+                            print(f"     {grp_name} ({grp_category}): {len(grp_videos)}개")
+                            yt_all_raw.extend(grp_videos)
+                        except Exception as grp_exc:
+                            print(f"     ⚠️ {grp_name} 수집 실패: {grp_exc}")
+            except Exception as exc:
+                print(f"  ⚠️ 키워드 그룹 수집 실패: {exc}")
+        else:
+            # 기존 방식: 단일 키워드 문자열 사용
+            try:
+                yt_kw_raw = youtube_collector.collect(
+                    api_key=Config.YOUTUBE_API_KEY,
+                    keywords=Config.YOUTUBE_KEYWORDS,
+                    max_results=Config.YOUTUBE_MAX_RESULTS,
+                    region_code=Config.YOUTUBE_REGION_CODE,
+                    published_after_days=Config.YOUTUBE_PUBLISHED_AFTER_DAYS,
+                )
+                print(f"  → 키워드 검색: {len(yt_kw_raw)}개")
+                yt_all_raw.extend(yt_kw_raw)
+            except Exception as exc:
+                print(f"  ⚠️ 키워드 수집 실패: {exc}")
         
         # 4. 중복 제거 (guid 기준)
         seen_guids = set()
