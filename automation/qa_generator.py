@@ -277,22 +277,22 @@ class OpenAIProvider:
                 {{
                   "phase": "즉시 학습 (1-2주)",
                   "skills": [
-                    "기술의 기본 개념과 작동 원리 이해",
-                    "간단한 도구나 플랫폼 사용 경험 쌓기 (초보자 수준)"
+                    "기사에서 언급된 구체적인 기술/도구/플랫폼의 기본 개념과 작동 원리 학습",
+                    "기사에서 다루는 기술과 직접 관련된 간단한 도구나 플랫폼 사용 경험"
                   ]
                 }},
                 {{
                   "phase": "단기 학습 (1-3개월)",
                   "skills": [
-                    "머신러닝 및 데이터 과학 기초 지식 (Python 등 프로그래밍 언어 활용)",
-                    "관련 테스트 자동화 프레임워크 및 도구 심화 학습"
+                    "기사에서 다루는 기술과 관련된 프로그래밍 언어나 기술 스택 학습",
+                    "기사에서 언급된 기술을 QA 관점에서 활용하기 위한 테스트 자동화 프레임워크 및 도구 심화 학습"
                   ]
                 }},
                 {{
                   "phase": "장기 학습 (3-6개월)",
                   "skills": [
-                    "AI 모델 커스터마이징 및 현장 적용 능력 (예: 결함 예측 모델 개발)",
-                    "AI 품질 거버넌스 및 윤리 준수 방안 습득"
+                    "기사에서 다루는 기술을 실제 QA 업무에 고급 수준으로 적용하고 커스터마이징하는 능력 개발",
+                    "기사에서 다루는 기술과 관련된 품질 거버넌스, 윤리, 보안, 규정 준수 측면 학습"
                   ]
                 }}
               ],
@@ -365,12 +365,22 @@ class OpenAIProvider:
                - 학습 로드맵: 즉시(1-2주) → 단기(1-3개월) → 장기(3-6개월)
                - practical_guide: "테스트 자동화 개선"에는 steps 포함, "품질 검증 프로세스"에는 steps 없음
             
-            7. **신뢰성과 정확성**: 추측이 필요한 경우 명시하고, 사실 기반 정보를 우선하세요.
+            7. **학습 로드맵 구체성**: 학습 로드맵은 반드시 기사 제목, 요약, 기술명을 분석하여 각 기사에 맞는 구체적인 학습 항목을 생성해야 합니다. JSON 스키마 예시는 일반적인 형식만 보여주지만, 실제 생성 시에는 기사 내용에 맞춰 구체적으로 작성해야 합니다.
+               - 절대로 일반적인 내용(예: "기술의 기본 개념 이해", "머신러닝 기초 지식", "간단한 도구나 플랫폼 사용 경험")을 그대로 사용하지 마세요.
+               - 기사에서 언급된 구체적인 기술명, 도구명, 서비스명, 플랫폼명을 반드시 포함하세요.
+               - 각 skills 배열의 항목은 기사에서 다루는 기술/도구/플랫폼의 실제 이름을 포함한 구체적인 학습 항목이어야 합니다.
+               - 예시:
+                 * OpenAI 기사: "OpenAI API 기본 사용법 및 모델 이해", "ChatGPT API를 사용한 테스트 케이스 생성"
+                 * Playwright 기사: "Playwright 설치 및 기본 사용법", "Playwright를 활용한 E2E 테스트 자동화"
+                 * AWS 기사: "AWS EC2 인스턴스 생성 및 기본 설정", "Terraform을 사용한 인프라 코드화"
+               - 각 단계별로 기사 내용에 맞는 실제 학습 가능한 구체적인 기술이나 도구를 제시하세요.
+            
+            8. **신뢰성과 정확성**: 추측이 필요한 경우 명시하고, 사실 기반 정보를 우선하세요.
                - 업계 통계나 설문 결과 인용
                - 실제 사례나 도구 언급
                - 불확실한 정보는 "추정됩니다", "예상됩니다" 등으로 명시
             
-            8. **JSON 형식 준수**: 반드시 유효한 JSON만 반환하세요.
+            9. **JSON 형식 준수**: 반드시 유효한 JSON만 반환하세요.
                - 마크다운 코드 블록(```) 사용 금지
                - 순수 JSON 객체만 출력
                - 모든 문자열은 큰따옴표로 감싸기
@@ -543,12 +553,16 @@ def _extract_json(content: str) -> str:
     content = content.strip()
     if content.startswith("```") and content.endswith("```"):
         lines = [line for line in content.splitlines() if not line.startswith("```")]
-        return "\n".join(lines)
+        content = "\n".join(lines)
     start = content.find("{")
     end = content.rfind("}")
     if start == -1 or end == -1:
         raise RuntimeError("응답에서 JSON을 찾을 수 없습니다.")
-    return content[start : end + 1]
+    json_text = content[start : end + 1]
+    # trailing comma 제거 (배열/객체 마지막 쉼표)
+    import re
+    json_text = re.sub(r',(\s*[}\]])', r'\1', json_text)
+    return json_text
 
 
 def _ensure_qa_pairs(value: t.Any) -> list[dict[str, str]]:

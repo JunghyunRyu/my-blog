@@ -31,6 +31,11 @@ layout: default
   <div class="post-content">
     <div class="container">
       <div class="content-wrapper">
+        {% if page.video_url %}
+        <div class="video-container">
+          <iframe src="{{ page.video_url | escape }}" title="Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        {% endif %}
         {{ content }}
       </div>
     </div>

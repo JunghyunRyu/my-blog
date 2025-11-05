@@ -49,10 +49,14 @@ try:  # pragma: no cover - 런타임에서만 필요
     from .qa_generator import QAContentGenerator, QAResult
     from .content_filter import ContentFilter, ContentMetrics
     from .web_researcher import WebResearcher, ResearchResult
+    from .config import Config
+    from .sources import youtube_collector, gmail_collector
 except ImportError:  # pragma: no cover - 스크립트 직접 실행 대비
     from qa_generator import QAContentGenerator, QAResult
     from content_filter import ContentFilter, ContentMetrics
     from web_researcher import WebResearcher, ResearchResult
+    from config import Config
+    from sources import youtube_collector, gmail_collector
 
 
 DEFAULT_FEED_URL = "https://feeds.feedburner.com/geeknews-feed"
@@ -298,17 +302,38 @@ def write_post(
     # 중복 제거
     tags = list(dict.fromkeys(tags))
 
-    front_matter = f"""---
-layout: post
-title: "{item['title']}"
-date: {published_dt:%Y-%m-%d %H:%M:%S %z}
-categories: [{category_name}]
-tags: {tags}
-summary: "{qa_result.summary.strip()}"
-original_url: "{item['link']}"
----"""
+    # Front matter 구성 (옵션 필드 포함)
+    fm_lines = [
+        "---",
+        "layout: post",
+        f"title: \"{item['title']}\"",
+        f"date: {published_dt:%Y-%m-%d %H:%M:%S %z}",
+        f"categories: [{category_name}]",
+        f"tags: {tags}",
+        f"summary: \"{qa_result.summary.strip()}\"",
+        f"original_url: \"{item['link']}\"",
+    ]
 
-    content_lines = [front_matter, "", "## 요약", "", qa_result.summary.strip() or "(요약 준비 중)", ""]
+    thumbnail_url = item.get("thumbnail") or ""
+    video_url = item.get("video_url") or ""
+    images: list[str] = item.get("images") or []
+    charts: list[str] = item.get("charts") or []
+
+    if thumbnail_url:
+        fm_lines.append(f"thumbnail: \"{thumbnail_url}\"")
+    if video_url:
+        fm_lines.append(f"video_url: \"{video_url}\"")
+    if images:
+        fm_lines.append("images:")
+        for img in images:
+            fm_lines.append(f"  - \"{img}\"")
+    if charts:
+        fm_lines.append("charts:")
+        for ch in charts:
+            fm_lines.append(f"  - \"{ch}\"")
+    fm_lines.append("---")
+
+    content_lines = ["\n".join(fm_lines), "", "## 요약", "", qa_result.summary.strip() or "(요약 준비 중)", ""]
 
     # QA Engineer 인사이트
     if qa_result.qa_engineer_insights:
@@ -397,6 +422,20 @@ original_url: "{item['link']}"
             content_lines.append(f"- {idea}")
         content_lines.append("")
 
+    # 시각 자료
+    if thumbnail_url or video_url or charts:
+        content_lines.extend(["## 시각 자료", ""])
+        if thumbnail_url:
+            content_lines.append(f"![썸네일]({thumbnail_url})")
+            content_lines.append("")
+        if video_url:
+            content_lines.append(f"[동영상 보기]({video_url})")
+            content_lines.append("")
+        if charts:
+            for ch in charts:
+                content_lines.append(f"![차트]({ch})")
+            content_lines.append("")
+
     # 참고 자료
     if qa_result.resources:
         content_lines.extend(["## 참고 자료", ""])
@@ -459,13 +498,104 @@ def run_pipeline(
     print("GeekNews QA 전문가급 자동화 파이프라인 시작")
     print("=" * 80)
     
-    # 1. RSS 피드 수집
-    print("\n[1단계] RSS 피드 수집 중...")
+    # 1. 소스 수집 (RSS/YouTube/Gmail)
+    print("\n[1단계] 소스 수집 중...")
+    items: list[FeedItem] = []
     try:
-        items = fetch_feed(feed_url)
-        print(f"  → 총 {len(items)}개 항목 수집 완료")
+        rss_items = fetch_feed(feed_url)
+        print(f"  → RSS {len(rss_items)}개")
+        items.extend(rss_items)
     except Exception as exc:
-        print(f"\n[!] RSS 피드 수집 실패: {exc}")
+        print(f"  ⚠️ RSS 피드 수집 실패: {exc}")
+
+    # YouTube
+    if getattr(Config, "YOUTUBE_API_KEY", None) and youtube_collector:
+        yt_all_raw = []
+        
+        # 1. 채널 기반 수집 (우선순위 높음)
+        if Config.YOUTUBE_CHANNELS_ENABLED:
+            try:
+                channels = Config.load_channels()
+                if channels:
+                    print(f"  → 활성 채널 {len(channels)}개에서 수집 중...")
+                    for ch in channels:
+                        ch_id = ch.get("id", "")
+                        ch_name = ch.get("name", "Unknown")
+                        try:
+                            ch_videos = youtube_collector.collect_from_channel(
+                                api_key=Config.YOUTUBE_API_KEY,
+                                channel_id=ch_id,
+                                max_results=Config.YOUTUBE_MAX_RESULTS,
+                                published_after_days=Config.YOUTUBE_PUBLISHED_AFTER_DAYS,
+                            )
+                            print(f"     {ch_name}: {len(ch_videos)}개")
+                            yt_all_raw.extend(ch_videos)
+                        except Exception as ch_exc:
+                            print(f"     ⚠️ {ch_name} 수집 실패: {ch_exc}")
+            except Exception as exc:
+                print(f"  ⚠️ 채널 수집 실패: {exc}")
+        
+        # 2. 키워드 기반 수집 (추가)
+        try:
+            yt_kw_raw = youtube_collector.collect(
+                api_key=Config.YOUTUBE_API_KEY,
+                keywords=Config.YOUTUBE_KEYWORDS,
+                max_results=Config.YOUTUBE_MAX_RESULTS,
+                region_code=Config.YOUTUBE_REGION_CODE,
+                published_after_days=Config.YOUTUBE_PUBLISHED_AFTER_DAYS,
+            )
+            print(f"  → 키워드 검색: {len(yt_kw_raw)}개")
+            yt_all_raw.extend(yt_kw_raw)
+        except Exception as exc:
+            print(f"  ⚠️ 키워드 수집 실패: {exc}")
+        
+        # 3. 중복 제거 (guid 기준)
+        seen_guids = set()
+        yt_items = []
+        for it in yt_all_raw:
+            guid = it.get("guid", "")
+            if guid and guid not in seen_guids:
+                seen_guids.add(guid)
+                yt_items.append(FeedItem(
+                    guid=guid,
+                    title=it.get("title", ""),
+                    link=it.get("link", ""),
+                    summary=it.get("summary", ""),
+                    published_at=it.get("published_at", "")
+                ))
+        
+        print(f"  → YouTube 총 {len(yt_items)}개 (중복 제거 후)")
+        items.extend(yt_items)
+
+    # Gmail (토큰 파일이 존재할 때만 시도)
+    from pathlib import Path as _P
+    if gmail_collector and getattr(Config, "GOOGLE_TOKEN_FILE", None) and _P(Config.GOOGLE_TOKEN_FILE).exists():
+        try:
+            gm_raw = gmail_collector.collect(
+                client_secret_file=Config.GOOGLE_CLIENT_SECRET_FILE,
+                token_file=Config.GOOGLE_TOKEN_FILE,
+                label=Config.GMAIL_LABEL,
+                max_results=10,
+            )
+            gm_items = [
+                FeedItem(
+                    guid=it.get("guid", ""),
+                    title=it.get("title", ""),
+                    link=it.get("link", ""),
+                    summary=it.get("summary", ""),
+                    published_at=it.get("published_at", "")
+                ) for it in gm_raw
+            ]
+            print(f"  → Gmail {len(gm_items)}개")
+            items.extend(gm_items)
+        except Exception as exc:
+            print(f"  ⚠️ Gmail 수집 실패: {exc}")
+    else:
+        print("  → Gmail: 토큰 파일 없음으로 건너뜀")
+
+    print(f"  → 통합 {len(items)}개 항목 수집 완료")
+    if not items:
+        print("  ⚠️ 수집된 항목이 없습니다.")
         return []
     
     # 수집된 RSS 피드 항목 상세 출력

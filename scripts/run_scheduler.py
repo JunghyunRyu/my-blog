@@ -17,10 +17,35 @@ sys.path.insert(0, str(project_root))
 
 from automation.config import Config
 from automation.geeknews_pipeline import run_pipeline, resolve_timezone
+import logging
+from logging.handlers import RotatingFileHandler
 
 
 def main() -> None:
     """스케줄러를 실행합니다."""
+    # 로깅 설정 (파일 회전 + 콘솔)
+    log_dir = Config.LOGS_DIR
+    try:
+        log_dir.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        pass
+    log_file = log_dir / "pipeline.log"
+
+    root_logger = logging.getLogger()
+    if not root_logger.handlers:
+        level_name = (Config.LOG_LEVEL or "INFO").upper()
+        level = getattr(logging, level_name, logging.INFO)
+        root_logger.setLevel(level)
+        fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+        try:
+            fh = RotatingFileHandler(str(log_file), maxBytes=Config.LOG_MAX_BYTES, backupCount=Config.LOG_BACKUP_COUNT)
+            fh.setFormatter(fmt)
+            root_logger.addHandler(fh)
+        except Exception:
+            pass
+        sh = logging.StreamHandler()
+        sh.setFormatter(fmt)
+        root_logger.addHandler(sh)
     print("=" * 80)
     print("GeekNews 자동화 스케줄러 시작")
     print("=" * 80)

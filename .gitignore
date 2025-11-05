@@ -188,6 +188,9 @@ config.local.py
 # Keep sample data
 !automation/sample_feed.xml
 
+# Keep YouTube channels configuration
+!data/youtube_channels.json
+
 # Keep documentation
 !README.md
 !docs/*.md

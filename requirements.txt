@@ -42,7 +42,20 @@ typing-extensions>=4.0.0
 # Async support
 asyncio-throttle>=1.0.2
 
-# MCP 통합
+# MCP integration
 httpx>=0.24.0
 anyio>=3.7.0
+
+# Google / YouTube APIs
+google-api-python-client>=2.0.0
+google-auth-httplib2>=0.2.0
+google-auth-oauthlib>=1.0.0
+youtube-transcript-api>=0.6.0
+
+# Media generation
+matplotlib>=3.8.0
+pillow>=10.0.0
+moviepy>=1.0.3
+edge-tts>=6.1.7
+gTTS>=2.5.0
 
