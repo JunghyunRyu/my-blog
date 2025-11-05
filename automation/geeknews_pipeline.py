@@ -535,7 +535,24 @@ def run_pipeline(
             except Exception as exc:
                 print(f"  ⚠️ 채널 수집 실패: {exc}")
         
-        # 2. 키워드 기반 수집 (추가)
+        # 2. 워치리스트 기반 수집
+        if Config.YOUTUBE_WATCHLIST_ENABLED:
+            try:
+                watchlist = Config.load_watchlist()
+                if watchlist:
+                    video_ids = [item.get("video_id", "") for item in watchlist if item.get("video_id")]
+                    if video_ids:
+                        print(f"  → 워치리스트 {len(video_ids)}개에서 수집 중...")
+                        wl_videos = youtube_collector.collect_from_watchlist(
+                            api_key=Config.YOUTUBE_API_KEY,
+                            video_ids=video_ids
+                        )
+                        print(f"     워치리스트: {len(wl_videos)}개")
+                        yt_all_raw.extend(wl_videos)
+            except Exception as exc:
+                print(f"  ⚠️ 워치리스트 수집 실패: {exc}")
+        
+        # 3. 키워드 기반 수집 (추가)
         try:
             yt_kw_raw = youtube_collector.collect(
                 api_key=Config.YOUTUBE_API_KEY,
@@ -549,7 +566,7 @@ def run_pipeline(
         except Exception as exc:
             print(f"  ⚠️ 키워드 수집 실패: {exc}")
         
-        # 3. 중복 제거 (guid 기준)
+        # 4. 중복 제거 (guid 기준)
         seen_guids = set()
         yt_items = []
         for it in yt_all_raw:
