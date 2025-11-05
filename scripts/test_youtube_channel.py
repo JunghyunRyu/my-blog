@@ -11,6 +11,7 @@ project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 from automation.config import Config
+from automation.sources import youtube_collector
 
 try:
     from googleapiclient.discovery import build
@@ -62,7 +63,48 @@ def test_channel_info(api_key: str, channel_id: str):
         return False
 
 
-def test_channels_from_config(api_key: str):
+def test_channel_collection(api_key: str, channel_id: str, max_results: int = 3):
+    """채널에서 실제 동영상 수집을 테스트합니다."""
+    print(f"\n{'='*60}")
+    print(f"YouTube 채널 수집 테스트")
+    print(f"{'='*60}\n")
+    
+    try:
+        print(f"📡 채널 ID: {channel_id}")
+        print(f"   최대 결과: {max_results}개")
+        print(f"   수집 중...\n")
+        
+        videos = youtube_collector.collect_from_channel(
+            api_key=api_key,
+            channel_id=channel_id,
+            max_results=max_results,
+            published_after_days=30  # 최근 30일
+        )
+        
+        if not videos:
+            print("⚠️ 수집된 동영상이 없습니다.")
+            return False
+        
+        print(f"✅ {len(videos)}개 동영상 수집 성공!\n")
+        
+        for idx, video in enumerate(videos, 1):
+            print(f"[{idx}] {video.get('title', 'N/A')}")
+            print(f"    링크: {video.get('link', 'N/A')}")
+            print(f"    발행일: {video.get('published_at', 'N/A')}")
+            print(f"    채널: {video.get('channel_name', 'N/A')}")
+            print(f"    요약 텍스트: {len(video.get('summary', ''))}자")
+            print()
+        
+        return True
+        
+    except Exception as e:
+        print(f"\n❌ 오류 발생: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def test_channels_from_config(api_key: str, max_results: int = 3):
     """설정 파일의 모든 활성 채널을 테스트합니다."""
     print(f"\n{'='*60}")
     print(f"설정 파일 채널 테스트")
@@ -85,7 +127,7 @@ def test_channels_from_config(api_key: str):
         print(f"\n[{idx}/{len(channels)}] {channel_name} (우선순위: {priority})")
         print(f"     채널 ID: {channel_id}")
         
-        if test_channel_info(api_key, channel_id):
+        if test_channel_collection(api_key, channel_id, max_results=max_results):
             success_count += 1
     
     print(f"\n{'='*60}")
@@ -102,9 +144,20 @@ def main():
         help="테스트할 채널 ID (옵션)"
     )
     parser.add_argument(
+        "--max-results",
+        type=int,
+        default=3,
+        help="수집할 최대 동영상 수 (기본값: 3)"
+    )
+    parser.add_argument(
         "--test-config",
         action="store_true",
         help="설정 파일의 모든 채널 테스트"
+    )
+    parser.add_argument(
+        "--info-only",
+        action="store_true",
+        help="채널 정보만 조회 (수집 테스트 제외)"
     )
     
     args = parser.parse_args()
@@ -119,15 +172,20 @@ def main():
     
     # 테스트 실행
     if args.test_config:
-        test_channels_from_config(Config.YOUTUBE_API_KEY)
+        test_channels_from_config(Config.YOUTUBE_API_KEY, max_results=args.max_results)
     elif args.channel_id:
-        test_channel_info(Config.YOUTUBE_API_KEY, args.channel_id)
+        if args.info_only:
+            test_channel_info(Config.YOUTUBE_API_KEY, args.channel_id)
+        else:
+            test_channel_collection(Config.YOUTUBE_API_KEY, args.channel_id, max_results=args.max_results)
     else:
         print("\n사용법:")
-        print("  특정 채널 테스트:")
-        print("    python scripts/test_youtube_channel.py --channel-id UCxX9wt5FWQUAAz4UrysqK9A")
+        print("  특정 채널 정보 조회:")
+        print("    python scripts/test_youtube_channel.py --channel-id UCxX9wt5FWQUAAz4UrysqK9A --info-only")
+        print("\n  특정 채널 수집 테스트:")
+        print("    python scripts/test_youtube_channel.py --channel-id UCxX9wt5FWQUAAz4UrysqK9A --max-results 3")
         print("\n  설정 파일 전체 테스트:")
-        print("    python scripts/test_youtube_channel.py --test-config")
+        print("    python scripts/test_youtube_channel.py --test-config --max-results 3")
 
 
 if __name__ == "__main__":
