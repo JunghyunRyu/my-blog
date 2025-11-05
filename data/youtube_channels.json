@@ -63,6 +63,10 @@
       "enabled": false,
       "description": "커뮤니티 경험담 (일단 비활성)"
     }
+  ],
+  "notes": [
+    "series, series_order 필드를 추가하여 채널의 특정 시리즈를 관리할 수 있습니다 (선택사항)",
+    "예: \"series\": \"Playwright 신기능 시리즈\", \"series_order\": 1"
   ]
 }
 

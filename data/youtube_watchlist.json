@@ -7,7 +7,9 @@
       "priority": "high",
       "enabled": true,
       "description": "Playwright 입문 시리즈 - 공식 튜토리얼",
-      "tags": ["playwright", "beginner", "tutorial"]
+      "tags": ["playwright", "beginner", "tutorial"],
+      "series": "Playwright 입문",
+      "series_order": 1
     },
     {
       "video_id": "PLACEHOLDER_PLAYWRIGHT_LIVE",
@@ -50,7 +52,8 @@
     "video_id는 YouTube URL의 'watch?v=' 뒤에 오는 11자리 문자열입니다.",
     "예: https://www.youtube.com/watch?v=mCy4ZJZvRMc -> video_id는 'mCy4ZJZvRMc'",
     "PLACEHOLDER로 시작하는 video_id는 실제 ID로 교체해야 합니다.",
-    "enabled: false인 항목은 수집되지 않습니다."
+    "enabled: false인 항목은 수집되지 않습니다.",
+    "series, series_order: 시리즈 콘텐츠 관리 (선택사항, front matter에 추가됨)"
   ]
 }
 
