@@ -1,0 +1,56 @@
+{
+  "watchlist": [
+    {
+      "video_id": "mCy4ZJZvRMc",
+      "title": "Get started with end-to-end testing: Playwright (Ep.1)",
+      "category": "qa-engineer",
+      "priority": "high",
+      "enabled": true,
+      "description": "Playwright 입문 시리즈 - 공식 튜토리얼",
+      "tags": ["playwright", "beginner", "tutorial"]
+    },
+    {
+      "video_id": "PLACEHOLDER_PLAYWRIGHT_LIVE",
+      "title": "Playwright Live - 커뮤니티 업데이트",
+      "category": "qa-engineer",
+      "priority": "high",
+      "enabled": false,
+      "description": "Playwright 신기능 및 커뮤니티 업데이트 (실제 video_id로 교체 필요)",
+      "tags": ["playwright", "updates", "community"]
+    },
+    {
+      "video_id": "c3RrXnteDXU",
+      "title": "ArgoCD Tutorial for Beginners",
+      "category": "learning",
+      "priority": "medium",
+      "enabled": true,
+      "description": "ArgoCD 초보자 가이드 - TechWorld with Nana",
+      "tags": ["argocd", "gitops", "kubernetes"]
+    },
+    {
+      "video_id": "PLACEHOLDER_ANDREW_KNIGHT",
+      "title": "Tutorial: End-to-End Testing with Playwright (Andrew Knight)",
+      "category": "qa-engineer",
+      "priority": "high",
+      "enabled": false,
+      "description": "Andrew Knight의 Playwright 심화 튜토리얼 (실제 video_id로 교체 필요)",
+      "tags": ["playwright", "python", "advanced"]
+    },
+    {
+      "video_id": "PLACEHOLDER_GITHUB_ACTIONS",
+      "title": "GitHub Actions 입문/심화 플레이리스트",
+      "category": "learning",
+      "priority": "medium",
+      "enabled": false,
+      "description": "GitHub Actions 공식 튜토리얼 (실제 video_id로 교체 필요)",
+      "tags": ["github-actions", "ci-cd", "automation"]
+    }
+  ],
+  "notes": [
+    "video_id는 YouTube URL의 'watch?v=' 뒤에 오는 11자리 문자열입니다.",
+    "예: https://www.youtube.com/watch?v=mCy4ZJZvRMc -> video_id는 'mCy4ZJZvRMc'",
+    "PLACEHOLDER로 시작하는 video_id는 실제 ID로 교체해야 합니다.",
+    "enabled: false인 항목은 수집되지 않습니다."
+  ]
+}
+
