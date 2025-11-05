@@ -233,3 +233,83 @@ def collect_from_channel(
     return results
 
 
+def collect_from_watchlist(
+    *,
+    api_key: str,
+    video_ids: list[str],
+) -> list[dict[str, t.Any]]:
+    """워치리스트의 특정 비디오 ID들을 수집해 표준 FeedItem 형태로 반환.
+    
+    Args:
+        api_key: YouTube Data API v3 키
+        video_ids: YouTube 비디오 ID 리스트 (11자리 문자열)
+    
+    Returns:
+        list of dicts with keys compatible to FeedItem: guid, title, link, summary, published_at
+        and extras: thumbnail, video_url, source, channel_name.
+    """
+    if not GOOGLE_API_AVAILABLE:
+        raise RuntimeError("google-api-python-client이 필요합니다. 'pip install google-api-python-client'를 설치하세요.")
+    
+    if not video_ids:
+        return []
+    
+    service = _build_service(api_key)
+    
+    # 비디오 상세 정보 조회 (최대 50개씩 요청 가능)
+    # 워치리스트는 보통 소수이므로 한 번에 요청
+    results: list[dict[str, t.Any]] = []
+    
+    # API 제한을 고려하여 50개씩 분할
+    for i in range(0, len(video_ids), 50):
+        batch_ids = video_ids[i:i+50]
+        
+        try:
+            details_resp = service.videos().list(
+                part="snippet,contentDetails,statistics",
+                id=",".join(batch_ids),
+            ).execute()
+            
+            for v in details_resp.get("items", []):
+                vid = v.get("id", "")
+                sn = v.get("snippet", {})
+                title = sn.get("title", "(제목 없음)")
+                description = sn.get("description", "")
+                published_at = sn.get("publishedAt", _now_utc_iso())
+                channel_title = sn.get("channelTitle", "")
+                thumbnails = (sn.get("thumbnails", {}) or {})
+                thumb = thumbnails.get("high") or thumbnails.get("medium") or thumbnails.get("default") or {}
+                thumb_url = thumb.get("url", "")
+                
+                # 자막 추출 시도
+                transcript_text = _safe_get_transcript(vid)
+                base_text = transcript_text if transcript_text.strip() else description
+                summary_seed = base_text[:6000]  # 요약 입력을 위한 원문 시드 텍스트
+                
+                link = f"https://www.youtube.com/watch?v={vid}"
+                guid = f"youtube:{vid}"
+                
+                item = {
+                    "guid": guid,
+                    "title": title,
+                    "link": link,
+                    "summary": summary_seed,
+                    "published_at": published_at,
+                    # extras
+                    "thumbnail": thumb_url,
+                    "video_url": link,
+                    "source": "youtube_watchlist",
+                    "channel_name": channel_title,
+                }
+                results.append(item)
+                
+                # API 쿼터 보호
+                time.sleep(0.05)
+        
+        except Exception as e:
+            print(f"⚠️ 워치리스트 배치 수집 실패 ({i}-{i+len(batch_ids)}): {e}")
+            continue
+    
+    return results
+
+
