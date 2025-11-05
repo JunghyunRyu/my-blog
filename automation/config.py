@@ -73,6 +73,8 @@ class Config:
     YOUTUBE_PUBLISHED_AFTER_DAYS: int = int(os.getenv("YOUTUBE_PUBLISHED_AFTER_DAYS", "7"))
     YOUTUBE_CHANNELS_ENABLED: bool = os.getenv("YOUTUBE_CHANNELS_ENABLED", "true").lower() == "true"
     YOUTUBE_CHANNELS_FILE: Path = DATA_DIR / "youtube_channels.json"
+    YOUTUBE_WATCHLIST_ENABLED: bool = os.getenv("YOUTUBE_WATCHLIST_ENABLED", "true").lower() == "true"
+    YOUTUBE_WATCHLIST_FILE: Path = DATA_DIR / "youtube_watchlist.json"
 
     # ========================================
     # Gmail 뉴스레터 인입 설정
@@ -121,6 +123,28 @@ class Config:
                 return [ch for ch in channels if ch.get("enabled", False)]
         except Exception as e:
             print(f"⚠️ 채널 설정 로드 실패: {e}", file=sys.stderr)
+            return []
+    
+    @classmethod
+    def load_watchlist(cls) -> list[dict]:
+        """YouTube 워치리스트를 로드합니다.
+        
+        Returns:
+            워치리스트 비디오 정보 딕셔너리 리스트. 파일이 없거나 오류 시 빈 리스트 반환.
+        """
+        import json
+        
+        if not cls.YOUTUBE_WATCHLIST_FILE.exists():
+            return []
+        
+        try:
+            with open(cls.YOUTUBE_WATCHLIST_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                watchlist = data.get("watchlist", [])
+                # enabled=true인 비디오만 반환
+                return [vid for vid in watchlist if vid.get("enabled", False)]
+        except Exception as e:
+            print(f"⚠️ 워치리스트 로드 실패: {e}", file=sys.stderr)
             return []
     
     @classmethod
@@ -213,6 +237,10 @@ class Config:
         if cls.YOUTUBE_CHANNELS_ENABLED:
             channels = cls.load_channels()
             print(f"  활성 채널 수: {len(channels)}")
+        print(f"  워치리스트: {'활성화' if cls.YOUTUBE_WATCHLIST_ENABLED else '비활성화'}")
+        if cls.YOUTUBE_WATCHLIST_ENABLED:
+            watchlist = cls.load_watchlist()
+            print(f"  워치리스트 비디오 수: {len(watchlist)}")
 
         print(f"\n[Gmail]")
         print(f"  라벨: {cls.GMAIL_LABEL}")
