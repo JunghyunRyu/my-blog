@@ -104,6 +104,52 @@ def test_channel_collection(api_key: str, channel_id: str, max_results: int = 3)
         return False
 
 
+def test_watchlist_collection(api_key: str):
+    """워치리스트에서 비디오 수집을 테스트합니다."""
+    print(f"\n{'='*60}")
+    print(f"YouTube 워치리스트 수집 테스트")
+    print(f"{'='*60}\n")
+    
+    try:
+        watchlist = Config.load_watchlist()
+        
+        if not watchlist:
+            print("⚠️ 활성화된 워치리스트 항목이 없습니다.")
+            return False
+        
+        video_ids = [item.get("video_id", "") for item in watchlist if item.get("video_id")]
+        
+        print(f"📡 워치리스트 비디오 {len(video_ids)}개")
+        print(f"   수집 중...\n")
+        
+        videos = youtube_collector.collect_from_watchlist(
+            api_key=api_key,
+            video_ids=video_ids
+        )
+        
+        if not videos:
+            print("⚠️ 수집된 동영상이 없습니다.")
+            return False
+        
+        print(f"✅ {len(videos)}개 동영상 수집 성공!\n")
+        
+        for idx, video in enumerate(videos, 1):
+            print(f"[{idx}] {video.get('title', 'N/A')}")
+            print(f"    링크: {video.get('link', 'N/A')}")
+            print(f"    발행일: {video.get('published_at', 'N/A')}")
+            print(f"    채널: {video.get('channel_name', 'N/A')}")
+            print(f"    요약 텍스트: {len(video.get('summary', ''))}자")
+            print()
+        
+        return True
+        
+    except Exception as e:
+        print(f"\n❌ 오류 발생: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
 def test_channels_from_config(api_key: str, max_results: int = 3):
     """설정 파일의 모든 활성 채널을 테스트합니다."""
     print(f"\n{'='*60}")
@@ -159,6 +205,11 @@ def main():
         action="store_true",
         help="채널 정보만 조회 (수집 테스트 제외)"
     )
+    parser.add_argument(
+        "--test-watchlist",
+        action="store_true",
+        help="워치리스트 수집 테스트"
+    )
     
     args = parser.parse_args()
     
@@ -171,7 +222,9 @@ def main():
     print(f"✅ API 키 확인 완료")
     
     # 테스트 실행
-    if args.test_config:
+    if args.test_watchlist:
+        test_watchlist_collection(Config.YOUTUBE_API_KEY)
+    elif args.test_config:
         test_channels_from_config(Config.YOUTUBE_API_KEY, max_results=args.max_results)
     elif args.channel_id:
         if args.info_only:
@@ -186,6 +239,8 @@ def main():
         print("    python scripts/test_youtube_channel.py --channel-id UCxX9wt5FWQUAAz4UrysqK9A --max-results 3")
         print("\n  설정 파일 전체 테스트:")
         print("    python scripts/test_youtube_channel.py --test-config --max-results 3")
+        print("\n  워치리스트 테스트:")
+        print("    python scripts/test_youtube_channel.py --test-watchlist")
 
 
 if __name__ == "__main__":
