@@ -7,7 +7,7 @@
 `.env` 파일에 아래 키를 필요에 맞게 설정합니다. (자세한 주석은 `env.example` 참고)
 
 - OpenAI: `OPENAI_API_KEY`, `OPENAI_MODEL`
-- YouTube: `YOUTUBE_API_KEY`, `YOUTUBE_KEYWORDS`, `YOUTUBE_MAX_RESULTS`, `YOUTUBE_REGION_CODE`, `YOUTUBE_PUBLISHED_AFTER_DAYS`, `YOUTUBE_CHANNELS_ENABLED`, `YOUTUBE_WATCHLIST_ENABLED`
+- YouTube: `YOUTUBE_API_KEY`, `YOUTUBE_KEYWORDS`, `YOUTUBE_MAX_RESULTS`, `YOUTUBE_REGION_CODE`, `YOUTUBE_PUBLISHED_AFTER_DAYS`, `YOUTUBE_CHANNELS_ENABLED`, `YOUTUBE_WATCHLIST_ENABLED`, `YOUTUBE_KEYWORD_GROUPS_ENABLED`
 - Gmail: `GOOGLE_CLIENT_SECRET_FILE`, `GOOGLE_TOKEN_FILE`, `GMAIL_LABEL`
 - 미디어: `GENERATE_CHARTS`, `GENERATE_DIAGRAMS`, `GENERATE_VIDEO`
 
@@ -34,11 +34,11 @@ powershell -ExecutionPolicy Bypass -File scripts\register_windows_task.ps1 -Pyth
 - 스케줄러: `scripts/run_scheduler.py`
 
 ## 동작 흐름
-1) 소스 수집: RSS + (YouTube: 채널/워치리스트/키워드) + (Gmail 선택적)
+1) 소스 수집: RSS + (YouTube: 채널/워치리스트/키워드 그룹) + (Gmail 선택적)
 2) 중복 제거 (`data/geeknews_state.json` 기준)
-3) 필터링/우선순위 결정 (`ContentFilter`)
+3) 필터링/우선순위 결정 (`ContentFilter`) + **카테고리 자동 태깅**
 4) 웹 연구(선택) → AI 요약/인사이트 생성 (`QAContentGenerator`)
-5) 포스트 생성: front matter에 `thumbnail`, `video_url`, `images`, `charts` 지원
+5) 포스트 생성: front matter에 `thumbnail`, `video_url`, `images`, `charts`, `category` 지원
 6) Git 자동 푸시(환경변수 `AUTO_GIT_PUSH=true` 시)
 
 ## YouTube 콘텐츠 수집
@@ -106,13 +106,52 @@ powershell -ExecutionPolicy Bypass -File scripts\register_windows_task.ps1 -Pyth
 - 추천받은 핵심 콘텐츠
 - "스타트 워치리스트"로 입문자 가이드 제공
 
-### 3. 키워드 기반 수집 (추가)
-기존 방식으로 키워드 검색을 통해 추가 콘텐츠를 수집합니다.
+### 3. 키워드 그룹 기반 수집 (카테고리 자동 태깅)
+카테고리별로 그룹화된 키워드로 검색하여 자동으로 카테고리를 태깅합니다.
 
-**설정**: `.env`의 `YOUTUBE_KEYWORDS`
-```env
-YOUTUBE_KEYWORDS="Playwright trace viewer, GitHub Actions, Argo CD"
+**키워드 그룹 설정 파일**: `data/youtube_keyword_groups.json`
+```json
+{
+  "keyword_groups": [
+    {
+      "name": "playwright",
+      "category": "qa-engineer",
+      "priority": "high",
+      "enabled": true,
+      "keywords": [
+        "Playwright trace viewer",
+        "pytest fixtures parametrize best practices",
+        "Playwright test parallel sharding GitHub Actions",
+        "Allure report Playwright Python"
+      ],
+      "description": "Playwright 테스트 자동화 관련 콘텐츠"
+    },
+    {
+      "name": "cicd",
+      "category": "learning",
+      "priority": "high",
+      "enabled": true,
+      "keywords": [
+        "GitHub Actions reusable workflows matrix",
+        "Argo CD progressive delivery",
+        "Terraform in CI security scanning"
+      ],
+      "description": "CI/CD 및 GitOps 관련 콘텐츠"
+    }
+  ]
+}
 ```
+
+**키워드 그룹 관리**:
+- `name`: 그룹 식별자
+- `category`: 블로그 포스트 카테고리 (`qa-engineer`, `learning`, `daily-life`)
+- `keywords`: 해당 그룹의 검색 키워드 리스트 (OR 조건)
+- `enabled: true`: 활성 그룹만 수집
+- **자동 카테고리 태깅**: 수집된 비디오에 자동으로 `category` 메타데이터 추가
+
+**키워드 그룹 vs 단일 키워드**:
+- 키워드 그룹 활성 (`YOUTUBE_KEYWORD_GROUPS_ENABLED=true`): 그룹별로 수집 + 카테고리 태깅
+- 키워드 그룹 비활성 (`YOUTUBE_KEYWORD_GROUPS_ENABLED=false`): 기존 방식 (`YOUTUBE_KEYWORDS` 문자열 사용)
 
 ### 수집 테스트
 파이프라인 실행 전 수집 기능을 테스트할 수 있습니다:
@@ -134,8 +173,15 @@ python scripts/test_youtube_channel.py --test-watchlist
 ### 수집 순서 및 중복 제거
 1. **채널** 수집 (우선순위 높음)
 2. **워치리스트** 수집 (중간 우선순위)
-3. **키워드** 검색 (추가)
+3. **키워드 그룹** 수집 (카테고리 자동 태깅)
+   - 그룹별로 순차 수집
+   - 각 비디오에 `category`, `keyword_group` 메타데이터 추가
 4. **중복 제거**: `guid` 기준으로 자동 제거 (먼저 수집된 것 유지)
+
+**카테고리 결정 우선순위**:
+1. 채널 설정의 `category` (향후 지원 예정)
+2. 키워드 그룹의 `category` ← 현재 사용
+3. 기본값: `learning`
 
 ## 다이어그램 / 차트 / 영상
 - Mermaid: `_includes/head.html`에서 자동 초기화. Markdown에 ```mermaid 코드블록 사용.
@@ -159,6 +205,11 @@ python scripts/test_youtube_channel.py --test-watchlist
 - 수집 비활성화: 
   - 채널: `.env`에서 `YOUTUBE_CHANNELS_ENABLED=false`
   - 워치리스트: `.env`에서 `YOUTUBE_WATCHLIST_ENABLED=false`
+  - 키워드 그룹: `.env`에서 `YOUTUBE_KEYWORD_GROUPS_ENABLED=false` (기존 단일 키워드 방식으로 전환)
+- 키워드 그룹 수집 실패:
+  - 그룹별 `keywords` 리스트 확인
+  - 특정 그룹만 비활성화: `enabled: false` 설정
+  - 카테고리 값 확인 (`qa-engineer`, `learning`, `daily-life` 중 하나)
 - Gmail 인증 실패: 토큰 파일 삭제 후 재인증
 - Windows 작업 스케줄러 동작 확인: `Get-ScheduledTask -TaskName MyBlogPipeline | Get-ScheduledTaskInfo`
 
