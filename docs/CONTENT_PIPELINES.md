@@ -7,7 +7,7 @@
 `.env` 파일에 아래 키를 필요에 맞게 설정합니다. (자세한 주석은 `env.example` 참고)
 
 - OpenAI: `OPENAI_API_KEY`, `OPENAI_MODEL`
-- YouTube: `YOUTUBE_API_KEY`, `YOUTUBE_KEYWORDS`, `YOUTUBE_MAX_RESULTS`, `YOUTUBE_REGION_CODE`, `YOUTUBE_PUBLISHED_AFTER_DAYS`
+- YouTube: `YOUTUBE_API_KEY`, `YOUTUBE_KEYWORDS`, `YOUTUBE_MAX_RESULTS`, `YOUTUBE_REGION_CODE`, `YOUTUBE_PUBLISHED_AFTER_DAYS`, `YOUTUBE_CHANNELS_ENABLED`
 - Gmail: `GOOGLE_CLIENT_SECRET_FILE`, `GOOGLE_TOKEN_FILE`, `GMAIL_LABEL`
 - 미디어: `GENERATE_CHARTS`, `GENERATE_DIAGRAMS`, `GENERATE_VIDEO`
 
@@ -41,6 +41,63 @@ powershell -ExecutionPolicy Bypass -File scripts\register_windows_task.ps1 -Pyth
 5) 포스트 생성: front matter에 `thumbnail`, `video_url`, `images`, `charts` 지원
 6) Git 자동 푸시(환경변수 `AUTO_GIT_PUSH=true` 시)
 
+## YouTube 채널 기반 수집
+파이프라인은 두 가지 방식으로 YouTube 콘텐츠를 수집합니다:
+
+### 1. 채널 기반 수집 (우선순위 높음)
+특정 채널의 최신 동영상을 안정적으로 수집합니다.
+
+**채널 설정 파일**: `data/youtube_channels.json`
+```json
+{
+  "channels": [
+    {
+      "id": "UCxX9wt5FWQUAAz4UrysqK9A",
+      "name": "Playwright",
+      "handle": "@Playwright",
+      "category": "qa-engineer",
+      "priority": "high",
+      "enabled": true,
+      "description": "공식 Playwright 채널"
+    }
+  ]
+}
+```
+
+**채널 관리**:
+- `enabled: true`: 활성 채널만 수집
+- `priority`: 우선순위 표시 (실제 수집 순서는 파일 순서대로)
+- `category`: 블로그 포스트 카테고리 자동 분류 (향후 지원)
+
+**채널 ID 찾기**:
+- 채널 페이지 → 소스 보기 → `"channelId":"UC..."`
+- 또는 YouTube Data API의 `channels.list` 사용
+
+### 2. 키워드 기반 수집 (추가)
+기존 방식으로 키워드 검색을 통해 추가 콘텐츠를 수집합니다.
+
+**설정**: `.env`의 `YOUTUBE_KEYWORDS`
+```env
+YOUTUBE_KEYWORDS="Playwright trace viewer, GitHub Actions, Argo CD"
+```
+
+### 채널 수집 테스트
+파이프라인 실행 전 채널 수집을 테스트할 수 있습니다:
+
+```powershell
+# 특정 채널 정보 조회
+python scripts/test_youtube_channel.py --channel-id UCxX9wt5FWQUAAz4UrysqK9A --info-only
+
+# 특정 채널 수집 테스트 (최대 3개)
+python scripts/test_youtube_channel.py --channel-id UCxX9wt5FWQUAAz4UrysqK9A --max-results 3
+
+# 설정 파일의 모든 채널 테스트
+python scripts/test_youtube_channel.py --test-config --max-results 3
+```
+
+### 중복 제거
+채널 수집과 키워드 수집에서 동일한 동영상이 발견되면 `guid` 기준으로 자동 중복 제거됩니다.
+
 ## 다이어그램 / 차트 / 영상
 - Mermaid: `_includes/head.html`에서 자동 초기화. Markdown에 ```mermaid 코드블록 사용.
 - 차트: `automation/media/charts.py`의 `generate_trend_chart`로 PNG 생성 → `assets/img/auto/` 저장 후 본문에 `![...]()` 삽입.
@@ -51,7 +108,9 @@ powershell -ExecutionPolicy Bypass -File scripts\register_windows_task.ps1 -Pyth
 - 최초 실행 시 브라우저 인증 완료 → `GOOGLE_TOKEN_FILE`에 토큰 생성
 
 ## 트러블슈팅
-- YouTube 쿼터 초과: 키워드 범위 축소, `YOUTUBE_MAX_RESULTS` 감소
+- YouTube 쿼터 초과: 키워드 범위 축소, `YOUTUBE_MAX_RESULTS` 감소, 또는 일부 채널 비활성화 (`enabled: false`)
+- 채널 수집 실패: 채널 ID 확인, API 키 권한 확인
+- 채널 수집 비활성화: `.env`에서 `YOUTUBE_CHANNELS_ENABLED=false` 설정
 - Gmail 인증 실패: 토큰 파일 삭제 후 재인증
 - Windows 작업 스케줄러 동작 확인: `Get-ScheduledTask -TaskName MyBlogPipeline | Get-ScheduledTaskInfo`
 
