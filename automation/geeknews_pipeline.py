@@ -547,6 +547,18 @@ def run_pipeline(
                             api_key=Config.YOUTUBE_API_KEY,
                             video_ids=video_ids
                         )
+                        # 시리즈 메타데이터 추가
+                        for vid in wl_videos:
+                            video_id = vid.get("guid", "").replace("youtube:", "")
+                            # 워치리스트에서 해당 비디오의 메타데이터 찾기
+                            for wl_item in watchlist:
+                                if wl_item.get("video_id") == video_id:
+                                    if wl_item.get("series"):
+                                        vid["series"] = wl_item.get("series")
+                                    if wl_item.get("series_order"):
+                                        vid["series_order"] = wl_item.get("series_order")
+                                    break
+                        
                         print(f"     워치리스트: {len(wl_videos)}개")
                         yt_all_raw.extend(wl_videos)
             except Exception as exc:
