@@ -1,0 +1,68 @@
+{
+  "channels": [
+    {
+      "id": "UCxX9wt5FWQUAAz4UrysqK9A",
+      "name": "Playwright",
+      "handle": "@Playwright",
+      "category": "qa-engineer",
+      "priority": "high",
+      "enabled": true,
+      "description": "공식 Playwright 채널 - 최신 기능 및 데모"
+    },
+    {
+      "id": "UCgGhyPBmkuHsMJgRwNeDCNA",
+      "name": "GitHub",
+      "handle": "@GitHub",
+      "category": "learning",
+      "priority": "high",
+      "enabled": true,
+      "description": "GitHub 공식 채널 - GitHub Actions 포함"
+    },
+    {
+      "id": "UCc4b0FDVoHm7sP4sDgwWgJA",
+      "name": "Automation Step by Step (Raghav Pal)",
+      "handle": "@RaghavPal",
+      "category": "qa-engineer",
+      "priority": "medium",
+      "enabled": true,
+      "description": "테스트 자동화 튜토리얼"
+    },
+    {
+      "id": "UCTt7pyY-o0eltq14glaG5dg",
+      "name": "Naveen AutomationLabs",
+      "handle": "@naveenautomationlabs",
+      "category": "qa-engineer",
+      "priority": "medium",
+      "enabled": true,
+      "description": "QA 프레임워크 설계 및 실무 패턴"
+    },
+    {
+      "id": "UCwy-yM-CIR6s8WNAAlEh4WQ",
+      "name": "Andrew Knight (Automation Panda)",
+      "handle": "@AutomationPanda",
+      "category": "qa-engineer",
+      "priority": "high",
+      "enabled": true,
+      "description": "Python/Playwright 심화 튜토리얼"
+    },
+    {
+      "id": "UCj9ybi4Lb3iMwbzgU8rqJEg",
+      "name": "TestGuild (Joe Colantonio)",
+      "handle": "@testguild",
+      "category": "qa-engineer",
+      "priority": "medium",
+      "enabled": false,
+      "description": "테스트 자동화 인터뷰 및 트렌드 (일단 비활성)"
+    },
+    {
+      "id": "UCMCvFAlH3kYr92z6oasJu8A",
+      "name": "Ministry of Testing",
+      "handle": "@MinistryofTesting",
+      "category": "qa-engineer",
+      "priority": "medium",
+      "enabled": false,
+      "description": "커뮤니티 경험담 (일단 비활성)"
+    }
+  ]
+}
+
