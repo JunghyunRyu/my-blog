@@ -11,7 +11,7 @@
 OPENAI_API_KEY
     설정되어 있으면 OpenAI Chat Completions API를 호출하여 QA 콘텐츠를 생성합니다.
 OPENAI_MODEL (선택)
-    기본값은 ``gpt-4o-mini`` 입니다. 다른 모델을 사용하려면 환경 변수를 지정하세요.
+    기본값은 ``gpt-5-mini-20250807`` 입니다. 다른 모델을 사용하려면 환경 변수를 지정하세요.
 
 사용 예시
 --------
@@ -43,7 +43,6 @@ try:
     REQUESTS_AVAILABLE = True
 except ImportError:
     REQUESTS_AVAILABLE = False
-    print("⚠️ requests 라이브러리가 설치되지 않았습니다. 'pip install requests'로 설치하세요.")
 
 try:  # pragma: no cover - 런타임에서만 필요
     from .qa_generator import QAContentGenerator, QAResult
@@ -51,12 +50,19 @@ try:  # pragma: no cover - 런타임에서만 필요
     from .web_researcher import WebResearcher, ResearchResult
     from .config import Config
     from .sources import youtube_collector, gmail_collector
+    from .logger import get_logger
 except ImportError:  # pragma: no cover - 스크립트 직접 실행 대비
     from qa_generator import QAContentGenerator, QAResult
     from content_filter import ContentFilter, ContentMetrics
     from web_researcher import WebResearcher, ResearchResult
     from config import Config
     from sources import youtube_collector, gmail_collector
+    from logger import get_logger
+
+logger = get_logger(__name__)
+
+if not REQUESTS_AVAILABLE:
+    logger.warning("requests 라이브러리가 설치되지 않았습니다. 'pip install requests'로 설치하세요.")
 
 
 DEFAULT_FEED_URL = "https://feeds.feedburner.com/geeknews-feed"
@@ -107,7 +113,7 @@ def fetch_feed(url: str = DEFAULT_FEED_URL) -> list[FeedItem]:
         except requests.RequestException as exc:
             if attempt < max_retries - 1:
                 import time
-                print(f"⚠️ RSS 피드 접근 실패. {retry_delay}초 후 재시도... ({attempt + 1}/{max_retries})")
+                logger.warning(f"RSS 피드 접근 실패. {retry_delay}초 후 재시도... ({attempt + 1}/{max_retries})")
                 time.sleep(retry_delay)
                 continue
             raise RuntimeError(f"RSS 피드에 접근할 수 없습니다 (모든 재시도 실패): {exc}") from exc
@@ -116,7 +122,7 @@ def fetch_feed(url: str = DEFAULT_FEED_URL) -> list[FeedItem]:
         except Exception as exc:
             if attempt < max_retries - 1:
                 import time
-                print(f"⚠️ RSS 피드 처리 중 오류. 재시도 중... ({attempt + 1}/{max_retries})")
+                logger.warning(f"RSS 피드 처리 중 오류. 재시도 중... ({attempt + 1}/{max_retries})")
                 time.sleep(retry_delay)
                 continue
             raise RuntimeError(f"RSS 피드 처리 중 예상치 못한 오류: {exc}") from exc
@@ -494,19 +500,19 @@ def run_pipeline(
     enable_scraping: bool = DEFAULT_ENABLE_SCRAPING,
     min_votes: int = DEFAULT_MIN_VOTES
 ) -> list[Path]:
-    print("=" * 80)
-    print("GeekNews QA 전문가급 자동화 파이프라인 시작")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("GeekNews QA 전문가급 자동화 파이프라인 시작")
+    logger.info("=" * 80)
     
     # 1. 소스 수집 (RSS/YouTube/Gmail)
-    print("\n[1단계] 소스 수집 중...")
+    logger.info("[1단계] 소스 수집 중...")
     items: list[FeedItem] = []
     try:
         rss_items = fetch_feed(feed_url)
-        print(f"  → RSS {len(rss_items)}개")
+        logger.info(f"RSS {len(rss_items)}개")
         items.extend(rss_items)
     except Exception as exc:
-        print(f"  ⚠️ RSS 피드 수집 실패: {exc}")
+        logger.error(f"RSS 피드 수집 실패: {exc}", exc_info=True)
 
     # YouTube
     if getattr(Config, "YOUTUBE_API_KEY", None) and youtube_collector:
@@ -517,7 +523,7 @@ def run_pipeline(
             try:
                 channels = Config.load_channels()
                 if channels:
-                    print(f"  → 활성 채널 {len(channels)}개에서 수집 중...")
+                    logger.info(f"활성 채널 {len(channels)}개에서 수집 중...")
                     for ch in channels:
                         ch_id = ch.get("id", "")
                         ch_name = ch.get("name", "Unknown")
@@ -528,12 +534,12 @@ def run_pipeline(
                                 max_results=Config.YOUTUBE_MAX_RESULTS,
                                 published_after_days=Config.YOUTUBE_PUBLISHED_AFTER_DAYS,
                             )
-                            print(f"     {ch_name}: {len(ch_videos)}개")
+                            logger.info(f"{ch_name}: {len(ch_videos)}개")
                             yt_all_raw.extend(ch_videos)
                         except Exception as ch_exc:
-                            print(f"     ⚠️ {ch_name} 수집 실패: {ch_exc}")
+                            logger.warning(f"{ch_name} 수집 실패: {ch_exc}", exc_info=True)
             except Exception as exc:
-                print(f"  ⚠️ 채널 수집 실패: {exc}")
+                logger.error(f"채널 수집 실패: {exc}", exc_info=True)
         
         # 2. 워치리스트 기반 수집
         if Config.YOUTUBE_WATCHLIST_ENABLED:
@@ -542,7 +548,7 @@ def run_pipeline(
                 if watchlist:
                     video_ids = [item.get("video_id", "") for item in watchlist if item.get("video_id")]
                     if video_ids:
-                        print(f"  → 워치리스트 {len(video_ids)}개에서 수집 중...")
+                        logger.info(f"워치리스트 {len(video_ids)}개에서 수집 중...")
                         wl_videos = youtube_collector.collect_from_watchlist(
                             api_key=Config.YOUTUBE_API_KEY,
                             video_ids=video_ids
@@ -559,10 +565,10 @@ def run_pipeline(
                                         vid["series_order"] = wl_item.get("series_order")
                                     break
                         
-                        print(f"     워치리스트: {len(wl_videos)}개")
+                        logger.info(f"워치리스트: {len(wl_videos)}개")
                         yt_all_raw.extend(wl_videos)
             except Exception as exc:
-                print(f"  ⚠️ 워치리스트 수집 실패: {exc}")
+                logger.error(f"워치리스트 수집 실패: {exc}", exc_info=True)
         
         # 3. 키워드 기반 수집
         if Config.YOUTUBE_KEYWORD_GROUPS_ENABLED:
@@ -570,7 +576,7 @@ def run_pipeline(
             try:
                 keyword_groups = Config.load_keyword_groups()
                 if keyword_groups:
-                    print(f"  → 키워드 그룹 {len(keyword_groups)}개에서 수집 중...")
+                    logger.info(f"키워드 그룹 {len(keyword_groups)}개에서 수집 중...")
                     for grp in keyword_groups:
                         grp_name = grp.get("name", "Unknown")
                         grp_category = grp.get("category", "learning")
@@ -594,12 +600,12 @@ def run_pipeline(
                                 vid["category"] = grp_category
                                 vid["keyword_group"] = grp_name
                             
-                            print(f"     {grp_name} ({grp_category}): {len(grp_videos)}개")
+                            logger.info(f"{grp_name} ({grp_category}): {len(grp_videos)}개")
                             yt_all_raw.extend(grp_videos)
                         except Exception as grp_exc:
-                            print(f"     ⚠️ {grp_name} 수집 실패: {grp_exc}")
+                            logger.warning(f"{grp_name} 수집 실패: {grp_exc}", exc_info=True)
             except Exception as exc:
-                print(f"  ⚠️ 키워드 그룹 수집 실패: {exc}")
+                logger.error(f"키워드 그룹 수집 실패: {exc}", exc_info=True)
         else:
             # 기존 방식: 단일 키워드 문자열 사용
             try:
@@ -610,10 +616,10 @@ def run_pipeline(
                     region_code=Config.YOUTUBE_REGION_CODE,
                     published_after_days=Config.YOUTUBE_PUBLISHED_AFTER_DAYS,
                 )
-                print(f"  → 키워드 검색: {len(yt_kw_raw)}개")
+                logger.info(f"키워드 검색: {len(yt_kw_raw)}개")
                 yt_all_raw.extend(yt_kw_raw)
             except Exception as exc:
-                print(f"  ⚠️ 키워드 수집 실패: {exc}")
+                logger.error(f"키워드 수집 실패: {exc}", exc_info=True)
         
         # 4. 중복 제거 (guid 기준)
         seen_guids = set()
@@ -630,7 +636,7 @@ def run_pipeline(
                     published_at=it.get("published_at", "")
                 ))
         
-        print(f"  → YouTube 총 {len(yt_items)}개 (중복 제거 후)")
+        logger.info(f"YouTube 총 {len(yt_items)}개 (중복 제거 후)")
         items.extend(yt_items)
 
     # Gmail (토큰 파일이 존재할 때만 시도)
@@ -652,77 +658,75 @@ def run_pipeline(
                     published_at=it.get("published_at", "")
                 ) for it in gm_raw
             ]
-            print(f"  → Gmail {len(gm_items)}개")
+            logger.info(f"Gmail {len(gm_items)}개")
             items.extend(gm_items)
         except Exception as exc:
-            print(f"  ⚠️ Gmail 수집 실패: {exc}")
+            logger.error(f"Gmail 수집 실패: {exc}", exc_info=True)
     else:
-        print("  → Gmail: 토큰 파일 없음으로 건너뜀")
+        logger.info("Gmail: 토큰 파일 없음으로 건너뜀")
 
-    print(f"  → 통합 {len(items)}개 항목 수집 완료")
+    logger.info(f"통합 {len(items)}개 항목 수집 완료")
     if not items:
-        print("  ⚠️ 수집된 항목이 없습니다.")
+        logger.warning("수집된 항목이 없습니다.")
         return []
     
     # 수집된 RSS 피드 항목 상세 출력
     if items:
-        print(f"\n  [수집된 RSS 피드 항목 목록]")
+        logger.debug(f"[수집된 RSS 피드 항목 목록]")
         for i, item in enumerate(items[:10], 1):  # 최대 10개만 출력
-            print(f"    {i}. {item['title'][:70]}...")
-            print(f"       GUID: {item['guid'][:80]}...")
+            logger.debug(f"{i}. {item['title'][:70]}...")
+            logger.debug(f"   GUID: {item['guid'][:80]}...")
         if len(items) > 10:
-            print(f"    ... 외 {len(items) - 10}개 항목")
-    else:
-        print("  ⚠️ RSS 피드에서 항목을 찾을 수 없습니다.")
+            logger.debug(f"... 외 {len(items) - 10}개 항목")
     
     # 2. 중복 필터링
-    print("\n[2단계] 중복 항목 필터링 중...")
+    logger.info("[2단계] 중복 항목 필터링 중...")
     processed = load_state()
-    print(f"  → 이미 처리된 항목: {len(processed)}개")
+    logger.info(f"이미 처리된 항목: {len(processed)}개")
     if processed:
-        print(f"  [이미 처리된 항목 목록]")
+        logger.debug("[이미 처리된 항목 목록]")
         for i, guid in enumerate(sorted(processed)[:5], 1):  # 최대 5개만 출력
-            print(f"    {i}. {guid[:80]}...")
+            logger.debug(f"{i}. {guid[:80]}...")
         if len(processed) > 5:
-            print(f"    ... 외 {len(processed) - 5}개 항목")
+            logger.debug(f"... 외 {len(processed) - 5}개 항목")
     
     new_items = select_new_items(items, processed)
-    print(f"\n  → 신규 항목: {len(new_items)}개 발견")
+    logger.info(f"신규 항목: {len(new_items)}개 발견")
     
     # 신규 항목 상세 출력
     if new_items:
-        print(f"\n  [신규 항목 목록]")
+        logger.debug("[신규 항목 목록]")
         for i, item in enumerate(new_items[:10], 1):  # 최대 10개만 출력
-            print(f"    {i}. {item['title'][:70]}...")
-            print(f"       GUID: {item['guid'][:80]}...")
+            logger.debug(f"{i}. {item['title'][:70]}...")
+            logger.debug(f"   GUID: {item['guid'][:80]}...")
         if len(new_items) > 10:
-            print(f"    ... 외 {len(new_items) - 10}개 항목")
+            logger.debug(f"... 외 {len(new_items) - 10}개 항목")
     else:
-        print("  ℹ️ 새로운 항목이 없습니다.")
+        logger.info("새로운 항목이 없습니다.")
     
     if not new_items:
-        print("\n[OK] 새로운 GeekNews 항목이 없습니다.")
+        logger.info("[OK] 새로운 GeekNews 항목이 없습니다.")
         return []
     
     # 3. 콘텐츠 필터링 및 우선순위 결정
-    print("\n[3단계] AI/트렌드 필터링 및 우선순위 결정 중...")
+    logger.info("[3단계] AI/트렌드 필터링 및 우선순위 결정 중...")
     content_filter = ContentFilter(
         min_votes=min_votes, 
         enable_scraping=enable_scraping
     )
     filtered_items = content_filter.filter_and_sort(new_items, max_items=max_posts)
-    print(f"  → {len(filtered_items)}개 항목 선별 완료")
+    logger.info(f"{len(filtered_items)}개 항목 선별 완료")
     
     for item, metrics in filtered_items[:5]:  # 상위 5개만 출력
-        print(f"    - {item['title'][:60]}... (우선순위: {metrics.priority_score:.1f})")
-        print(f"      AI 관련: {metrics.is_ai_related}, 카테고리: {', '.join(metrics.categories)}")
+        logger.debug(f"- {item['title'][:60]}... (우선순위: {metrics.priority_score:.1f})")
+        logger.debug(f"  AI 관련: {metrics.is_ai_related}, 카테고리: {', '.join(metrics.categories)}")
     
     if not filtered_items:
-        print("\n[OK] 필터링 조건을 만족하는 항목이 없습니다.")
+        logger.info("[OK] 필터링 조건을 만족하는 항목이 없습니다.")
         return []
     
     # 4. 웹 연구 및 QA 콘텐츠 생성
-    print("\n[4단계] 웹 연구 및 전문가급 QA 콘텐츠 생성 중...")
+    logger.info("[4단계] 웹 연구 및 전문가급 QA 콘텐츠 생성 중...")
     
     web_researcher = WebResearcher(
         max_search_results=5,
@@ -733,47 +737,47 @@ def run_pipeline(
     created_files: list[Path] = []
     
     for i, (item, metrics) in enumerate(filtered_items, 1):
-        print(f"\n  [{i}/{len(filtered_items)}] 처리 중: {item['title']}")
+        logger.info(f"[{i}/{len(filtered_items)}] 처리 중: {item['title']}")
         
         # 웹 연구 수행
         research_data = None
         if web_researcher:
-            print(f"    → 웹 연구 수행 중...")
+            logger.debug("웹 연구 수행 중...")
             try:
                 research_data = web_researcher.research(
                     item["title"], 
                     item.get("summary", ""), 
                     item["link"]
                 )
-                print(f"       웹 검색 결과: {len(research_data.web_results)}개")
-                print(f"       전문가 의견: {len(research_data.expert_opinions)}개")
+                logger.debug(f"웹 검색 결과: {len(research_data.web_results)}개")
+                logger.debug(f"전문가 의견: {len(research_data.expert_opinions)}개")
             except Exception as exc:
-                print(f"       웹 연구 실패: {exc}")
+                logger.warning(f"웹 연구 실패: {exc}", exc_info=True)
         
         # QA 콘텐츠 생성
-        print(f"    → AI 기반 QA 콘텐츠 생성 중...")
+        logger.debug("AI 기반 QA 콘텐츠 생성 중...")
         try:
             qa_result = generator.generate(item, research_data=research_data)
-            print(f"       생성 완료 (인사이트: {len(qa_result.qa_engineer_insights)}개)")
+            logger.info(f"생성 완료 (인사이트: {len(qa_result.qa_engineer_insights)}개)")
         except Exception as exc:
-            print(f"       생성 실패: {exc}")
+            logger.error(f"생성 실패: {exc}", exc_info=True)
             continue
         
         # 포스트 작성
-        print(f"    → 블로그 포스트 작성 중...")
+        logger.debug("블로그 포스트 작성 중...")
         try:
             filepath = write_post(item, qa_result, metrics=metrics, timezone=timezone)
-            print(f"       [OK] 생성 완료: {filepath.name}")
+            logger.info(f"[OK] 생성 완료: {filepath.name}")
             created_files.append(filepath)
             processed.add(item["guid"])
         except Exception as exc:
-            print(f"       포스트 작성 실패: {exc}")
+            logger.error(f"포스트 작성 실패: {exc}", exc_info=True)
             continue
     
     # 5. 상태 저장
-    print("\n[5단계] 처리 상태 저장 중...")
+    logger.info("[5단계] 처리 상태 저장 중...")
     save_state(processed)
-    print(f"  → 상태 저장 완료")
+    logger.info("상태 저장 완료")
     
     # 6. GitHub에 자동 push
     git_push_success = False
@@ -782,28 +786,28 @@ def run_pipeline(
             from scripts.git_push import auto_push_posts
             git_push_success = auto_push_posts(created_files, project_dir=Path.cwd())
         except Exception as exc:
-            print(f"\n⚠️  Git 자동 푸시 실패: {exc}")
+            logger.error(f"Git 자동 푸시 실패: {exc}", exc_info=True)
     
     # 요약 출력
-    print("\n" + "=" * 80)
-    print("파이프라인 실행 완료")
-    print("=" * 80)
-    print(f"총 생성된 포스트: {len(created_files)}개")
+    logger.info("=" * 80)
+    logger.info("파이프라인 실행 완료")
+    logger.info("=" * 80)
+    logger.info(f"총 생성된 포스트: {len(created_files)}개")
     
     if created_files:
-        print("\n생성된 포스트 목록:")
+        logger.info("생성된 포스트 목록:")
         for path in created_files:
-            print(f"  [OK] {path}")
+            logger.info(f"[OK] {path}")
     
     if git_push_success:
-        print("\n[SUCCESS] GitHub 자동 푸시 완료")
+        logger.info("[SUCCESS] GitHub 자동 푸시 완료")
     elif created_files:
-        print("\n[INFO] GitHub 푸시를 수동으로 실행하세요:")
-        print("   git add _posts/ data/")
-        print("   git commit -m 'Add new posts'")
-        print("   git push")
+        logger.info("[INFO] GitHub 푸시를 수동으로 실행하세요:")
+        logger.info("   git add _posts/ data/")
+        logger.info("   git commit -m 'Add new posts'")
+        logger.info("   git push")
     
-    print("=" * 80)
+    logger.info("=" * 80)
     
     return created_files
 
@@ -861,7 +865,7 @@ def resolve_timezone(name: str | None) -> dt.tzinfo | None:
     try:
         return ZoneInfo(name)
     except Exception:
-        print(f"경고: 알 수 없는 타임존 '{name}'. UTC를 사용합니다.")
+        logger.warning(f"알 수 없는 타임존 '{name}'. UTC를 사용합니다.")
         return dt.timezone.utc
 
 
@@ -879,9 +883,7 @@ def main(argv: list[str] | None = None) -> int:
             min_votes=args.min_votes
         )
     except Exception as exc:  # pylint: disable=broad-except
-        print(f"\n[ERROR] 파이프라인 실행 중 오류: {exc}")
-        import traceback
-        traceback.print_exc()
+        logger.error(f"[ERROR] 파이프라인 실행 중 오류: {exc}", exc_info=True)
         return 1
 
     return 0

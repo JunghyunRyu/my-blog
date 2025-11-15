@@ -18,7 +18,6 @@ try:
     REQUESTS_AVAILABLE = True
 except ImportError:
     REQUESTS_AVAILABLE = False
-    print("⚠️ requests 라이브러리가 설치되지 않았습니다. 'pip install requests'로 설치하세요.")
 
 try:
     # ddgs (구 duckduckgo_search) 라이브러리 사용
@@ -30,7 +29,16 @@ try:
     DDGS_AVAILABLE = True
 except ImportError:
     DDGS_AVAILABLE = False
-    print("⚠️ ddgs 라이브러리가 설치되지 않았습니다. 'pip install ddgs'로 설치하세요.")
+
+from automation.logger import get_logger
+
+logger = get_logger(__name__)
+
+if not REQUESTS_AVAILABLE:
+    logger.warning("requests 라이브러리가 설치되지 않았습니다. 'pip install requests'로 설치하세요.")
+
+if not DDGS_AVAILABLE:
+    logger.warning("ddgs 라이브러리가 설치되지 않았습니다. 'pip install ddgs'로 설치하세요.")
 
 
 @dataclass
@@ -93,7 +101,7 @@ class WebResearcher:
     def _search_web(self, query: str) -> list[WebResource]:
         """DuckDuckGo를 사용하여 웹 검색을 수행한다."""
         if not DDGS_AVAILABLE:
-            print(f"⚠️ DuckDuckGo 검색 라이브러리를 사용할 수 없습니다. 빈 결과 반환.")
+            logger.warning("DuckDuckGo 검색 라이브러리를 사용할 수 없습니다. 빈 결과 반환.")
             return []
         
         try:
@@ -120,7 +128,7 @@ class WebResearcher:
             return results[:self.max_search_results]
             
         except Exception as exc:
-            print(f"⚠️ 웹 검색 중 오류: {exc}")
+            logger.warning(f"웹 검색 중 오류: {exc}", exc_info=True)
             # 에러 발생 시 빈 리스트 반환 (크래시 방지)
             return []
     
@@ -162,13 +170,13 @@ class WebResearcher:
             return opinions
             
         except requests.RequestException as exc:
-            print(f"⚠️ HackerNews API 연결 실패: {exc}")
+            logger.warning(f"HackerNews API 연결 실패: {exc}", exc_info=True)
             return []
         except json.JSONDecodeError as exc:
-            print(f"⚠️ HackerNews API 응답 파싱 실패: {exc}")
+            logger.warning(f"HackerNews API 응답 파싱 실패: {exc}", exc_info=True)
             return []
         except Exception as exc:
-            print(f"⚠️ 전문가 의견 검색 중 오류: {exc}")
+            logger.warning(f"전문가 의견 검색 중 오류: {exc}", exc_info=True)
             return []
     
     def _search_related_articles(self, title: str) -> list[WebResource]:
@@ -184,20 +192,20 @@ class WebResearcher:
                     site_results = self._search_web(query)
                     results.extend(site_results[:1])  # 각 사이트에서 1개씩
                 except Exception as site_exc:
-                    print(f"⚠️ {site} 검색 실패: {site_exc}")
+                    logger.warning(f"{site} 검색 실패: {site_exc}", exc_info=True)
                     continue
             
             return results
             
         except Exception as exc:
-            print(f"⚠️ 관련 기사 검색 중 오류: {exc}")
+            logger.warning(f"관련 기사 검색 중 오류: {exc}", exc_info=True)
             return []
 
 
 def extract_article_content(url: str) -> str:
     """주어진 URL에서 기사 본문을 추출한다 (간단한 버전)."""
     if not REQUESTS_AVAILABLE:
-        print("⚠️ requests 라이브러리가 필요합니다.")
+        logger.warning("requests 라이브러리가 필요합니다.")
         return ""
     
     try:
@@ -220,13 +228,13 @@ def extract_article_content(url: str) -> str:
         return text[:5000]  # 최대 5000자
         
     except requests.RequestException as exc:
-        print(f"⚠️ 기사 URL 접근 실패: {exc}")
+        logger.warning(f"기사 URL 접근 실패: {exc}", exc_info=True)
         return ""
     except UnicodeDecodeError as exc:
-        print(f"⚠️ 기사 본문 인코딩 오류: {exc}")
+        logger.warning(f"기사 본문 인코딩 오류: {exc}", exc_info=True)
         return ""
     except Exception as exc:
-        print(f"⚠️ 기사 본문 추출 중 오류: {exc}")
+        logger.warning(f"기사 본문 추출 중 오류: {exc}", exc_info=True)
         return ""
 
 
@@ -239,11 +247,11 @@ if __name__ == "__main__":
         url="https://news.hada.io/topic?id=12345"
     )
     
-    print("웹 검색 결과:")
+    logger.info("웹 검색 결과:")
     for res in result.web_results:
-        print(f"  - {res.title[:80]} ({res.url})")
+        logger.info(f"  - {res.title[:80]} ({res.url})")
     
-    print("\n전문가 의견:")
+    logger.info("\n전문가 의견:")
     for op in result.expert_opinions:
-        print(f"  - {op['title']} (댓글: {op['comments']}, 포인트: {op['points']})")
+        logger.info(f"  - {op['title']} (댓글: {op['comments']}, 포인트: {op['points']})")
 

@@ -25,6 +25,10 @@ try:
 except ImportError:
     httpx = None
 
+from automation.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 class SequentialThinkingClient:
     """Sequential Thinking MCP 서버와 통신하는 비동기 클라이언트"""
@@ -251,7 +255,7 @@ def create_mcp_client() -> SyncSequentialThinkingClient | None:
         return None
     
     if httpx is None:
-        print("⚠️ MCP 활성화되었지만 httpx가 설치되지 않았습니다.")
+        logger.warning("MCP 활성화되었지만 httpx가 설치되지 않았습니다.")
         return None
     
     try:
@@ -260,10 +264,10 @@ def create_mcp_client() -> SyncSequentialThinkingClient | None:
         if client.health_check():
             return client
         else:
-            print("⚠️ MCP 서버에 연결할 수 없습니다.")
+            logger.warning("MCP 서버에 연결할 수 없습니다.")
             return None
     except Exception as e:
-        print(f"⚠️ MCP 클라이언트 생성 실패: {e}")
+        logger.warning(f"MCP 클라이언트 생성 실패: {e}", exc_info=True)
         return None
 
 
@@ -288,6 +292,6 @@ if __name__ == "__main__":
             print(json.dumps(result, indent=2, ensure_ascii=False))
     
     # 실행
-    print("=== 동기 예시 ===")
+    logger.info("=== 동기 예시 ===")
     sync_example()
 

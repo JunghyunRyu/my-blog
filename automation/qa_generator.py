@@ -11,6 +11,10 @@ import urllib.request
 from dataclasses import dataclass, field
 from html import unescape
 
+from automation.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 @dataclass
 class QAResult:
@@ -53,17 +57,25 @@ class QAContentGenerator:
                 from .mcp_client import create_mcp_client
                 self.mcp_client = create_mcp_client()
                 if self.mcp_client:
-                    print("✓ MCP Sequential Thinking 활성화됨")
+                    logger.info("MCP Sequential Thinking 활성화됨")
             except ImportError:
-                print("⚠️ MCP 클라이언트 모듈을 찾을 수 없습니다.")
+                logger.warning("MCP 클라이언트 모듈을 찾을 수 없습니다.")
             except Exception as exc:
-                print(f"⚠️ MCP 클라이언트 초기화 실패: {exc}")
+                logger.warning(f"MCP 클라이언트 초기화 실패: {exc}")
 
     def _build_provider(self) -> QAProvider:
+        # Claude API 키가 있으면 Claude 사용 (기술 분석에 강점)
+        claude_key = os.getenv("CLAUDE_API_KEY")
+        if claude_key:
+            model = os.getenv("CLAUDE_MODEL", "claude-3-5-sonnet-20241022")
+            return ClaudeProvider(api_key=claude_key, model=model)
+        
+        # OpenAI API 키가 있으면 OpenAI 사용
         api_key = os.getenv("OPENAI_API_KEY")
         if api_key:
             model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
             return OpenAIProvider(api_key=api_key, model=model)
+        
         return RuleBasedProvider()
 
     def generate(self, item: t.Mapping[str, t.Any], research_data: t.Any = None) -> QAResult:
@@ -82,7 +94,7 @@ class QAContentGenerator:
             
             return self._provider.generate(item)
         except Exception as exc:  # pylint: disable=broad-except
-            print(f"AI 생성 중 오류 발생: {exc}. 규칙 기반 백업을 사용합니다.")
+            logger.error(f"AI 생성 중 오류 발생: {exc}. 규칙 기반 백업을 사용합니다.", exc_info=True)
             return RuleBasedProvider().generate(item)
     
     def _run_mcp_analysis(self, item: t.Mapping[str, t.Any]) -> dict[str, t.Any] | None:
@@ -111,14 +123,14 @@ class QAContentGenerator:
             result = self.mcp_client.think(problem.strip(), depth=depth)
             
             if result.get("error"):
-                print(f"  ⚠️ MCP 분석 실패: {result.get('error')}")
+                logger.warning(f"MCP 분석 실패: {result.get('error')}")
                 return None
             
-            print(f"  ✓ MCP 분석 완료 (사고 단계: {len(result.get('thoughts', []))})")
+            logger.info(f"MCP 분석 완료 (사고 단계: {len(result.get('thoughts', []))})")
             return result
             
         except Exception as exc:
-            print(f"  ⚠️ MCP 분석 중 오류: {exc}")
+            logger.warning(f"MCP 분석 중 오류: {exc}", exc_info=True)
             return None
 
 
@@ -185,20 +197,20 @@ class OpenAIProvider:
                     if attempt < max_retries - 1:
                         import time
                         wait_time = retry_delay * (attempt + 1)
-                        print(f"⚠️ OpenAI API rate limit. {wait_time}초 후 재시도 ({attempt + 1}/{max_retries})...")
+                        logger.warning(f"OpenAI API rate limit. {wait_time}초 후 재시도 ({attempt + 1}/{max_retries})...")
                         time.sleep(wait_time)
                         continue
                 elif exc.code >= 500:  # Server error
                     if attempt < max_retries - 1:
                         import time
-                        print(f"⚠️ OpenAI API 서버 오류 (HTTP {exc.code}). 재시도 중... ({attempt + 1}/{max_retries})")
+                        logger.warning(f"OpenAI API 서버 오류 (HTTP {exc.code}). 재시도 중... ({attempt + 1}/{max_retries})")
                         time.sleep(retry_delay)
                         continue
                 raise RuntimeError(f"OpenAI API 호출 실패 (HTTP {exc.code}): {exc.reason}\n{error_body}") from exc
             except urllib.error.URLError as exc:
                 if attempt < max_retries - 1:
                     import time
-                    print(f"⚠️ OpenAI API 연결 실패. 재시도 중... ({attempt + 1}/{max_retries})")
+                    logger.warning(f"OpenAI API 연결 실패. 재시도 중... ({attempt + 1}/{max_retries})")
                     time.sleep(retry_delay)
                     continue
                 raise RuntimeError(f"OpenAI API 연결 실패: {exc}") from exc
@@ -226,6 +238,46 @@ class OpenAIProvider:
         if self.mcp_insights:
             mcp_context = self._format_mcp_insights(self.mcp_insights)
         
+        # 향상된 프롬프트 시스템 사용 여부 확인
+        use_enhanced_prompts = os.getenv("USE_ENHANCED_PROMPTS", "false").lower() in ("true", "1", "yes")
+        
+        if use_enhanced_prompts:
+            try:
+                from automation.enhanced_prompts import EnhancedPromptTemplates
+                
+                # 컨텍스트 준비
+                context = {
+                    "title": title,
+                    "summary": description,
+                    "link": item.get("link", ""),
+                    "published_at": item.get("published_at", ""),
+                    "additional_data": {
+                        "research_context": research_context,
+                        "mcp_context": mcp_context
+                    }
+                }
+                
+                # 페르소나 및 분석 유형 결정
+                persona = os.getenv("PROMPT_PERSONA", "senior_qa_architect")
+                analysis_type = os.getenv("PROMPT_ANALYSIS_TYPE", "deep_technical")
+                format_type = os.getenv("PROMPT_FORMAT_TYPE", "case_study")
+                level = os.getenv("PROMPT_LEVEL", "intermediate")
+                
+                # 향상된 프롬프트 생성
+                enhanced_prompt = EnhancedPromptTemplates.combine_prompts(
+                    persona=persona,
+                    analysis_type=analysis_type,
+                    format_type=format_type,
+                    level=level,
+                    context=context
+                )
+                
+                # 기존 JSON 스키마 추가
+                return enhanced_prompt + "\n\n" + self._get_base_json_schema()
+            except ImportError:
+                logger.warning("향상된 프롬프트 시스템을 사용할 수 없습니다. 기본 프롬프트를 사용합니다.")
+        
+        # 기본 프롬프트 사용
         return textwrap.dedent(
             f"""
             당신은 시니어 QA 엔지니어이자 기술 전문가입니다. 아래 GeekNews 기사를 분석하여 
@@ -444,6 +496,27 @@ class OpenAIProvider:
             return "\n".join(context_parts)
         
         return ""
+    
+    def _get_base_json_schema(self) -> str:
+        """기본 JSON 스키마 반환 (향상된 프롬프트와 함께 사용)."""
+        return textwrap.dedent(
+            """
+            다음 JSON 스키마에 맞춰 응답하세요:
+            {
+              "blog_category": "Learning | QA Engineer | Daily Life",
+              "technical_level": "advanced | practical",
+              "summary": "3-5문장 요약",
+              "qa_engineer_insights": ["인사이트 1", "인사이트 2", "인사이트 3"],
+              "practical_guide": [{"title": "...", "description": "...", "steps": [...]}],
+              "learning_roadmap": [{"phase": "...", "skills": [...]}],
+              "expert_opinions": [{"perspective": "...", "opinion": "..."}],
+              "qa_pairs": [{"question": "...", "answer": "..."}],
+              "follow_ups": ["...", "..."]
+            }
+            
+            반드시 유효한 JSON만 반환하세요.
+            """
+        ).strip()
 
     def _parse_response(self, content: str, item: t.Mapping[str, t.Any]) -> QAResult:
         json_text = _extract_json(content)
@@ -472,6 +545,572 @@ class OpenAIProvider:
             technical_level = "advanced"
         
         # blog_category 유효성 검증 (정확히 3개 중 하나만 허용)
+        if blog_category not in ["Learning", "QA Engineer", "Daily Life"]:
+            blog_category = "Learning"
+
+        return QAResult(
+            summary=summary, 
+            qa_pairs=qa_pairs, 
+            follow_ups=follow_ups, 
+            resources=resources,
+            qa_engineer_insights=qa_engineer_insights,
+            practical_guide=practical_guide,
+            learning_roadmap=learning_roadmap,
+            expert_opinions=expert_opinions,
+            technical_level=technical_level,
+            blog_category=blog_category
+        )
+
+
+class ClaudeProvider:
+    """Anthropic Claude API를 호출하여 QAResult를 생성한다."""
+
+    endpoint = "https://api.anthropic.com/v1/messages"
+
+    def __init__(self, api_key: str, model: str = "claude-3-5-sonnet-20241022"):
+        self.api_key = api_key
+        self.model = model
+        self.research_data: t.Any = None
+        self.mcp_insights: dict[str, t.Any] | None = None
+    
+    def set_research_data(self, research_data: t.Any) -> None:
+        """웹 연구 데이터를 설정한다."""
+        self.research_data = research_data
+    
+    def set_mcp_insights(self, mcp_insights: dict[str, t.Any]) -> None:
+        """MCP Sequential Thinking 분석 결과를 설정한다."""
+        self.mcp_insights = mcp_insights
+
+    def generate(self, item: t.Mapping[str, t.Any]) -> QAResult:
+        prompt = self._build_prompt(item)
+        payload = {
+            "model": self.model,
+            "max_tokens": 4096,
+            "temperature": 0.3,
+            "system": (
+                "당신은 15년 경력의 시니어 QA 아키텍트입니다. "
+                "대규모 분산 시스템의 품질 보증 전략을 설계하고, "
+                "수백 명의 엔지니어가 사용하는 테스트 인프라를 구축한 경험이 있습니다. "
+                "기술적 심층 분석과 아키텍처 수준의 인사이트를 제공하세요."
+            ),
+            "messages": [
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
+            ],
+        }
+
+        request = urllib.request.Request(
+            self.endpoint,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "x-api-key": self.api_key,
+                "anthropic-version": "2023-06-01",
+            },
+        )
+
+        max_retries = 3
+        retry_delay = 2  # 초
+        
+        for attempt in range(max_retries):
+            try:
+                with urllib.request.urlopen(request, timeout=120) as response:
+                    data = json.loads(response.read().decode("utf-8"))
+                    content = data["content"][0]["text"]
+                    return self._parse_response(content, item)
+            except urllib.error.HTTPError as exc:
+                error_body = exc.read().decode("utf-8") if exc.fp else ""
+                if exc.code == 429:  # Rate limit
+                    if attempt < max_retries - 1:
+                        import time
+                        wait_time = retry_delay * (attempt + 1)
+                        logger.warning(f"Claude API rate limit. {wait_time}초 후 재시도 ({attempt + 1}/{max_retries})...")
+                        time.sleep(wait_time)
+                        continue
+                elif exc.code >= 500:  # Server error
+                    if attempt < max_retries - 1:
+                        import time
+                        logger.warning(f"Claude API 서버 오류 (HTTP {exc.code}). 재시도 중... ({attempt + 1}/{max_retries})")
+                        time.sleep(retry_delay)
+                        continue
+                raise RuntimeError(f"Claude API 호출 실패 (HTTP {exc.code}): {exc.reason}\n{error_body}") from exc
+            except urllib.error.URLError as exc:
+                if attempt < max_retries - 1:
+                    import time
+                    logger.warning(f"Claude API 연결 실패. 재시도 중... ({attempt + 1}/{max_retries})")
+                    time.sleep(retry_delay)
+                    continue
+                raise RuntimeError(f"Claude API 연결 실패: {exc}") from exc
+            except json.JSONDecodeError as exc:
+                raise RuntimeError(f"Claude API 응답 JSON 파싱 실패: {exc}") from exc
+            except KeyError as exc:
+                raise RuntimeError(f"Claude API 응답 형식 오류: {exc}") from exc
+            except Exception as exc:
+                raise RuntimeError(f"Claude API 호출 중 예상치 못한 오류: {exc}") from exc
+        
+        # 모든 재시도 실패
+        raise RuntimeError(f"Claude API 호출이 {max_retries}번 모두 실패했습니다.")
+
+    def _build_prompt(self, item: t.Mapping[str, t.Any]) -> str:
+        """Claude용 프롬프트 생성 (기술적 심층 분석 중심)."""
+        description = item.get("summary") or ""
+        title = item.get("title", "")
+        
+        # 웹 연구 데이터 포함
+        research_context = ""
+        if self.research_data:
+            research_context = self._format_research_data(self.research_data)
+        
+        # MCP 인사이트 포함
+        mcp_context = ""
+        if self.mcp_insights:
+            mcp_context = self._format_mcp_insights(self.mcp_insights)
+        
+        return textwrap.dedent(
+            f"""
+            다음 기술 기사를 시니어 QA 아키텍트 관점에서 심층 분석하세요:
+            
+            제목: {title}
+            요약: {description}
+            링크: {item.get('link', '')}
+            
+            {research_context}
+            
+            {mcp_context}
+            
+            다음 관점에서 분석하세요:
+            
+            1. **아키텍처 수준 영향 분석**
+               - 기존 QA 아키텍처와의 통합 방안
+               - 성능 및 확장성 고려사항
+               - 기술 스택 호환성 매트릭스
+            
+            2. **실제 구현 사례**
+               - 엔터프라이즈 환경 적용 예시
+               - 단계별 마이그레이션 전략
+               - 실제 코드 예시와 설정 파일
+            
+            3. **비교 분석**
+               - 경쟁 도구/기술 대비 장단점
+               - 정량적 성능 비교
+               - TCO(Total Cost of Ownership) 분석
+            
+            4. **미래 전망 (3-5년)**
+               - 기술 로드맵과 발전 방향
+               - 예상되는 패러다임 변화
+               - 투자 가치와 위험 요소
+            
+            OpenAIProvider와 동일한 JSON 스키마로 응답하세요.
+            """
+        ).strip()
+    
+    def _format_research_data(self, research_data: t.Any) -> str:
+        """웹 연구 데이터를 프롬프트에 포함할 수 있는 형식으로 변환한다."""
+        if not research_data:
+            return ""
+        
+        context_parts = ["추가 참고 정보:"]
+        
+        # 웹 검색 결과
+        if hasattr(research_data, 'web_results') and research_data.web_results:
+            context_parts.append("\n웹 검색 결과:")
+            for i, result in enumerate(research_data.web_results[:3], 1):
+                context_parts.append(f"  {i}. {result.title}")
+                if result.snippet:
+                    context_parts.append(f"     {result.snippet[:200]}")
+        
+        return "\n".join(context_parts) if len(context_parts) > 1 else ""
+    
+    def _format_mcp_insights(self, mcp_insights: dict[str, t.Any]) -> str:
+        """MCP Sequential Thinking 분석 결과를 프롬프트에 포함할 수 있는 형식으로 변환한다."""
+        if not mcp_insights or mcp_insights.get("error"):
+            return ""
+        
+        context_parts = ["MCP Sequential Thinking 분석 결과:"]
+        
+        # 사고 과정
+        thoughts = mcp_insights.get("thoughts", [])
+        if thoughts:
+            context_parts.append("\n분석 사고 과정:")
+            for i, thought in enumerate(thoughts[:5], 1):
+                context_parts.append(f"  {i}. {thought}")
+        
+        # 인사이트
+        insights = mcp_insights.get("insights", [])
+        if insights:
+            context_parts.append("\n핵심 인사이트:")
+            for insight in insights[:3]:
+                context_parts.append(f"  - {insight}")
+        
+        # 결론
+        conclusion = mcp_insights.get("conclusion", "")
+        if conclusion:
+            context_parts.append(f"\n종합 결론: {conclusion}")
+        
+        if len(context_parts) > 1:
+            context_parts.append("\n위 MCP 분석 결과를 참고하여 더 깊이 있고 구조화된 콘텐츠를 생성하세요.")
+            return "\n".join(context_parts)
+        
+        return ""
+
+    def _parse_response(self, content: str, item: t.Mapping[str, t.Any]) -> QAResult:
+        """Claude 응답을 파싱하여 QAResult로 변환."""
+        # OpenAIProvider와 동일한 파싱 로직 사용
+        json_text = _extract_json(content)
+        try:
+            payload = json.loads(json_text)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(f"JSON 파싱 실패: {exc}\n본문:\n{content}") from exc
+
+        summary = t.cast(str, payload.get("summary") or (item.get("summary") or ""))
+        qa_pairs = _ensure_qa_pairs(payload.get("qa_pairs"))
+        follow_ups = _ensure_str_list(payload.get("follow_ups"))
+        resources = _ensure_resource_list(payload.get("resources"))
+        if not resources and item.get("link"):
+            resources = [{"label": "원문", "url": t.cast(str, item.get("link"))}]
+        
+        # 새로운 필드 파싱
+        qa_engineer_insights = _ensure_str_list(payload.get("qa_engineer_insights"))
+        practical_guide = _ensure_practical_guide_list(payload.get("practical_guide"))
+        learning_roadmap = _ensure_learning_roadmap_list(payload.get("learning_roadmap"))
+        expert_opinions = _ensure_expert_opinions_list(payload.get("expert_opinions"))
+        technical_level = str(payload.get("technical_level", "advanced")).lower()
+        blog_category = str(payload.get("blog_category", "Learning")).strip()
+        
+        # technical_level 유효성 검증
+        if technical_level not in ["advanced", "practical"]:
+            technical_level = "advanced"
+        
+        # blog_category 유효성 검증
+        if blog_category not in ["Learning", "QA Engineer", "Daily Life"]:
+            blog_category = "Learning"
+
+        return QAResult(
+            summary=summary, 
+            qa_pairs=qa_pairs, 
+            follow_ups=follow_ups, 
+            resources=resources,
+            qa_engineer_insights=qa_engineer_insights,
+            practical_guide=practical_guide,
+            learning_roadmap=learning_roadmap,
+            expert_opinions=expert_opinions,
+            technical_level=technical_level,
+            blog_category=blog_category
+        )
+
+
+class PerplexityProvider:
+    """Perplexity API를 호출하여 실시간 웹 검색 기반 QAResult를 생성한다."""
+
+    endpoint = "https://api.perplexity.ai/chat/completions"
+
+    def __init__(self, api_key: str, model: str = "llama-3.1-sonar-large-128k-online"):
+        self.api_key = api_key
+        self.model = model
+        self.research_data: t.Any = None
+        self.mcp_insights: dict[str, t.Any] | None = None
+    
+    def set_research_data(self, research_data: t.Any) -> None:
+        """웹 연구 데이터를 설정한다."""
+        self.research_data = research_data
+    
+    def set_mcp_insights(self, mcp_insights: dict[str, t.Any]) -> None:
+        """MCP Sequential Thinking 분석 결과를 설정한다."""
+        self.mcp_insights = mcp_insights
+
+    def generate(self, item: t.Mapping[str, t.Any]) -> QAResult:
+        prompt = self._build_prompt(item)
+        payload = {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": (
+                        "당신은 최신 기술 트렌드를 분석하는 QA 전문가입니다. "
+                        "실시간 웹 검색을 통해 최신 정보를 수집하고, "
+                        "QA 엔지니어가 활용할 수 있는 실용적인 인사이트를 제공하세요."
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
+            ],
+            "temperature": 0.3,
+            "max_tokens": 4096,
+        }
+
+        request = urllib.request.Request(
+            self.endpoint,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.api_key}",
+            },
+        )
+
+        max_retries = 3
+        retry_delay = 2
+        
+        for attempt in range(max_retries):
+            try:
+                with urllib.request.urlopen(request, timeout=120) as response:
+                    data = json.loads(response.read().decode("utf-8"))
+                    content = data["choices"][0]["message"]["content"]
+                    return self._parse_response(content, item)
+            except urllib.error.HTTPError as exc:
+                error_body = exc.read().decode("utf-8") if exc.fp else ""
+                if exc.code == 429:
+                    if attempt < max_retries - 1:
+                        import time
+                        wait_time = retry_delay * (attempt + 1)
+                        logger.warning(f"Perplexity API rate limit. {wait_time}초 후 재시도 ({attempt + 1}/{max_retries})...")
+                        time.sleep(wait_time)
+                        continue
+                elif exc.code >= 500:
+                    if attempt < max_retries - 1:
+                        import time
+                        logger.warning(f"Perplexity API 서버 오류 (HTTP {exc.code}). 재시도 중... ({attempt + 1}/{max_retries})")
+                        time.sleep(retry_delay)
+                        continue
+                raise RuntimeError(f"Perplexity API 호출 실패 (HTTP {exc.code}): {exc.reason}\n{error_body}") from exc
+            except urllib.error.URLError as exc:
+                if attempt < max_retries - 1:
+                    import time
+                    logger.warning(f"Perplexity API 연결 실패. 재시도 중... ({attempt + 1}/{max_retries})")
+                    time.sleep(retry_delay)
+                    continue
+                raise RuntimeError(f"Perplexity API 연결 실패: {exc}") from exc
+            except (json.JSONDecodeError, KeyError) as exc:
+                raise RuntimeError(f"Perplexity API 응답 파싱 실패: {exc}") from exc
+            except Exception as exc:
+                raise RuntimeError(f"Perplexity API 호출 중 예상치 못한 오류: {exc}") from exc
+        
+        raise RuntimeError(f"Perplexity API 호출이 {max_retries}번 모두 실패했습니다.")
+
+    def _build_prompt(self, item: t.Mapping[str, t.Any]) -> str:
+        """Perplexity용 프롬프트 생성 (실시간 웹 검색 중심)."""
+        description = item.get("summary") or ""
+        title = item.get("title", "")
+        
+        return textwrap.dedent(
+            f"""
+            다음 주제에 대한 최신 정보를 실시간 웹 검색을 통해 수집하고 분석하세요:
+            
+            제목: {title}
+            요약: {description}
+            링크: {item.get('link', '')}
+            
+            다음 내용을 포함하여 분석하세요:
+            
+            1. **최근 3개월 내 관련 뉴스 및 발표**
+               - 주요 기업의 도입 사례
+               - 최신 버전 및 업데이트
+            
+            2. **실제 기업 도입 사례**
+               - 성공 사례와 실패 사례
+               - ROI 및 효과 측정 결과
+            
+            3. **경쟁 기술/도구 비교**
+               - 유사 기술과의 차이점
+               - 장단점 비교
+            
+            4. **커뮤니티 반응과 평가**
+               - 개발자 커뮤니티의 평가
+               - GitHub 프로젝트 트렌드
+            
+            5. **QA 엔지니어 관점의 실무 적용**
+               - 즉시 적용 가능한 방법
+               - 주의사항 및 베스트 프랙티스
+            
+            OpenAIProvider와 동일한 JSON 스키마로 응답하세요.
+            """
+        ).strip()
+
+    def _parse_response(self, content: str, item: t.Mapping[str, t.Any]) -> QAResult:
+        """Perplexity 응답을 파싱하여 QAResult로 변환."""
+        json_text = _extract_json(content)
+        try:
+            payload = json.loads(json_text)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(f"JSON 파싱 실패: {exc}\n본문:\n{content}") from exc
+
+        summary = t.cast(str, payload.get("summary") or (item.get("summary") or ""))
+        qa_pairs = _ensure_qa_pairs(payload.get("qa_pairs"))
+        follow_ups = _ensure_str_list(payload.get("follow_ups"))
+        resources = _ensure_resource_list(payload.get("resources"))
+        if not resources and item.get("link"):
+            resources = [{"label": "원문", "url": t.cast(str, item.get("link"))}]
+        
+        qa_engineer_insights = _ensure_str_list(payload.get("qa_engineer_insights"))
+        practical_guide = _ensure_practical_guide_list(payload.get("practical_guide"))
+        learning_roadmap = _ensure_learning_roadmap_list(payload.get("learning_roadmap"))
+        expert_opinions = _ensure_expert_opinions_list(payload.get("expert_opinions"))
+        technical_level = str(payload.get("technical_level", "advanced")).lower()
+        blog_category = str(payload.get("blog_category", "Learning")).strip()
+        
+        if technical_level not in ["advanced", "practical"]:
+            technical_level = "advanced"
+        if blog_category not in ["Learning", "QA Engineer", "Daily Life"]:
+            blog_category = "Learning"
+
+        return QAResult(
+            summary=summary, 
+            qa_pairs=qa_pairs, 
+            follow_ups=follow_ups, 
+            resources=resources,
+            qa_engineer_insights=qa_engineer_insights,
+            practical_guide=practical_guide,
+            learning_roadmap=learning_roadmap,
+            expert_opinions=expert_opinions,
+            technical_level=technical_level,
+            blog_category=blog_category
+        )
+
+
+class GeminiProvider:
+    """Google Gemini API를 호출하여 멀티모달 QAResult를 생성한다."""
+
+    endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+
+    def __init__(self, api_key: str, model: str = "gemini-1.5-pro"):
+        self.api_key = api_key
+        self.model = model
+        self.research_data: t.Any = None
+        self.mcp_insights: dict[str, t.Any] | None = None
+    
+    def set_research_data(self, research_data: t.Any) -> None:
+        """웹 연구 데이터를 설정한다."""
+        self.research_data = research_data
+    
+    def set_mcp_insights(self, mcp_insights: dict[str, t.Any]) -> None:
+        """MCP Sequential Thinking 분석 결과를 설정한다."""
+        self.mcp_insights = mcp_insights
+
+    def generate(self, item: t.Mapping[str, t.Any]) -> QAResult:
+        prompt = self._build_prompt(item)
+        url = self.endpoint.format(model=self.model)
+        payload = {
+            "contents": [{
+                "parts": [{
+                    "text": prompt
+                }]
+            }],
+            "generationConfig": {
+                "temperature": 0.3,
+                "maxOutputTokens": 4096,
+            }
+        }
+
+        full_url = f"{url}?key={self.api_key}"
+        request = urllib.request.Request(
+            full_url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+            },
+        )
+
+        max_retries = 3
+        retry_delay = 2
+        
+        for attempt in range(max_retries):
+            try:
+                with urllib.request.urlopen(request, timeout=120) as response:
+                    data = json.loads(response.read().decode("utf-8"))
+                    content = data["candidates"][0]["content"]["parts"][0]["text"]
+                    return self._parse_response(content, item)
+            except urllib.error.HTTPError as exc:
+                error_body = exc.read().decode("utf-8") if exc.fp else ""
+                if exc.code == 429:
+                    if attempt < max_retries - 1:
+                        import time
+                        wait_time = retry_delay * (attempt + 1)
+                        logger.warning(f"Gemini API rate limit. {wait_time}초 후 재시도 ({attempt + 1}/{max_retries})...")
+                        time.sleep(wait_time)
+                        continue
+                elif exc.code >= 500:
+                    if attempt < max_retries - 1:
+                        import time
+                        logger.warning(f"Gemini API 서버 오류 (HTTP {exc.code}). 재시도 중... ({attempt + 1}/{max_retries})")
+                        time.sleep(retry_delay)
+                        continue
+                raise RuntimeError(f"Gemini API 호출 실패 (HTTP {exc.code}): {exc.reason}\n{error_body}") from exc
+            except urllib.error.URLError as exc:
+                if attempt < max_retries - 1:
+                    import time
+                    logger.warning(f"Gemini API 연결 실패. 재시도 중... ({attempt + 1}/{max_retries})")
+                    time.sleep(retry_delay)
+                    continue
+                raise RuntimeError(f"Gemini API 연결 실패: {exc}") from exc
+            except (json.JSONDecodeError, KeyError) as exc:
+                raise RuntimeError(f"Gemini API 응답 파싱 실패: {exc}") from exc
+            except Exception as exc:
+                raise RuntimeError(f"Gemini API 호출 중 예상치 못한 오류: {exc}") from exc
+        
+        raise RuntimeError(f"Gemini API 호출이 {max_retries}번 모두 실패했습니다.")
+
+    def _build_prompt(self, item: t.Mapping[str, t.Any]) -> str:
+        """Gemini용 프롬프트 생성 (멀티모달 분석 중심)."""
+        description = item.get("summary") or ""
+        title = item.get("title", "")
+        
+        return textwrap.dedent(
+            f"""
+            다음 기술 기사를 멀티모달 관점에서 분석하세요:
+            
+            제목: {title}
+            요약: {description}
+            링크: {item.get('link', '')}
+            
+            다음을 포함하여 분석하세요:
+            
+            1. **시각적 자료 분석** (이미지, 차트, 다이어그램이 있다면)
+               - 시각 자료에서 추출한 핵심 정보
+               - 데이터 시각화 해석
+            
+            2. **기술적 심층 분석**
+               - 코드 예시와 아키텍처 다이어그램 설명
+               - 성능 메트릭 및 벤치마크
+            
+            3. **실무 적용 가이드**
+               - 단계별 구현 방법
+               - 실제 코드 스니펫
+            
+            4. **QA 엔지니어 관점의 인사이트**
+               - 테스트 전략 수립
+               - 품질 보증 방법
+            
+            OpenAIProvider와 동일한 JSON 스키마로 응답하세요.
+            """
+        ).strip()
+
+    def _parse_response(self, content: str, item: t.Mapping[str, t.Any]) -> QAResult:
+        """Gemini 응답을 파싱하여 QAResult로 변환."""
+        json_text = _extract_json(content)
+        try:
+            payload = json.loads(json_text)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(f"JSON 파싱 실패: {exc}\n본문:\n{content}") from exc
+
+        summary = t.cast(str, payload.get("summary") or (item.get("summary") or ""))
+        qa_pairs = _ensure_qa_pairs(payload.get("qa_pairs"))
+        follow_ups = _ensure_str_list(payload.get("follow_ups"))
+        resources = _ensure_resource_list(payload.get("resources"))
+        if not resources and item.get("link"):
+            resources = [{"label": "원문", "url": t.cast(str, item.get("link"))}]
+        
+        qa_engineer_insights = _ensure_str_list(payload.get("qa_engineer_insights"))
+        practical_guide = _ensure_practical_guide_list(payload.get("practical_guide"))
+        learning_roadmap = _ensure_learning_roadmap_list(payload.get("learning_roadmap"))
+        expert_opinions = _ensure_expert_opinions_list(payload.get("expert_opinions"))
+        technical_level = str(payload.get("technical_level", "advanced")).lower()
+        blog_category = str(payload.get("blog_category", "Learning")).strip()
+        
+        if technical_level not in ["advanced", "practical"]:
+            technical_level = "advanced"
         if blog_category not in ["Learning", "QA Engineer", "Daily Life"]:
             blog_category = "Learning"
 

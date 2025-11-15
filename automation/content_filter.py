@@ -15,6 +15,10 @@ try:
 except ImportError:
     REQUESTS_AVAILABLE = False
 
+from automation.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 @dataclass
 class ContentMetrics:
@@ -135,7 +139,7 @@ class ContentFilter:
             return votes, comments
             
         except Exception as exc:
-            print(f"메트릭 스크래핑 중 오류 ({url}): {exc}")
+            logger.warning(f"메트릭 스크래핑 중 오류 ({url}): {exc}", exc_info=True)
             return 0, 0
     
     def _is_ai_related(self, title: str, summary: str) -> bool:
@@ -300,11 +304,11 @@ if __name__ == "__main__":
     
     results = filter_engine.filter_and_sort(sample_items, max_items=5)
     
-    print("필터링 및 정렬 결과:")
+    logger.info("필터링 및 정렬 결과:")
     for item, metrics in results:
-        print(f"  제목: {item['title']}")
-        print(f"  우선순위: {metrics.priority_score:.1f}")
-        print(f"  AI 관련: {metrics.is_ai_related}")
-        print(f"  카테고리: {', '.join(metrics.categories)}")
-        print()
+        logger.info(f"  제목: {item['title']}")
+        logger.info(f"  우선순위: {metrics.priority_score:.1f}")
+        logger.info(f"  AI 관련: {metrics.is_ai_related}")
+        logger.info(f"  카테고리: {', '.join(metrics.categories)}")
+        logger.info("")
 
