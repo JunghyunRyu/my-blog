@@ -848,7 +848,8 @@ class ContentAggregator:
             # 품질 점수 계산
             quality_score = self._calculate_quality_score(content)
             
-            if quality_score >= 70:  # 70점 이상만
+            # 기준 완화: 30점 이상이면 포함 (QA 관련 키워드만 있어도 30점)
+            if quality_score >= 30:
                 content.metadata["quality_score"] = quality_score
                 filtered.append(content)
         

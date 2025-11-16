@@ -31,19 +31,19 @@
 
 ### 1. Claude API 모델 이름
 **현재 상태**: 404 오류 발생
-- 오류: `model: claude-3-5-sonnet-20240620` not found
+- 오류: `model: claude-haiku-4-5` not found
 - **해결 방법**:
   1. [Anthropic Console](https://console.anthropic.com/) 접속
   2. 사용 가능한 모델 확인
   3. `.env` 파일에서 `CLAUDE_MODEL` 값을 올바른 모델 이름으로 변경
   4. 일반적인 모델 이름 예시:
      - `claude-3-opus-20240229`
-     - `claude-3-5-sonnet-20240620` (날짜 확인 필요)
+     - `claude-haiku-4-5` (날짜 확인 필요)
      - `claude-3-5-sonnet-20241022` (최신 버전 확인 필요)
 
 ### 2. Gemini API 모델 이름/버전
 **현재 상태**: 404 오류 발생
-- 오류: `models/gemini-1.5-flash is not found for API version v1`
+- 오류: `models/gemini-2.5-flash-lite is not found for API version v1`
 - **해결 방법**:
   1. [Google AI Studio](https://aistudio.google.com/) 접속
   2. 사용 가능한 모델 확인
@@ -52,7 +52,7 @@
   5. 일반적인 모델 이름 예시:
      - `gemini-pro`
      - `gemini-1.5-pro`
-     - `gemini-1.5-flash`
+     - `gemini-2.5-flash-lite`
 
 ### 3. 웹 검색 오류 (선택사항)
 **현재 상태**: httpx proxies 오류

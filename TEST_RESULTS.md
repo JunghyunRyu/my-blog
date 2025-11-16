@@ -51,16 +51,16 @@
 
 ### Claude Provider
 ⚠️ **모델 이름 오류**
-- 오류: `model: claude-3-5-sonnet-20240620` not found
+- 오류: `model: claude-haiku-4-5` not found
 - 원인: API 키에 접근 가능한 모델 이름이 다를 수 있음
 - 해결 방법:
   1. Anthropic Console에서 사용 가능한 모델 확인
   2. `.env` 파일의 `CLAUDE_MODEL` 값을 실제 사용 가능한 모델로 변경
-  3. 일반적으로 사용되는 모델: `claude-3-opus-20240229`, `claude-3-5-sonnet-20240620` (날짜 버전 확인 필요)
+  3. 일반적으로 사용되는 모델: `claude-3-opus-20240229`, `claude-haiku-4-5` (날짜 버전 확인 필요)
 
 ### Gemini Provider
 ⚠️ **모델 이름/API 버전 오류**
-- 오류: `models/gemini-1.5-flash is not found for API version v1`
+- 오류: `models/gemini-2.5-flash-lite is not found for API version v1`
 - 원인: API 버전 또는 모델 이름이 맞지 않음
 - 해결 방법:
   1. Google AI Studio에서 사용 가능한 모델 확인
@@ -79,8 +79,8 @@
 
 2. **모델 이름 업데이트**
    - Perplexity: `llama-3.1-sonar-large-128k-online` → `sonar` (성공)
-   - Claude: `claude-3-5-sonnet-20241022` → `claude-3-5-sonnet-20240620` (여전히 오류)
-   - Gemini: `gemini-1.5-pro` → `gemini-1.5-flash` (여전히 오류)
+   - Claude: `claude-3-5-sonnet-20241022` → `claude-haiku-4-5` (여전히 오류)
+   - Gemini: `gemini-1.5-pro` → `gemini-2.5-flash-lite` (여전히 오류)
 
 3. **테스트 스크립트 개선**
    - `test_setup.py`: 기본 모듈 및 초기화 테스트

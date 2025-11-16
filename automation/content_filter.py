@@ -237,12 +237,21 @@ class ContentFilter:
         if metrics.is_ai_related:
             return True
         
+        # QA 관련 항목도 포함 (QA 블로그이므로)
+        if "QA" in metrics.categories:
+            return True
+        
         # 인기도 기준 충족
         if metrics.votes >= self.min_votes:
             return True
         
         # 트렌드이면서 일정 이상의 점수
         if metrics.is_trending and metrics.priority_score >= 20:
+            return True
+        
+        # 투표수 정보가 없는 경우 (RSS 피드에서 투표수 정보가 없을 수 있음)
+        # 우선순위 점수가 일정 이상이면 처리
+        if metrics.votes == 0 and metrics.priority_score >= 15:
             return True
         
         return False

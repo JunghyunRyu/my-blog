@@ -67,7 +67,7 @@ class QAContentGenerator:
         # Claude API 키가 있으면 Claude 사용 (기술 분석에 강점)
         claude_key = os.getenv("CLAUDE_API_KEY")
         if claude_key:
-            model = os.getenv("CLAUDE_MODEL", "claude-3-5-sonnet-20240620")
+            model = os.getenv("CLAUDE_MODEL", "claude-haiku-4-5")
             return ClaudeProvider(api_key=claude_key, model=model)
         
         # OpenAI API 키가 있으면 OpenAI 사용
@@ -567,7 +567,7 @@ class ClaudeProvider:
 
     endpoint = "https://api.anthropic.com/v1/messages"
 
-    def __init__(self, api_key: str, model: str = "claude-3-5-sonnet-20240620"):
+    def __init__(self, api_key: str, model: str = "claude-haiku-4-5"):
         self.api_key = api_key
         self.model = model
         self.research_data: t.Any = None
@@ -975,7 +975,7 @@ class GeminiProvider:
 
     endpoint = "https://generativelanguage.googleapis.com/v1/models/{model}:generateContent"
 
-    def __init__(self, api_key: str, model: str = "gemini-1.5-flash"):
+    def __init__(self, api_key: str, model: str = "gemini-2.5-flash-lite"):
         self.api_key = api_key
         self.model = model
         self.research_data: t.Any = None
