@@ -9,6 +9,13 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
+try:
+    from PIL import Image, ImageDraw, ImageFont
+except ImportError:
+    Image = None
+    ImageDraw = None
+    ImageFont = None
+
 from automation.logger import get_logger
 
 logger = get_logger(__name__)

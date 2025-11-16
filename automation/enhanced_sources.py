@@ -884,7 +884,14 @@ class ContentAggregator:
             score += 10
         
         # 3. 최신성 (20점)
-        days_old = (datetime.now() - content.published_at).days
+        # 타임존 문제 해결
+        now = datetime.now(content.published_at.tzinfo) if content.published_at.tzinfo else datetime.now()
+        published = content.published_at if content.published_at.tzinfo else content.published_at.replace(tzinfo=None)
+        if published.tzinfo and not now.tzinfo:
+            now = now.replace(tzinfo=published.tzinfo)
+        elif not published.tzinfo and now.tzinfo:
+            published = published.replace(tzinfo=now.tzinfo)
+        days_old = (now - published).days
         if days_old <= 7:
             score += 20
         elif days_old <= 30:

@@ -67,7 +67,7 @@ class QAContentGenerator:
         # Claude API 키가 있으면 Claude 사용 (기술 분석에 강점)
         claude_key = os.getenv("CLAUDE_API_KEY")
         if claude_key:
-            model = os.getenv("CLAUDE_MODEL", "claude-3-5-sonnet-20241022")
+            model = os.getenv("CLAUDE_MODEL", "claude-3-5-sonnet-20240620")
             return ClaudeProvider(api_key=claude_key, model=model)
         
         # OpenAI API 키가 있으면 OpenAI 사용
@@ -567,7 +567,7 @@ class ClaudeProvider:
 
     endpoint = "https://api.anthropic.com/v1/messages"
 
-    def __init__(self, api_key: str, model: str = "claude-3-5-sonnet-20241022"):
+    def __init__(self, api_key: str, model: str = "claude-3-5-sonnet-20240620"):
         self.api_key = api_key
         self.model = model
         self.research_data: t.Any = None
@@ -806,7 +806,7 @@ class PerplexityProvider:
 
     endpoint = "https://api.perplexity.ai/chat/completions"
 
-    def __init__(self, api_key: str, model: str = "llama-3.1-sonar-large-128k-online"):
+    def __init__(self, api_key: str, model: str = "sonar"):
         self.api_key = api_key
         self.model = model
         self.research_data: t.Any = None
@@ -973,9 +973,9 @@ class PerplexityProvider:
 class GeminiProvider:
     """Google Gemini API를 호출하여 멀티모달 QAResult를 생성한다."""
 
-    endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+    endpoint = "https://generativelanguage.googleapis.com/v1/models/{model}:generateContent"
 
-    def __init__(self, api_key: str, model: str = "gemini-1.5-pro"):
+    def __init__(self, api_key: str, model: str = "gemini-1.5-flash"):
         self.api_key = api_key
         self.model = model
         self.research_data: t.Any = None
