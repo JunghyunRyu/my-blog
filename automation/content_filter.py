@@ -39,14 +39,22 @@ class ContentMetrics:
 class ContentFilter:
     """GeekNews 콘텐츠 필터링 및 우선순위 결정."""
     
-    # AI 관련 키워드
+    # AI 관련 키워드 (QA 자동화 포함)
     AI_KEYWORDS = [
         "ai", "artificial intelligence", "machine learning", "ml", "deep learning",
         "llm", "gpt", "claude", "gemini", "openai", "anthropic", "neural network",
         "transformer", "자연어처리", "nlp", "컴퓨터비전", "computer vision",
         "강화학습", "reinforcement learning", "생성형", "generative",
-        "테스트 자동화", "test automation", "qa automation", "playwright",
-        "selenium", "cypress", "pytest", "테스팅", "testing framework"
+        # QA 자동화 관련
+        "테스트 자동화", "test automation", "qa automation", "test automation framework",
+        "ai testing", "ai-driven testing", "ai-powered qa", "qa ai", "testing ai",
+        "automated testing", "testing automation", "test automation tool",
+        "qa workflow automation", "qa process automation", "intelligent testing",
+        "smart testing", "ai test generation", "ml testing", "ai qa",
+        # 테스팅 도구/프레임워크
+        "playwright", "selenium", "cypress", "pytest", "testng", "junit",
+        "appium", "robot framework", "karate", "rest assured", "postman automation",
+        "테스팅", "testing framework", "test tool", "qa tool"
     ]
     
     # 트렌딩 기술 키워드
@@ -57,12 +65,21 @@ class ContentFilter:
         "api", "rest", "graphql", "websocket", "grpc"
     ]
     
-    # QA/테스팅 관련 키워드
+    # QA/테스팅 관련 키워드 (자동화 중심)
     QA_KEYWORDS = [
-        "qa", "quality assurance", "test", "testing", "automation",
-        "unit test", "integration test", "e2e", "end-to-end",
-        "performance", "load test", "stress test", "security test",
-        "테스트", "품질", "자동화", "성능", "부하"
+        "qa", "quality assurance", "test", "testing", "automation", "automated",
+        "unit test", "integration test", "e2e", "end-to-end", "api test", "ui test",
+        "performance", "load test", "stress test", "security test", "regression test",
+        "테스트", "품질", "자동화", "성능", "부하", "테스트 케이스", "테스트 시나리오",
+        # QA 자동화 관련
+        "test automation", "qa automation", "testing automation", "automated qa",
+        "ci/cd testing", "continuous testing", "shift-left testing", "shift-right testing",
+        "devops testing", "test orchestration", "test execution", "test reporting",
+        "test analytics", "test metrics", "test coverage", "code coverage",
+        # AI 기반 QA 자동화
+        "ai testing", "ml testing", "ai qa", "intelligent testing", "smart qa",
+        "ai test generation", "automated test creation", "test data generation",
+        "visual testing", "visual regression", "screenshot testing"
     ]
     
     def __init__(
@@ -205,35 +222,44 @@ class ContentFilter:
     ) -> float:
         """우선순위 점수를 계산한다 (0-100)."""
         score = 0.0
+        text = f"{title} {summary}".lower()
         
         # 1. AI 관련성 (40점)
         if metrics.is_ai_related:
             score += 40
         
-        # 2. 투표수 기반 인기도 (30점)
+        # 2. QA 자동화 관련성 추가 점수 (AI 관련이면서 QA도 관련된 경우)
+        if metrics.is_ai_related and "QA" in metrics.categories:
+            # AI + QA 자동화는 추가 10점
+            score += 10
+        elif "QA" in metrics.categories:
+            # QA 관련성 (20점으로 증가 - 자동화 관련 키워드가 있으면 추가 점수)
+            qa_automation_keywords = ["automation", "automated", "자동화", "ci/cd", "continuous"]
+            if any(keyword in text for keyword in qa_automation_keywords):
+                score += 25  # QA 자동화는 높은 점수
+            else:
+                score += 15  # 일반 QA는 15점
+        
+        # 3. 투표수 기반 인기도 (30점)
         if metrics.votes >= self.min_votes:
             # 투표수에 비례하여 점수 부여 (최대 30점)
             vote_score = min(30, (metrics.votes / 50) * 30)
             score += vote_score
         
-        # 3. 댓글 수 (10점)
+        # 4. 댓글 수 (10점)
         if metrics.comments > 0:
             comment_score = min(10, (metrics.comments / 20) * 10)
             score += comment_score
         
-        # 4. 트렌드 여부 (10점)
+        # 5. 트렌드 여부 (10점)
         if metrics.is_trending:
-            score += 10
-        
-        # 5. QA 관련성 (10점)
-        if "QA" in metrics.categories:
             score += 10
         
         return min(100.0, score)
     
     def should_process(self, metrics: ContentMetrics) -> bool:
         """기사를 처리할지 여부를 결정한다."""
-        # AI 관련 항목은 무조건 포함
+        # AI 관련 항목은 무조건 포함 (QA 자동화 포함)
         if metrics.is_ai_related:
             return True
         
@@ -250,9 +276,14 @@ class ContentFilter:
             return True
         
         # 투표수 정보가 없는 경우 (RSS 피드에서 투표수 정보가 없을 수 있음)
-        # 우선순위 점수가 일정 이상이면 처리
-        if metrics.votes == 0 and metrics.priority_score >= 15:
-            return True
+        # 우선순위 점수가 일정 이상이면 처리 (QA 자동화는 더 낮은 기준)
+        if metrics.votes == 0:
+            # QA 자동화는 10점 이상이면 처리, 일반 항목은 15점 이상
+            if "QA" in metrics.categories:
+                if metrics.priority_score >= 10:
+                    return True
+            elif metrics.priority_score >= 15:
+                return True
         
         return False
     

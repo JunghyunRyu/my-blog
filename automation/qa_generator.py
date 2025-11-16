@@ -973,7 +973,7 @@ class PerplexityProvider:
 class GeminiProvider:
     """Google Gemini API를 호출하여 멀티모달 QAResult를 생성한다."""
 
-    endpoint = "https://generativelanguage.googleapis.com/v1/models/{model}:generateContent"
+    endpoint = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
     def __init__(self, api_key: str, model: str = "gemini-2.5-flash-lite"):
         self.api_key = api_key

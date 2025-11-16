@@ -108,22 +108,31 @@ class WebResearcher:
             results: list[WebResource] = []
             
             # duckduckgo-search 라이브러리 사용
-            with DDGS() as ddgs:
-                search_results = ddgs.text(
-                    query, 
-                    max_results=self.max_search_results,
-                    region='kr-kr',  # 한국 지역 우선
-                    safesearch='moderate'
-                )
-                
-                for result in search_results:
-                    if isinstance(result, dict):
-                        results.append(WebResource(
-                            title=result.get("title", "")[:100],
-                            url=result.get("href", "") or result.get("link", ""),
-                            snippet=result.get("body", "") or result.get("snippet", ""),
-                            source="duckduckgo"
-                        ))
+            # DDGS 초기화 시 proxies 파라미터 제거 (버전 호환성 문제)
+            try:
+                # 최신 버전 ddgs 사용 시도
+                with DDGS() as ddgs:
+                    search_results = ddgs.text(
+                        query, 
+                        max_results=self.max_search_results,
+                        region='kr-kr',  # 한국 지역 우선
+                        safesearch='moderate'
+                    )
+                    
+                    for result in search_results:
+                        if isinstance(result, dict):
+                            results.append(WebResource(
+                                title=result.get("title", "")[:100],
+                                url=result.get("href", "") or result.get("link", ""),
+                                snippet=result.get("body", "") or result.get("snippet", ""),
+                                source="duckduckgo"
+                            ))
+            except TypeError as te:
+                # proxies 파라미터 오류 시 다른 방식 시도
+                if "proxies" in str(te):
+                    logger.warning(f"ddgs 라이브러리 버전 호환성 문제. 웹 검색을 건너뜁니다: {te}")
+                    return []
+                raise
             
             return results[:self.max_search_results]
             
