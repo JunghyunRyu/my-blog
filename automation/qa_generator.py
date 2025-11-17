@@ -605,7 +605,7 @@ class ClaudeProvider:
             "model": self.model,
             "max_tokens": 8192,
             "temperature": 0.3,
-            "            system": (
+            "system": (
                 "당신은 15년 경력의 시니어 QA 아키텍트입니다. "
                 "대규모 분산 시스템의 품질 보증 전략을 설계하고, "
                 "수백 명의 엔지니어가 사용하는 테스트 인프라를 구축한 경험이 있습니다. "
