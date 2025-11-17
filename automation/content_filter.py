@@ -184,22 +184,40 @@ class ContentFilter:
         text = f"{title} {summary}".lower()
         categories: list[str] = []
         
+        # Daily Life 키워드 우선 확인 (QA와 관련 없으면 Daily Life로 분류)
+        daily_life_keywords = [
+            "파티", "파티를", "주식", "투자", "리뷰", "소감", "일상",
+            "party", "stock", "investment", "review", "daily", "생일",
+            "birthday", "21가지", "21 facts"
+        ]
+        has_daily_life_keyword = any(keyword in text for keyword in daily_life_keywords)
+        has_qa_keyword = any(kw in text for kw in ["test", "qa", "testing", "automation", "quality"])
+        
+        # Daily Life 키워드가 있고 QA 키워드가 없으면 Daily Life로 분류
+        if has_daily_life_keyword and not has_qa_keyword:
+            categories.append("Daily Life")
+            return categories
+        
         # AI 카테고리
         if self._is_ai_related(title, summary):
             categories.append("AI")
         
-        # QA/Testing 카테고리
+        # QA/Testing 카테고리 (명확한 QA 키워드가 있을 때만)
+        qa_score = 0
         for keyword in self.QA_KEYWORDS:
             if keyword.lower() in text:
-                categories.append("QA")
-                break
+                qa_score += 1
+                if qa_score >= 2:  # 최소 2개 이상의 QA 키워드가 있어야 QA 카테고리
+                    categories.append("QA")
+                    break
         
-        # 개발/프로그래밍
-        dev_keywords = ["programming", "developer", "코딩", "개발", "framework", "library"]
-        for keyword in dev_keywords:
-            if keyword.lower() in text:
-                categories.append("Development")
-                break
+        # 개발/프로그래밍 (QA 카테고리가 없을 때만)
+        if "QA" not in categories:
+            dev_keywords = ["programming", "developer", "코딩", "개발", "framework", "library"]
+            for keyword in dev_keywords:
+                if keyword.lower() in text:
+                    categories.append("Development")
+                    break
         
         # DevOps
         devops_keywords = ["devops", "kubernetes", "docker", "ci/cd", "deployment"]
@@ -233,12 +251,18 @@ class ContentFilter:
             # AI + QA 자동화는 추가 10점
             score += 10
         elif "QA" in metrics.categories:
-            # QA 관련성 (20점으로 증가 - 자동화 관련 키워드가 있으면 추가 점수)
-            qa_automation_keywords = ["automation", "automated", "자동화", "ci/cd", "continuous"]
+            # QA 관련성 (30점으로 증가 - 자동화 관련 키워드가 있으면 추가 점수)
+            qa_automation_keywords = ["automation", "automated", "자동화", "ci/cd", "continuous", "test", "testing"]
             if any(keyword in text for keyword in qa_automation_keywords):
-                score += 25  # QA 자동화는 높은 점수
+                score += 30  # QA 자동화는 높은 점수
             else:
-                score += 15  # 일반 QA는 15점
+                score += 20  # 일반 QA는 20점
+        
+        # Daily Life 키워드가 있으면 QA 점수 크게 감점
+        daily_life_keywords = ["파티", "주식", "투자", "리뷰", "소감", "생일", "party", "stock", "investment"]
+        if any(keyword in text for keyword in daily_life_keywords):
+            if "test" not in text and "qa" not in text and "testing" not in text:
+                score -= 50  # QA 관련성 크게 감점
         
         # 3. 투표수 기반 인기도 (30점)
         if metrics.votes >= self.min_votes:
@@ -278,9 +302,9 @@ class ContentFilter:
         # 투표수 정보가 없는 경우 (RSS 피드에서 투표수 정보가 없을 수 있음)
         # 우선순위 점수가 일정 이상이면 처리 (QA 자동화는 더 낮은 기준)
         if metrics.votes == 0:
-            # QA 자동화는 10점 이상이면 처리, 일반 항목은 15점 이상
+            # QA 자동화는 30점 이상이면 처리 (기준 상향), 일반 항목은 15점 이상
             if "QA" in metrics.categories:
-                if metrics.priority_score >= 10:
+                if metrics.priority_score >= 30:  # 10 → 30으로 상향
                     return True
             elif metrics.priority_score >= 15:
                 return True
