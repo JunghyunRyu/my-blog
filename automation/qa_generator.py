@@ -155,9 +155,11 @@ class OpenAIProvider:
 
     def generate(self, item: t.Mapping[str, t.Any]) -> QAResult:
         prompt = self._build_prompt(item)
-        payload = {
+        
+        # 일부 모델은 temperature를 지원하지 않음 (예: gpt-5-mini)
+        # 모델 이름에 따라 temperature 파라미터 조건부 추가
+        payload: dict[str, t.Any] = {
             "model": self.model,
-            "temperature": 0.3,
             "messages": [
                 {
                     "role": "system",
@@ -172,6 +174,11 @@ class OpenAIProvider:
                 },
             ],
         }
+        
+        # temperature를 지원하는 모델에만 추가
+        # gpt-5-mini 같은 일부 모델은 temperature를 지원하지 않음
+        if not self.model.startswith("gpt-5"):
+            payload["temperature"] = 0.3
 
         request = urllib.request.Request(
             self.endpoint,
@@ -1190,17 +1197,43 @@ class RuleBasedProvider:
 
 def _extract_json(content: str) -> str:
     content = content.strip()
-    if content.startswith("```") and content.endswith("```"):
+    
+    # 마크다운 코드 블록 제거
+    if "```json" in content:
+        # ```json ... ``` 형식
+        start_marker = content.find("```json")
+        end_marker = content.find("```", start_marker + 7)
+        if end_marker != -1:
+            content = content[start_marker + 7:end_marker].strip()
+    elif content.startswith("```") and content.endswith("```"):
+        # ``` ... ``` 형식
         lines = [line for line in content.splitlines() if not line.startswith("```")]
         content = "\n".join(lines)
+    
+    # JSON 객체 찾기
     start = content.find("{")
     end = content.rfind("}")
+    
     if start == -1 or end == -1:
-        raise RuntimeError("응답에서 JSON을 찾을 수 없습니다.")
+        # JSON 배열도 시도
+        start = content.find("[")
+        end = content.rfind("]")
+        if start == -1 or end == -1:
+            raise RuntimeError("응답에서 JSON을 찾을 수 없습니다.")
+    
     json_text = content[start : end + 1]
+    
     # trailing comma 제거 (배열/객체 마지막 쉼표)
     import re
     json_text = re.sub(r',(\s*[}\]])', r'\1', json_text)
+    
+    # 불완전한 JSON 처리 (마지막 부분이 잘린 경우)
+    # 중괄호 균형 확인
+    open_braces = json_text.count("{")
+    close_braces = json_text.count("}")
+    if open_braces > close_braces:
+        json_text += "}" * (open_braces - close_braces)
+    
     return json_text
 
 
